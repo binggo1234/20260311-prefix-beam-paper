@@ -1,0 +1,2 @@
+﻿case_id,family,seed,LB_area,n_items,N_board_PureGreedy,gap_to_lb_pct_PureGreedy,U_global_PureGreedy,runtime_s_PureGreedy,N_board_BaselineSA,gap_to_lb_pct_BaselineSA,U_global_BaselineSA,runtime_s_BaselineSA,N_board_OursFull,gap_to_lb_pct_OursFull,U_global_OursFull,runtime_s_OursFull
+cgcut1,cgcut,1000,2,16,2,0.0,0.75,0.005741299999999949,2,0.0,0.75,1.178414,2,0.0,0.75,3.7737504

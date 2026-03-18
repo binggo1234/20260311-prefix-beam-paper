@@ -1,0 +1,2 @@
+﻿suite,ordinal,case_id,family,source,csv_path,n_items,status,started_s,elapsed_s,comparison_rows,has_comparison_table,out_case_dir,error
+public_smoke_status_20260315,1,cgcut1,cgcut,public_binpacktwo,D:\桌面\CXP\20260311 (2)\20260311\data\public_binpacktwo\instances\cgcut1.csv,16,completed,0.745808,19.062589,1,1,D:\桌面\CXP\20260311 (2)\20260311\outputs\public_smoke_status_20260315\public_smoke_status_20260315__cgcut1,

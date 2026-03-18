@@ -1,0 +1,44 @@
+﻿instance,family,source_sheet,n_items,board_w,board_h,allow_rot,enabled,pipeline_compatible,stock_source,notes
+cgcut1,cgcut,cgcut,16,15,10,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+cgcut2,cgcut,cgcut,23,40,70,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+cgcut3,cgcut,cgcut,62,40,70,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut1,gcut,gcut,10,250,250,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut10,gcut,gcut,20,1000,1000,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut11,gcut,gcut,30,1000,1000,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut12,gcut,gcut,50,1000,1000,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut13,gcut,gcut,32,3000,3000,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut2,gcut,gcut,20,250,250,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut3,gcut,gcut,30,250,250,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut4,gcut,gcut,50,250,250,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut5,gcut,gcut,10,500,500,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut6,gcut,gcut,20,500,500,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut7,gcut,gcut,30,500,500,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut8,gcut,gcut,50,500,500,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+gcut9,gcut,gcut,10,1000,1000,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+M1a,m1,M1,100,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M1b,m1,M1,100,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M1c,m1,M1,100,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M1d,m1,M1,100,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M1e,m1,M1,100,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M2a,m2,M2,100,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M2b,m2,M2,100,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M2c,m2,M2,100,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M2d,m2,M2,100,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M2e,m2,M2,100,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M3a,m3,M3,150,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M3b,m3,M3,150,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M3c,m3,M3,150,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M3d,m3,M3,150,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+M3e,m3,M3,150,,,1,0,0,manual,"Parsed from workbook, but this family is not directly compatible with the current single-stock workflow. Fill stock info manually or exclude from public runs."
+ngcut1,ngcut,ngcut,10,10,10,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+ngcut10,ngcut,ngcut,13,30,30,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+ngcut11,ngcut,ngcut,15,30,30,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+ngcut12,ngcut,ngcut,22,30,30,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+ngcut2,ngcut,ngcut,17,10,10,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+ngcut3,ngcut,ngcut,21,10,10,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+ngcut4,ngcut,ngcut,7,15,10,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+ngcut5,ngcut,ngcut,14,15,10,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+ngcut6,ngcut,ngcut,15,15,10,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+ngcut7,ngcut,ngcut,8,20,20,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+ngcut8,ngcut,ngcut,13,20,20,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.
+ngcut9,ngcut,ngcut,18,20,20,1,1,1,orlib_official,Stock rectangle prefilled from the official OR-Library text file.

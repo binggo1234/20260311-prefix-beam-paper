@@ -1,0 +1,4 @@
+﻿round,case_id,N_board_baseline,N_board_ref,N_board_beam,U_global_beam,beam_candidates_generated,beam_active_states_max,beam_force_rounds,macro_pattern_actions,macro_rollout_pattern_steps,macro_rollout_single_fallback_steps,result_source,post_repair_boards_saved,elapsed_s,out_case_dir
+1,data3,175,177,176,0.8944186043471022,6.0,2.0,0.0,8909.0,2205.0,4968.0,global_best,0.0,873.010604,D:\桌面\CXP\20260311 (2)\20260311\outputs\autonomous_beam_behavior_round1_20260318\round_01\round_01__data3
+1,data6,151,153,153,0.9153000966735345,8.0,2.0,0.0,15700.0,3892.0,5322.0,beam_focused_repair,0.0,836.019556,D:\桌面\CXP\20260311 (2)\20260311\outputs\autonomous_beam_behavior_round1_20260318\round_01\round_01__data6
+1,I1_parts,71,70,70,0.8989180934944525,22.0,2.0,0.0,13870.0,3377.0,6430.0,global_best,0.0,720.31359,D:\桌面\CXP\20260311 (2)\20260311\outputs\autonomous_beam_behavior_round1_20260318\round_01\round_01__I1_parts

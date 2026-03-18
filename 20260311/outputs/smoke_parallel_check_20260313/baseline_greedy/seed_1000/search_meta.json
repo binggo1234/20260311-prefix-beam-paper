@@ -1,0 +1,10 @@
+{
+  "solver_kind": "baseline_greedy",
+  "baseline_order": "area_aspect_desc",
+  "decode_cache_hits": 0.0,
+  "decode_cache_misses": 80.0,
+  "decode_cache_entries": 80.0,
+  "micro_cache_hits": 64.0,
+  "micro_cache_misses": 919.0,
+  "micro_cache_entries": 919.0
+}

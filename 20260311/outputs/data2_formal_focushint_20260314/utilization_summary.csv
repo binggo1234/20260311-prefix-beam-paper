@@ -1,0 +1,2 @@
+﻿variant,U_avg_excl_last2_pct_mean,U_avg_excl_last2_pct_std,U_avg_excl_last_pct_mean,U_avg_excl_last_pct_std,U_avg_pct_mean,U_avg_pct_std,U_best_board_pct_mean,U_best_board_pct_std,U_global_pct_mean,U_global_pct_std,U_last_pct_mean,U_last_pct_std,U_worst_board_pct_mean,U_worst_board_pct_std,U_worst_excl_last_pct_mean,U_worst_excl_last_pct_std,n
+rh_mcts_main,89.2377786285924,0.0,89.16398131016614,0.0,88.96690418692276,0.0,98.39025127653856,0.0,88.96690418692276,0.0,12.106826122010213,0.0,12.106826122010213,0.0,59.74362738511153,0.0,1

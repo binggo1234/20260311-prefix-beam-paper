@@ -1,0 +1,9 @@
+name: nesting-only
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.8
+  - pip
+  - pip:
+      - ortools>=9.15,<10
+      - -r requirements.txt

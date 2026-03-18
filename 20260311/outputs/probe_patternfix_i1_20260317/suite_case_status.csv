@@ -1,0 +1,2 @@
+﻿suite,ordinal,case_id,family,source,csv_path,n_items,status,started_s,elapsed_s,comparison_rows,has_comparison_table,out_case_dir,error
+probe_patternfix_i1_20260317,1,I1_parts,industrial_cases,industrial_cases,D:\桌面\CXP\20260311 (2)\20260311\data\industrial_cases\I1_parts.csv,564,completed,0.435705,669.803938,1,1,D:\桌面\CXP\20260311 (2)\20260311\outputs\probe_patternfix_i1_20260317\probe_patternfix_i1_20260317__I1_parts,

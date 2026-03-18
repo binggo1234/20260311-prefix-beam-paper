@@ -1,0 +1,3 @@
+﻿case,variant,seed,N_board,U_global,U_avg_excl_last,runtime_s,LB_area,N_board_gap_to_LB
+data2_formal_global_20260313,baseline_greedy,1000,392,0.8873994779869079,0.8879888482439819,5.424657300000001,353,39.0
+data2_formal_global_20260313,rh_mcts_main,1000,392,0.887399477986908,0.8895250639901685,1608.0471906999999,353,39.0

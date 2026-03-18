@@ -1,0 +1,2 @@
+﻿suite,ordinal,case_id,family,source,csv_path,n_items,status,started_s,elapsed_s,comparison_rows,has_comparison_table,out_case_dir,error
+probe_patternpush_data6_20260317,1,data6,industrial_xlsx6,industrial_xlsx6,D:\桌面\CXP\20260311 (2)\20260311\data\industrial_xlsx6\data6.csv,1114,completed,0.359179,728.79975,1,1,D:\桌面\CXP\20260311 (2)\20260311\outputs\probe_patternpush_data6_20260317\probe_patternpush_data6_20260317__data6,

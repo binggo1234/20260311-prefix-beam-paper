@@ -1,0 +1,16 @@
+{
+  "best_round": 1,
+  "best_score": [
+    1,
+    -154,
+    -177,
+    -70,
+    0.8992133583132979
+  ],
+  "beam_overrides": {},
+  "used_bundles": [
+    "focused_repair_push"
+  ],
+  "passed_repr": false,
+  "promotion_ready": false
+}

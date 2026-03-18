@@ -1,0 +1,4 @@
+﻿case_id,variant_label,n,N_board_mean,N_board_std,N_board_best,gap_to_lb_pct_mean,gap_to_lb_pct_std,U_global_mean,U_global_std,U_avg_excl_last_mean,U_avg_excl_last_std,runtime_s_mean,runtime_s_std,simulations_mean,simulations_std
+cgcut1,BaselineSA,1,2.0,0.0,2.0,0.0,0.0,0.75,0.0,1.0,0.0,1.178414,0.0,0.0,0.0
+cgcut1,OursFull,1,2.0,0.0,2.0,0.0,0.0,0.75,0.0,1.0,0.0,3.7737504,0.0,1224.0,0.0
+cgcut1,PureGreedy,1,2.0,0.0,2.0,0.0,0.0,0.75,0.0,0.9866666666666667,0.0,0.005741299999999949,0.0,0.0,0.0
