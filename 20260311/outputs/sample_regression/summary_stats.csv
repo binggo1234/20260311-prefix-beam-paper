@@ -1,2 +1,0 @@
-﻿variant,N_board_mean,N_board_std,U_avg_excl_last_mean,U_avg_excl_last_std,U_avg_mean,U_avg_std,U_global_mean,U_global_std,n,runtime_s_mean,runtime_s_std,used_area_sum_mean,used_area_sum_std,waste_area_sum_mean,waste_area_sum_std
-rh_mcts,23.0,0.0,0.8800422456390022,0.0,0.8597471453150742,0.0,0.8597471453150743,0.0,1,258.12393320025876,0.0,58863791.95,0.0,9602608.05,0.0

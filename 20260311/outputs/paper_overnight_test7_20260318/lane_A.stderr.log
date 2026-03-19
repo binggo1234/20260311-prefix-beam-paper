@@ -1,7 +1,0 @@
-在此对象上找不到属性“Args”。请确认该属性存在。
-所在位置 D:\桌面\CXP\20260311 (2)\20260311\run_paper_overnight.ps1:257 字符: 17
-+ ...             Write-Log ("[DryRun] python " + ($task.Args -join " ")) $ ...
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (:) [], ParentContainsErrorRecordException
-    + FullyQualifiedErrorId : PropertyNotFoundStrict
- 

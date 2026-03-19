@@ -1,8 +1,0 @@
-无法将“SetThreadExecutionState”的参数“esFlags”(其值为“-2147483583”)转换为类型“System.UInt32”:“无法将值“-21474
-83583”转换为类型“System.UInt32”。错误:“值对于 UInt32 太大或太小。””
-所在位置 D:\桌面\CXP\20260311 (2)\20260311\run_paper_overnight.ps1:47 字符: 9
-+         [SleepUtil]::SetThreadExecutionState($ES_CONTINUOUS -bor $ES_ ...
-+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (:) [], ParentContainsErrorRecordException
-    + FullyQualifiedErrorId : MethodArgumentConversionInvalidCastArgument
- 

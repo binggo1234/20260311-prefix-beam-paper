@@ -1,5 +1,0 @@
-﻿case_id,family,status,elapsed_s,out_case_dir,n_rows,mcts_n_sim
-data3,industrial_xlsx6,completed,448.585562,D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_formal_v2_20260318\paper_sensitivity_data3\paper_sensitivity_data3__data3__nsim_1,3,1
-data3,industrial_xlsx6,completed,448.608518,D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_formal_v2_20260318\paper_sensitivity_data3\paper_sensitivity_data3__data3__nsim_2,3,2
-data3,industrial_xlsx6,completed,453.427854,D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_formal_v2_20260318\paper_sensitivity_data3\paper_sensitivity_data3__data3__nsim_3,3,3
-data3,industrial_xlsx6,completed,448.768282,D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_formal_v2_20260318\paper_sensitivity_data3\paper_sensitivity_data3__data3__nsim_5,3,5

@@ -1,3 +1,0 @@
-﻿suite,ordinal,case_id,family,source,csv_path,n_items,board_w,board_h,allow_rot
-public_casejobs_smoke_20260315,1,cgcut1,cgcut,public_binpacktwo,D:\桌面\CXP\20260311 (2)\20260311\data\public_binpacktwo\instances\cgcut1.csv,16,15.0,10.0,True
-public_casejobs_smoke_20260315,2,gcut1,gcut,public_binpacktwo,D:\桌面\CXP\20260311 (2)\20260311\data\public_binpacktwo\instances\gcut1.csv,10,250.0,250.0,True

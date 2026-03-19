@@ -1,2 +1,0 @@
-﻿case_id,family,seed,LB_area,n_items,N_board_Greedy,gap_to_lb_pct_Greedy,U_global_Greedy,runtime_s_Greedy,N_board_OursBase,gap_to_lb_pct_OursBase,U_global_OursBase,runtime_s_OursBase,N_board_OursNoPrior,gap_to_lb_pct_OursNoPrior,U_global_OursNoPrior,runtime_s_OursNoPrior,N_board_OursFull,gap_to_lb_pct_OursFull,U_global_OursFull,runtime_s_OursFull,delta_full_vs_base,delta_full_vs_noprior
-cgcut1,cgcut,1000,2,16,2,0.0,0.75,0.005916699999999997,2,0.0,0.75,3.6793861999999997,2,0.0,0.75,3.5087784000000006,2,0.0,0.75,3.7277455999999995,0.0,0.0

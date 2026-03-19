@@ -1,3 +1,0 @@
-﻿suite,ordinal,case_id,family,source,csv_path,n_items,status,started_s,elapsed_s,comparison_rows,has_comparison_table,out_case_dir,error
-regression_tagguided_xlsx2_20260317,1,data6,industrial_xlsx6,industrial_xlsx6,D:\桌面\CXP\20260311 (2)\20260311\data\industrial_xlsx6\data6.csv,1114,completed,0.368101,1773.321455,1,1,D:\桌面\CXP\20260311 (2)\20260311\outputs\regression_tagguided_xlsx2_20260317\regression_tagguided_xlsx2_20260317__data6,
-regression_tagguided_xlsx2_20260317,2,data3,industrial_xlsx6,industrial_xlsx6,D:\桌面\CXP\20260311 (2)\20260311\data\industrial_xlsx6\data3.csv,1234,completed,0.369361,1797.168985,1,1,D:\桌面\CXP\20260311 (2)\20260311\outputs\regression_tagguided_xlsx2_20260317\regression_tagguided_xlsx2_20260317__data3,

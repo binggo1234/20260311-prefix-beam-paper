@@ -1,6 +1,0 @@
-﻿"lane","task","state","done_file","updated_at","elapsed_s"
-"B","public_generalization_short","running","D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_formal_20260318\generalization_public_1seed_300s\suite_comparison_table.csv","2026-03-18 21:50:25","0"
-"B","robustness_data3","pending","D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_formal_20260318\paper_robustness_data3_5seed_900s\robustness_summary.csv","2026-03-18 21:50:25","0"
-"B","robustness_data6","pending","D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_formal_20260318\paper_robustness_data6_5seed_900s\robustness_summary.csv","2026-03-18 21:50:25","0"
-"B","sensitivity_data3","pending","D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_formal_20260318\paper_sensitivity_data3\sensitivity_summary.csv","2026-03-18 21:50:25","0"
-"B","sensitivity_data6","pending","D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_formal_20260318\paper_sensitivity_data6\sensitivity_summary.csv","2026-03-18 21:50:25","0"

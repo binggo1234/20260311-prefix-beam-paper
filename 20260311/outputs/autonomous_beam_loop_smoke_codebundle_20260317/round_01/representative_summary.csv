@@ -1,4 +1,0 @@
-﻿round,case_id,N_board_baseline,N_board_ref,N_board_beam,U_global_beam,beam_candidates_generated,beam_active_states_max,post_repair_boards_saved,elapsed_s,out_case_dir
-1,data3,175,177,177,0.8893653918931638,2.0,2.0,0.0,252.356107,D:\桌面\CXP\20260311 (2)\20260311\outputs\autonomous_beam_loop_smoke_codebundle_20260317\round_01\round_01__data3
-1,data6,151,153,154,0.9093565895522778,2.0,2.0,0.0,198.886623,D:\桌面\CXP\20260311 (2)\20260311\outputs\autonomous_beam_loop_smoke_codebundle_20260317\round_01\round_01__data6
-1,I1_parts,71,70,70,0.8989180934944522,2.0,2.0,0.0,136.275839,D:\桌面\CXP\20260311 (2)\20260311\outputs\autonomous_beam_loop_smoke_codebundle_20260317\round_01\round_01__I1_parts

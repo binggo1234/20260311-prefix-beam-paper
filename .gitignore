@@ -1,0 +1,31 @@
+# Local Python caches
+*.py[cod]
+__pycache__/
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+20260311/.venv/
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+
+# Local logs
+*.log
+
+# Temporary experiment status files
+20260311/outputs/**/resume.stdout.log
+20260311/outputs/**/resume.stderr.log
+
+# Local exploratory outputs kept only on disk
+20260311/outputs/archive_exploration/
+
+# Paper logs can stay on disk without polluting git status
+20260311/outputs/paper_final/**/*.log
+20260311/outputs/paper_final/**/*stderr*.csv
+20260311/outputs/paper_final/**/*status.csv
+
+# Untracked duplicate top-level source mirror
+src/

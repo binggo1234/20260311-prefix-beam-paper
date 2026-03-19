@@ -1,3 +1,0 @@
-﻿suite,ordinal,case_id,family,source,csv_path,n_items,board_w,board_h,allow_rot
-regression_tagguided_xlsx2_20260317,1,data6,industrial_xlsx6,industrial_xlsx6,D:\桌面\CXP\20260311 (2)\20260311\data\industrial_xlsx6\data6.csv,1114,,,
-regression_tagguided_xlsx2_20260317,2,data3,industrial_xlsx6,industrial_xlsx6,D:\桌面\CXP\20260311 (2)\20260311\data\industrial_xlsx6\data3.csv,1234,,,

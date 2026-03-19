@@ -1,4 +1,0 @@
-﻿"lane","task","state","done_file","updated_at","elapsed_s"
-"A","industrial_main_short","completed","D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_formal_v2_20260318\main_industrial_xlsx6_1seed_300s\suite_comparison_table.csv","2026-03-18 23:00:33","4063.59"
-"A","industrial_ablation_short","completed","D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_formal_v2_20260318\paper_ablation_industrial_xlsx6_1seed_300s\ablation_wide.csv","2026-03-19 01:38:38","9485.13"
-"A","industrial_main_formal","running","D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_formal_v2_20260318\main_industrial_xlsx6_3seed_3600s\suite_comparison_table.csv","2026-03-19 01:38:38","0"
