@@ -1,0 +1,8 @@
+Export-Csv : 文件“D:\桌面\CXP\20260311 (2)\20260311\outputs\paper_overnight_test4_20260318\lane_status.csv”正由另一进
+程使用，因此该进程无法访问此文件。
+所在位置 D:\桌面\CXP\20260311 (2)\20260311\run_paper_overnight.ps1:82 字符: 13
++     $rows | Export-Csv -Path $StatusPath -Encoding UTF8 -NoTypeInform ...
++             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OpenError: (:) [Export-Csv], IOException
+    + FullyQualifiedErrorId : FileOpenFailure,Microsoft.PowerShell.Commands.ExportCsvCommand
+ 

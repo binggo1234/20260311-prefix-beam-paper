@@ -254,10 +254,10 @@
     "WARMSTART_VMAX": 64
   },
   "meta": {
-    "timestamp": "2026-03-18T18:42:37",
+    "timestamp": "2026-03-18T19:25:53",
     "python": "3.9.7 (default, Sep 16 2021, 16:59:28) [MSC v.1916 64 bit (AMD64)]",
     "platform": "Windows-10-10.0.26200-SP0",
-    "cwd": "D:\\桌面\\CXP\\20260311 (2)",
+    "cwd": "D:\\桌面\\CXP\\20260311 (2)\\20260311",
     "pipeline": "nesting_only",
     "variant": "baseline_greedy",
     "profile": "baseline_greedy"

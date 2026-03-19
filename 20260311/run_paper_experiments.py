@@ -19,17 +19,20 @@ from inrp.runner import run_stepF
 from run_benchmark_suite import _discover_cases, _filter_cases
 
 
+PAPER_MAIN_VARIANT = "rh_mcts_prefix_beam"
+
+
 EXTERNAL_VARIANTS: List[Tuple[str, str]] = [
     ("baseline_greedy", "PureGreedy"),
     ("baseline_sa", "BaselineSA"),
-    ("rh_mcts_main", "OursMain"),
+    (PAPER_MAIN_VARIANT, "OursMain"),
 ]
 
 ABLATION_VARIANTS: List[Tuple[str, str]] = [
     ("baseline_greedy", "Greedy"),
     ("ours_base", "OursBase"),
     ("ours_noprior", "OursNoPrior"),
-    ("rh_mcts_main", "OursMain"),
+    (PAPER_MAIN_VARIANT, "OursMain"),
 ]
 
 
@@ -320,11 +323,11 @@ def _parse_args() -> argparse.Namespace:
 
     robustness = sub.add_parser("robustness", help="Seed robustness experiment.")
     _common_args(robustness)
-    robustness.add_argument("--variants", nargs="+", default=["rh_mcts_main"])
+    robustness.add_argument("--variants", nargs="+", default=[PAPER_MAIN_VARIANT])
 
     sensitivity = sub.add_parser("sensitivity", help="MCTS simulation-budget sensitivity.")
     _common_args(sensitivity)
-    sensitivity.add_argument("--variants", nargs="+", default=["rh_mcts_main"])
+    sensitivity.add_argument("--variants", nargs="+", default=[PAPER_MAIN_VARIANT])
     sensitivity.add_argument("--mcts-n-sim-values", nargs="+", type=int, default=[1, 2, 3, 5])
     return parser.parse_args()
 

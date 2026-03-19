@@ -31,6 +31,7 @@ from inrp.runner import (
     _adaptive_main_profile,
     _area_lower_bound,
     _case_stats,
+    _comparison_table_rows,
     _effective_board_area,
     _load_cached_seed_totals,
     _solve_baseline_sa,
@@ -41,6 +42,7 @@ from inrp.runner import (
 )
 from inrp.validate import validate_solution
 from run_autonomous_beam_loop import _choose_next_bundle, _promotion_ready
+from run_paper_experiments import ABLATION_VARIANTS, EXTERNAL_VARIANTS, PAPER_MAIN_VARIANT
 
 
 def _cfg() -> CFG:
@@ -614,16 +616,40 @@ def test_variant_cfg_rh_mcts_prefix_beam_enables_prefix_bundle():
     cfg_variant = _variant_cfg(cfg, "rh_mcts_prefix_beam", stats)
 
     assert str(cfg_variant.SOLVER_ROLE) == "prefix_beam_main"
-    assert str(cfg_variant.SOLVER_BUNDLE) == "prefix_beam_oracle"
+    assert str(cfg_variant.SOLVER_BUNDLE) == "prefix_beam_multi_oracle_light_repair"
     assert bool(cfg_variant.PREFIX_BEAM_ENABLE)
     assert int(cfg_variant.PREFIX_BEAM_DEPTH) == 3
     assert int(cfg_variant.PREFIX_BEAM_WIDTH) == 2
     assert int(cfg_variant.PREFIX_BEAM_BRANCH_TOPK) == 3
     assert int(cfg_variant.PREFIX_BEAM_POST_TOPK) == 2
+    assert tuple(cfg_variant.PREFIX_BEAM_ORACLE_MODES) == ("baseline", "long_edge", "strip_bias")
+    assert bool(cfg_variant.PREFIX_BEAM_LIGHT_REPAIR_ENABLE)
+    assert int(cfg_variant.PREFIX_BEAM_LIGHT_REPAIR_TOPK) == 1
     assert bool(cfg_variant.MACRO_ACTION_ENABLE)
     assert not bool(cfg_variant.POST_REPAIR_ENABLE)
     assert not bool(cfg_variant.GLOBAL_PATTERN_MASTER_ENABLE)
     assert not bool(cfg_variant.BEAM_FOCUSED_REPAIR_ENABLE)
+
+
+def test_paper_experiment_defaults_point_ours_main_to_prefix_beam():
+    assert PAPER_MAIN_VARIANT == "rh_mcts_prefix_beam"
+    assert EXTERNAL_VARIANTS[-1] == ("rh_mcts_prefix_beam", "OursMain")
+    assert ABLATION_VARIANTS[-1] == ("rh_mcts_prefix_beam", "OursMain")
+
+
+def test_comparison_table_prefers_prefix_beam_when_both_main_and_prefix_exist():
+    rows = _comparison_table_rows(
+        [
+            {"seed": 1000, "variant": "baseline_greedy", "case": "demo", "N_board": 10, "N_board_gap_to_LB": 2, "LB_area": 8, "U_global": 0.9, "U_avg_excl_last": 0.91, "runtime_s": 1.0},
+            {"seed": 1000, "variant": "rh_mcts_ref", "case": "demo", "N_board": 9, "N_board_gap_to_LB": 1, "LB_area": 8, "U_global": 0.92, "U_avg_excl_last": 0.93, "runtime_s": 2.0},
+            {"seed": 1000, "variant": "rh_mcts_main", "case": "demo", "N_board": 11, "N_board_gap_to_LB": 3, "LB_area": 8, "U_global": 0.88, "U_avg_excl_last": 0.89, "runtime_s": 3.0},
+            {"seed": 1000, "variant": "rh_mcts_prefix_beam", "case": "demo", "N_board": 8, "N_board_gap_to_LB": 0, "LB_area": 8, "U_global": 0.95, "U_avg_excl_last": 0.96, "runtime_s": 4.0},
+        ]
+    )
+
+    assert len(rows) == 1
+    assert rows[0]["variant_main"] == "rh_mcts_prefix_beam"
+    assert float(rows[0]["N_board_main"]) == 8.0
 
 
 def test_variant_cfg_applies_variant_extra_overrides_after_profiles():
@@ -751,6 +777,7 @@ def test_prefix_baseline_completion_oracle_completes_legally_and_hits_cache():
     cfg = _cfg()
     cfg.PREFIX_BEAM_ENABLE = True
     cfg.MACRO_ACTION_ENABLE = True
+    cfg.PREFIX_BEAM_ORACLE_MODES = ("baseline", "long_edge")
     mcts = RecedingHorizonMCTS(_parts(), cfg, seed=11)
     prefix = (1, 2)
     prefix_snapshot, _ = mcts.decoder.replay_order(prefix)
@@ -776,6 +803,86 @@ def test_prefix_baseline_completion_oracle_completes_legally_and_hits_cache():
     assert len(final_snapshot_1.boards.materialize()) == len(final_snapshot_2.boards.materialize())
     assert float(mcts.meta["oracle_completion_calls"]) >= 2.0
     assert float(mcts.meta["oracle_completion_cache_hits"]) >= 1.0
+    assert float(mcts.meta["oracle_completion_mode_evals"]) >= 2.0
+    assert str(mcts.meta["oracle_completion_last_best_mode"]) in {"baseline", "long_edge"}
+
+
+def test_prefix_oracle_chooses_best_mode_and_caches_selected_mode():
+    cfg = _cfg()
+    cfg.PREFIX_BEAM_ENABLE = True
+    cfg.PREFIX_BEAM_ORACLE_MODES = ("baseline", "strip_bias")
+    mcts = RecedingHorizonMCTS(_parts(), cfg, seed=12)
+    prefix = (1,)
+    prefix_snapshot, _ = mcts.decoder.replay_order(prefix)
+    remaining_mask = mcts.full_remaining_mask & ~int(mcts.part_bit[1])
+
+    calls = []
+
+    def _fake_order(mask: int, *, mode: str = "baseline"):
+        del mask
+        calls.append(str(mode))
+        if mode == "baseline":
+            return (2, 3, 4, 5, 6)
+        return (6, 5, 4, 3, 2)
+
+    def _fake_rank(snapshot, *, prefix_depth: int):
+        del prefix_depth
+        board_count = len(snapshot.boards.materialize())
+        return (-float(board_count), float(snapshot.sum_u_gamma), 0.0, 0.0, 0.0)
+
+    def _fake_replay(order, prefix_snapshot=None):
+        del prefix_snapshot
+        order_t = tuple(int(pid) for pid in order)
+        if order_t and order_t[0] == 6:
+            return _dummy_snapshot(2, 0.9), tuple()
+        return _dummy_snapshot(3, 0.8), tuple()
+
+    mcts._baseline_completion_order = _fake_order  # type: ignore[assignment]
+    mcts._prefix_beam_completed_rank = _fake_rank  # type: ignore[assignment]
+    mcts.decoder.replay_order = _fake_replay  # type: ignore[assignment]
+
+    suffix_1, final_snapshot_1, _ = mcts._complete_with_baseline(prefix_snapshot, remaining_mask, prefix_depth=1)
+    suffix_2, final_snapshot_2, _ = mcts._complete_with_baseline(prefix_snapshot, remaining_mask, prefix_depth=1)
+
+    assert tuple(suffix_1) == (6, 5, 4, 3, 2)
+    assert tuple(suffix_2) == tuple(suffix_1)
+    assert len(calls) == 2
+    assert str(mcts.meta["oracle_completion_last_best_mode"]) == "strip_bias"
+    assert float(mcts.meta["oracle_completion_best_strip_bias"]) >= 2.0
+    assert len(final_snapshot_1.boards.materialize()) == len(final_snapshot_2.boards.materialize())
+
+
+def test_prefix_light_repair_prefers_improved_tail_collapse_result():
+    cfg = _cfg()
+    cfg.PREFIX_BEAM_ENABLE = True
+    cfg.PREFIX_BEAM_LIGHT_REPAIR_ENABLE = True
+    mcts = RecedingHorizonMCTS(_parts(), cfg, seed=13)
+    base_sequence = tuple(part.uid for part in _parts())
+    base_snapshot = _dummy_snapshot(3, 0.75)
+    improved_snapshot = _dummy_snapshot(2, 0.85)
+
+    def _fake_tail_collapse(seq, snap):
+        del snap
+        return tuple(reversed(seq)), improved_snapshot
+
+    def _fake_rank(snapshot, *, prefix_depth: int):
+        del prefix_depth
+        return (-float(len(snapshot.boards.materialize())), float(snapshot.sum_u_gamma), 0.0, 0.0, 0.0)
+
+    mcts._focused_tail_collapse = _fake_tail_collapse  # type: ignore[assignment]
+    mcts._prefix_beam_completed_rank = _fake_rank  # type: ignore[assignment]
+
+    best_sequence, best_snapshot, best_rank, improved = mcts._prefix_beam_light_postprocess(
+        base_sequence,
+        base_snapshot,
+        prefix_depth=2,
+    )
+
+    assert improved
+    assert best_sequence == tuple(reversed(base_sequence))
+    assert len(best_snapshot.boards.materialize()) == 2
+    assert best_rank == _fake_rank(improved_snapshot, prefix_depth=2)
+    assert float(mcts.meta["prefix_light_repair_improvements"]) >= 1.0
 
 
 def test_prefix_beam_root_rank_prefers_better_oracle_terminal_result_over_visits():

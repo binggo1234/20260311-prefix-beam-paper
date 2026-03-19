@@ -1,0 +1,7 @@
+方法调用失败，因为 [System.Management.Automation.PSObject] 不包含名为“op_Addition”的方法。
+所在位置 D:\桌面\CXP\20260311 (2)\20260311\run_paper_overnight.ps1:75 字符: 9
++         $rows += $obj
++         ~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (op_Addition:String) []，ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : MethodNotFound
+ 

@@ -1,0 +1,7 @@
+﻿experiment,suite,exp_name,case_id,family,source,csv_path,n_items
+ablation,industrial_xlsx6,paper_ablation_industrial_xlsx6_1seed_300s,data6,industrial_xlsx6,industrial_xlsx6,D:\桌面\CXP\20260311 (2)\20260311\data\industrial_xlsx6\data6.csv,1114
+ablation,industrial_xlsx6,paper_ablation_industrial_xlsx6_1seed_300s,data3,industrial_xlsx6,industrial_xlsx6,D:\桌面\CXP\20260311 (2)\20260311\data\industrial_xlsx6\data3.csv,1234
+ablation,industrial_xlsx6,paper_ablation_industrial_xlsx6_1seed_300s,data5,industrial_xlsx6,industrial_xlsx6,D:\桌面\CXP\20260311 (2)\20260311\data\industrial_xlsx6\data5.csv,1649
+ablation,industrial_xlsx6,paper_ablation_industrial_xlsx6_1seed_300s,data4,industrial_xlsx6,industrial_xlsx6,D:\桌面\CXP\20260311 (2)\20260311\data\industrial_xlsx6\data4.csv,2109
+ablation,industrial_xlsx6,paper_ablation_industrial_xlsx6_1seed_300s,data2,industrial_xlsx6,industrial_xlsx6,D:\桌面\CXP\20260311 (2)\20260311\data\industrial_xlsx6\data2.csv,2429
+ablation,industrial_xlsx6,paper_ablation_industrial_xlsx6_1seed_300s,data1,industrial_xlsx6,industrial_xlsx6,D:\桌面\CXP\20260311 (2)\20260311\data\industrial_xlsx6\data1.csv,2819

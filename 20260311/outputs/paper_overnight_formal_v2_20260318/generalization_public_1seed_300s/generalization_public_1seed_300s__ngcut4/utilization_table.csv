@@ -1,0 +1,4 @@
+﻿case,variant,seed,N_input,N_board,U_avg,U_avg_excl_last,U_avg_excl_last2,U_global,U_last,U_worst_excl_last,U_best_board,U_worst_board,last2_used_equiv,sparse_board_count,tail_waste_area,U_avg_pct,U_avg_excl_last_pct,U_avg_excl_last2_pct,U_global_pct,U_last_pct,U_worst_excl_last_pct,U_best_board_pct,U_worst_board_pct,runtime_s
+generalization_public_1seed_300s__ngcut4,baseline_greedy,1000,7,2,0.54,0.78,0.78,0.54,0.3,0.78,0.78,0.3,1.08,1,105.0,54.0,78.0,78.0,54.0,30.0,78.0,78.0,30.0,0.42931670000007216
+generalization_public_1seed_300s__ngcut4,rh_mcts_prefix_beam,1000,7,2,0.54,0.92,0.92,0.54,0.16,0.92,0.92,0.16,1.08,1,126.0,54.0,92.0,92.0,54.0,16.0,92.0,92.0,16.0,0.5738167999998041
+generalization_public_1seed_300s__ngcut4,rh_mcts_ref,1000,7,2,0.54,0.92,0.92,0.54,0.16,0.92,0.92,0.16,1.08,1,126.0,54.0,92.0,92.0,54.0,16.0,92.0,92.0,16.0,286.1245764

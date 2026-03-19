@@ -1,0 +1,4 @@
+﻿variant,U_avg_excl_last2_pct_mean,U_avg_excl_last2_pct_std,U_avg_excl_last_pct_mean,U_avg_excl_last_pct_std,U_avg_pct_mean,U_avg_pct_std,U_best_board_pct_mean,U_best_board_pct_std,U_global_pct_mean,U_global_pct_std,U_last_pct_mean,U_last_pct_std,U_worst_board_pct_mean,U_worst_board_pct_std,U_worst_excl_last_pct_mean,U_worst_excl_last_pct_std,n
+baseline_greedy,89.51132222222222,0.0,89.51132222222222,0.0,79.5306,0.0,89.51132222222222,0.0,79.53059999999999,0.0,69.54987777777778,0.0,69.54987777777778,0.0,89.51132222222222,0.0,1
+rh_mcts_ref,95.06831111111111,0.0,95.06831111111111,0.0,79.5306,0.0,95.06831111111111,0.0,79.53059999999999,0.0,63.992888888888885,0.0,63.992888888888885,0.0,95.06831111111111,0.0,1
+rh_mcts_prefix_beam,94.57435555555556,0.0,94.57435555555556,0.0,79.5306,0.0,94.57435555555556,0.0,79.53059999999999,0.0,64.48684444444444,0.0,64.48684444444444,0.0,94.57435555555556,0.0,1

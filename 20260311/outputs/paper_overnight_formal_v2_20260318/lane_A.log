@@ -1,0 +1,6 @@
+﻿[2026-03-18 21:52:50] Lane A starting with 3 tasks.
+[2026-03-18 21:52:50] Starting industrial_main_short: python 20260311/run_benchmark_suite.py --suite industrial_xlsx6 --suite-name main_industrial_xlsx6_1seed_300s --out-root outputs/paper_overnight_formal_v2_20260318 --variants baseline_greedy rh_mcts_ref rh_mcts_prefix_beam --solver-time-limit-s 300 --post-repair-cp-workers 2 --seed0 1000 --n-seeds 1 --inner-jobs 1 --case-jobs 2 --resume
+[2026-03-18 23:00:33] Completed industrial_main_short in 67.73 min.
+[2026-03-18 23:00:33] Starting industrial_ablation_short: python 20260311/run_paper_experiments.py ablation --suite industrial_xlsx6 --exp-name paper_ablation_industrial_xlsx6_1seed_300s --out-root outputs/paper_overnight_formal_v2_20260318 --solver-time-limit-s 300 --post-repair-cp-workers 2 --seed0 1000 --n-seeds 1 --inner-jobs 1
+[2026-03-19 01:38:38] Completed industrial_ablation_short in 158.09 min.
+[2026-03-19 01:38:38] Starting industrial_main_formal: python 20260311/run_benchmark_suite.py --suite industrial_xlsx6 --suite-name main_industrial_xlsx6_3seed_3600s --out-root outputs/paper_overnight_formal_v2_20260318 --variants baseline_greedy rh_mcts_ref rh_mcts_prefix_beam --solver-time-limit-s 3600 --post-repair-cp-workers 2 --seed0 1000 --n-seeds 3 --inner-jobs 1 --case-jobs 2 --resume

@@ -1,0 +1,2 @@
+﻿case_id,variant_label,n,N_board_mean,N_board_std,N_board_best,gap_to_lb_pct_mean,gap_to_lb_pct_std,U_global_mean,U_global_std,U_avg_excl_last_mean,U_avg_excl_last_std,runtime_s_mean,runtime_s_std,simulations_mean,simulations_std
+data6,rh_mcts_prefix_beam,5,151.0,0.0,151.0,6.338028169014085,0.0,0.927423276761926,0.0,0.9314506215846995,0.0003587974251657904,123.05656384000001,9.183618864937383,80.0,0.0

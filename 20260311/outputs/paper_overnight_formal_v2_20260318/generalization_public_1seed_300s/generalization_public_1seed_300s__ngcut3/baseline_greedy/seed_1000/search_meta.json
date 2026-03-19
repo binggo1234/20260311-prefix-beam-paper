@@ -1,0 +1,20 @@
+{
+  "solver_kind": "baseline_greedy",
+  "baseline_order": "area_aspect_desc",
+  "decode_cache_hits": 0.0,
+  "decode_cache_misses": 21.0,
+  "decode_cache_entries": 21.0,
+  "micro_cache_hits": 26.0,
+  "micro_cache_misses": 44.0,
+  "micro_cache_entries": 44.0,
+  "solver_role": "",
+  "solver_bundle": "",
+  "preprocess_distinct_shapes": 10,
+  "preprocess_duplicate_parts": 11,
+  "preprocess_large_part_count": 12,
+  "preprocess_strip_part_count": 3,
+  "preprocess_quantized_parts": 0,
+  "main_profile_tier": "base",
+  "main_profile_n_parts": 21,
+  "main_profile_lb_area": 3
+}

@@ -216,6 +216,9 @@ class CFG:
     PREFIX_BEAM_USE_MACRO: bool = True
     PREFIX_BEAM_ALLOW_SINGLE_FALLBACK: bool = True
     PREFIX_BEAM_ORACLE_CACHE_ENABLE: bool = True
+    PREFIX_BEAM_ORACLE_MODES: tuple = ("baseline", "long_edge", "strip_bias")
+    PREFIX_BEAM_LIGHT_REPAIR_ENABLE: bool = True
+    PREFIX_BEAM_LIGHT_REPAIR_TOPK: int = 1
 
     # Spill-point memetic search
     LOCAL_SEARCH_ENABLE: bool = True

@@ -931,6 +931,25 @@ class RecedingHorizonMCTS:
         self.prefix_beam_use_macro = bool(getattr(cfg, "PREFIX_BEAM_USE_MACRO", True))
         self.prefix_beam_allow_single_fallback = bool(getattr(cfg, "PREFIX_BEAM_ALLOW_SINGLE_FALLBACK", True))
         self.prefix_beam_oracle_cache_enable = bool(getattr(cfg, "PREFIX_BEAM_ORACLE_CACHE_ENABLE", True))
+        self.prefix_beam_light_repair_enable = bool(getattr(cfg, "PREFIX_BEAM_LIGHT_REPAIR_ENABLE", True))
+        self.prefix_beam_light_repair_topk = max(0, int(getattr(cfg, "PREFIX_BEAM_LIGHT_REPAIR_TOPK", 1)))
+        raw_prefix_beam_oracle_modes = getattr(
+            cfg,
+            "PREFIX_BEAM_ORACLE_MODES",
+            ("baseline", "long_edge", "strip_bias"),
+        )
+        if isinstance(raw_prefix_beam_oracle_modes, str):
+            raw_prefix_beam_oracle_modes = (raw_prefix_beam_oracle_modes,)
+        allowed_oracle_modes = {"baseline", "long_edge", "strip_bias", "meta"}
+        oracle_modes: List[str] = []
+        for mode in raw_prefix_beam_oracle_modes:
+            name = str(mode).strip().lower()
+            if not name or name not in allowed_oracle_modes or name in oracle_modes:
+                continue
+            oracle_modes.append(name)
+        if not oracle_modes:
+            oracle_modes = ["baseline"]
+        self.prefix_beam_oracle_modes = tuple(oracle_modes)
         self.sig_nd = int(getattr(cfg, "STATE_SIG_ND", 3))
         usable_w = max(0.0, float(getattr(self.cfg, "BOARD_W", 0.0)) - 2.0 * float(self.trim))
         usable_h = max(0.0, float(getattr(self.cfg, "BOARD_H", 0.0)) - 2.0 * float(self.trim))
@@ -962,6 +981,7 @@ class RecedingHorizonMCTS:
         self.rollout_cache: Dict[Tuple, Tuple[LayoutSnapshot, Tuple[int, ...]]] = {}
         self.seed_suffix_cache: Dict[Tuple, Tuple[LayoutSnapshot, Tuple[int, ...]]] = {}
         self.oracle_completion_cache: Dict[Tuple, Tuple[Tuple[int, ...], LayoutSnapshot, Tuple[float, ...]]] = {}
+        self.oracle_completion_mode_cache: Dict[Tuple, str] = {}
         self.global_best_sequence: Optional[Tuple[int, ...]] = None
         self.global_best_snapshot: Optional[LayoutSnapshot] = None
         self.global_best_score: Optional[Tuple[float, ...]] = None
@@ -1089,8 +1109,12 @@ class RecedingHorizonMCTS:
             "oracle_completion_calls": 0.0,
             "oracle_completion_cache_hits": 0.0,
             "oracle_completion_cache_entries": 0.0,
+            "oracle_completion_mode_evals": 0.0,
+            "oracle_completion_last_best_mode": "",
             "prefix_candidates_generated": 0.0,
             "prefix_depth_reached": 0.0,
+            "prefix_light_repair_candidates": 0.0,
+            "prefix_light_repair_improvements": 0.0,
             "result_source": "",
         }
 
@@ -1891,10 +1915,30 @@ class RecedingHorizonMCTS:
             -int(pid),
         )
 
-    def _baseline_completion_order(self, remaining_mask: int) -> Tuple[int, ...]:
+    def _oracle_completion_sort_key(self, pid: int, *, mode: str) -> Tuple[float, ...]:
+        part = self.parts_by_id[int(pid)]
+        area = float(part.w0) * float(part.h0)
+        long_edge = max(float(part.w0), float(part.h0))
+        short_edge = max(EPS, min(float(part.w0), float(part.h0)))
+        aspect = long_edge / short_edge
+        if mode == "long_edge":
+            return (long_edge, area, aspect, -int(pid))
+        if mode == "strip_bias":
+            return (aspect, long_edge, area, -int(pid))
+        if mode == "meta":
+            return (
+                self._part_order_bonus(int(pid), stage="mid"),
+                area,
+                aspect,
+                long_edge,
+                -int(pid),
+            )
+        return self._baseline_sort_key(int(pid))
+
+    def _baseline_completion_order(self, remaining_mask: int, *, mode: str = "baseline") -> Tuple[int, ...]:
         ranked = sorted(
             self._candidate_actions_static(remaining_mask),
-            key=lambda pid: self._baseline_sort_key(int(pid)),
+            key=lambda pid: self._oracle_completion_sort_key(int(pid), mode=str(mode)),
             reverse=True,
         )
         return tuple(int(pid) for pid in ranked)
@@ -1919,14 +1963,39 @@ class RecedingHorizonMCTS:
         cached = self.oracle_completion_cache.get(cache_key)
         if cached is not None:
             self.meta["oracle_completion_cache_hits"] += 1.0
+            best_mode = str(self.oracle_completion_mode_cache.get(cache_key, self.prefix_beam_oracle_modes[0]))
+            self.meta[f"oracle_completion_best_{best_mode}"] = float(
+                self.meta.get(f"oracle_completion_best_{best_mode}", 0.0)
+            ) + 1.0
+            self.meta["oracle_completion_last_best_mode"] = best_mode
             return cached
 
-        suffix = self._baseline_completion_order(remaining_mask)
-        final_snapshot, _ = self.decoder.replay_order(suffix, prefix_snapshot=prefix_snapshot)
-        score = self._terminal_score(final_snapshot)
-        out = (tuple(int(pid) for pid in suffix), final_snapshot, tuple(score))
+        best_mode = "baseline"
+        best_rank: Optional[Tuple[float, ...]] = None
+        best_out: Optional[Tuple[Tuple[int, ...], LayoutSnapshot, Tuple[float, ...]]] = None
+        for mode in self.prefix_beam_oracle_modes:
+            self.meta["oracle_completion_mode_evals"] += 1.0
+            self.meta[f"oracle_completion_mode_eval_{mode}"] = float(
+                self.meta.get(f"oracle_completion_mode_eval_{mode}", 0.0)
+            ) + 1.0
+            suffix = self._baseline_completion_order(remaining_mask, mode=mode)
+            final_snapshot, _ = self.decoder.replay_order(suffix, prefix_snapshot=prefix_snapshot)
+            score = tuple(self._terminal_score(final_snapshot))
+            rank = self._prefix_beam_completed_rank(final_snapshot, prefix_depth=prefix_depth)
+            if best_rank is None or rank > best_rank:
+                best_rank = rank
+                best_mode = str(mode)
+                best_out = (tuple(int(pid) for pid in suffix), final_snapshot, score)
+
+        assert best_out is not None
+        out = best_out
         if self.prefix_beam_oracle_cache_enable:
             self.oracle_completion_cache[cache_key] = out
+            self.oracle_completion_mode_cache[cache_key] = best_mode
+        self.meta[f"oracle_completion_best_{best_mode}"] = float(
+            self.meta.get(f"oracle_completion_best_{best_mode}", 0.0)
+        ) + 1.0
+        self.meta["oracle_completion_last_best_mode"] = best_mode
         self.meta["oracle_completion_cache_entries"] = float(len(self.oracle_completion_cache))
         return out
 
@@ -2827,6 +2896,31 @@ class RecedingHorizonMCTS:
     def _prefix_beam_completed_rank(self, snapshot: LayoutSnapshot, *, prefix_depth: int) -> Tuple[float, ...]:
         return self._prefix_beam_rank_tuple(snapshot, prefix_depth=prefix_depth)
 
+    def _prefix_beam_light_postprocess(
+        self,
+        base_sequence: Tuple[int, ...],
+        base_snapshot: LayoutSnapshot,
+        *,
+        prefix_depth: int,
+    ) -> Tuple[Tuple[int, ...], LayoutSnapshot, Tuple[float, ...], bool]:
+        best_sequence = tuple(int(x) for x in base_sequence)
+        best_snapshot = base_snapshot
+        best_rank = self._prefix_beam_completed_rank(best_snapshot, prefix_depth=prefix_depth)
+        improved = False
+
+        collapsed_sequence, collapsed_snapshot = self._focused_tail_collapse(best_sequence, best_snapshot)
+        collapsed_rank = self._prefix_beam_completed_rank(collapsed_snapshot, prefix_depth=prefix_depth)
+        if collapsed_rank > best_rank:
+            best_sequence = collapsed_sequence
+            best_snapshot = collapsed_snapshot
+            best_rank = collapsed_rank
+            improved = True
+
+        if improved:
+            self.meta["prefix_light_repair_improvements"] += 1.0
+            self._update_global_best(best_sequence, best_snapshot)
+        return best_sequence, best_snapshot, best_rank, improved
+
     def _prefix_beam_child_allowed(self, node: SearchNode, action: int, child: SearchNode) -> bool:
         del child
         if not self.prefix_beam_enable:
@@ -3118,6 +3212,23 @@ class RecedingHorizonMCTS:
         completed_candidates.sort(key=lambda item: item[0], reverse=True)
         self.meta["beam_fast_completed_candidates"] = float(len(completed_candidates))
         ranked_candidates = completed_candidates[: max(1, min(post_topk, len(completed_candidates)))]
+        if self.prefix_beam_light_repair_enable and self.prefix_beam_light_repair_topk > 0 and ranked_candidates:
+            repaired_candidates = []
+            light_topk = max(1, min(self.prefix_beam_light_repair_topk, len(ranked_candidates)))
+            for idx, (rank, full_sequence, final_snapshot, depth) in enumerate(ranked_candidates):
+                if idx < light_topk:
+                    self.meta["prefix_light_repair_candidates"] += 1.0
+                    full_sequence, final_snapshot, rank, improved = self._prefix_beam_light_postprocess(
+                        full_sequence,
+                        final_snapshot,
+                        prefix_depth=int(depth),
+                    )
+                else:
+                    improved = False
+                repaired_candidates.append((rank, full_sequence, final_snapshot, depth, improved))
+            repaired_candidates.sort(key=lambda item: item[0], reverse=True)
+        else:
+            repaired_candidates = [(rank, full_sequence, final_snapshot, depth, False) for rank, full_sequence, final_snapshot, depth in ranked_candidates]
         self.meta["beam_postprocess_candidates"] = float(len(ranked_candidates))
         self.meta["beam_focused_repair_candidates"] = 0.0
 
@@ -3126,11 +3237,12 @@ class RecedingHorizonMCTS:
         best_rank: Optional[Tuple[float, ...]] = None
         result_source = "prefix_oracle_complete"
 
-        for rank, full_sequence, final_snapshot, _depth in ranked_candidates:
+        for rank, full_sequence, final_snapshot, _depth, improved in repaired_candidates:
             if best_rank is None or rank > best_rank:
                 best_rank = rank
                 best_sequence = full_sequence
                 best_snapshot = final_snapshot
+                result_source = "prefix_light_repair" if improved else "prefix_oracle_complete"
 
         if best_sequence is None or best_snapshot is None:
             best_sequence, best_snapshot = self._complete_root_candidate(root)

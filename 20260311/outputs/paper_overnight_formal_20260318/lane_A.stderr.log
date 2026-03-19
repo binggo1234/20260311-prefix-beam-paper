@@ -1,0 +1,7 @@
+python.exe : Python 3.9.7 (default, Sep 16 2021, 16:59:28) [MSC v.1916 64 bit (AMD64)] :: Anaconda, Inc. on win32
+所在位置 D:\桌面\CXP\20260311 (2)\20260311\run_paper_overnight.ps1:264 字符: 13
++             & $PythonExe @($task.Args) 2>&1 | Tee-Object -FilePath $l ...
++             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Python 3.9.7 (d..., Inc. on win32:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

@@ -267,7 +267,7 @@ RH_MCTS_BEAM_OVERRIDES: Dict[str, Any] = {
 
 RH_MCTS_PREFIX_BEAM_OVERRIDES: Dict[str, Any] = {
     "SOLVER_ROLE": "prefix_beam_main",
-    "SOLVER_BUNDLE": "prefix_beam_oracle",
+    "SOLVER_BUNDLE": "prefix_beam_multi_oracle_light_repair",
     "PREFIX_BEAM_ENABLE": True,
     "PREFIX_BEAM_DEPTH": 3,
     "PREFIX_BEAM_WIDTH": 2,
@@ -276,6 +276,9 @@ RH_MCTS_PREFIX_BEAM_OVERRIDES: Dict[str, Any] = {
     "PREFIX_BEAM_USE_MACRO": True,
     "PREFIX_BEAM_ALLOW_SINGLE_FALLBACK": True,
     "PREFIX_BEAM_ORACLE_CACHE_ENABLE": True,
+    "PREFIX_BEAM_ORACLE_MODES": ("baseline", "long_edge", "strip_bias"),
+    "PREFIX_BEAM_LIGHT_REPAIR_ENABLE": True,
+    "PREFIX_BEAM_LIGHT_REPAIR_TOPK": 1,
     "BEAM_ENABLE": True,
     "BEAM_WIDTH": 2,
     "BEAM_BRANCH_TOPK": 3,
@@ -710,7 +713,7 @@ def _comparison_table_rows(totals_all: List[Dict[str, Any]]) -> List[Dict[str, A
         variants = by_seed[seed]
         baseline = variants.get("baseline_greedy")
         ref = variants.get("rh_mcts_ref") or variants.get("rh_mcts")
-        main = variants.get("rh_mcts_main") or variants.get("rh_mcts_beam") or variants.get("rh_mcts_prefix_beam")
+        main = variants.get("rh_mcts_prefix_beam") or variants.get("rh_mcts_main") or variants.get("rh_mcts_beam")
         if ref is None or main is None:
             continue
         row = {

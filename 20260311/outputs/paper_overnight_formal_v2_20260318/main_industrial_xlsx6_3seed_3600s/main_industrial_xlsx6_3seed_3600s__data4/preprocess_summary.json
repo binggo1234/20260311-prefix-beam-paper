@@ -1,0 +1,15 @@
+{
+  "enabled": false,
+  "n_parts": 2109,
+  "n_distinct_shapes": 1117,
+  "duplicate_parts": 992,
+  "max_dup_count": 12,
+  "large_part_count": 594,
+  "strip_part_count": 288,
+  "quantized_parts": 0,
+  "dim_step": 0.0,
+  "board_area_effective": 2940300.0,
+  "large_area_ratio": 0.14,
+  "large_edge_ratio": 0.88,
+  "strip_aspect": 8.0
+}

@@ -1,0 +1,7 @@
+无法将值“-2147483648”转换为类型“System.UInt32”。错误:“值对于 UInt32 太大或太小。”
+所在位置 D:\桌面\CXP\20260311 (2)\20260311\run_paper_overnight.ps1:43 字符: 5
++     [uint32]$ES_CONTINUOUS = 0x80000000
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) []，ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : InvalidCastIConvertible
+ 
