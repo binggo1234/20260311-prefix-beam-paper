@@ -323,6 +323,7 @@ RH_MCTS_PROFILE_BASES: Dict[str, str] = {
     "rh_mcts_beam": "rh_mcts_main",
     "rh_mcts_prefix_beam": "rh_mcts_main",
     "rh_mcts_prefix_beam_random_completion": "rh_mcts_prefix_beam",
+    "rh_mcts_prefix_beam_complement": "rh_mcts_prefix_beam",
     "rh_mcts_full": "rh_mcts_main",
     "ours_full": "rh_mcts_full",
     "ours_base": "rh_mcts_main",
@@ -348,6 +349,11 @@ RH_MCTS_PROFILE_OVERRIDES: Dict[str, Dict[str, Any]] = {
     "rh_mcts_beam": RH_MCTS_BEAM_OVERRIDES,
     "rh_mcts_prefix_beam": RH_MCTS_PREFIX_BEAM_OVERRIDES,
     "rh_mcts_prefix_beam_random_completion": RH_MCTS_PREFIX_BEAM_RANDOM_COMPLETION_OVERRIDES,
+    "rh_mcts_prefix_beam_complement": {
+        "SOLVER_ROLE": "prefix_beam_complement_development",
+        "SOLVER_BUNDLE": "prefix_beam_complement",
+        "MACRO_COMPLEMENT_ENABLE": True,
+    },
     "rh_mcts_full": RH_MCTS_FULL_OVERRIDES,
     "ours_full": {},
     "ours_base": {
@@ -440,6 +446,7 @@ MCTS_MAIN_VARIANTS = {
     "rh_mcts_beam",
     "rh_mcts_prefix_beam",
     "rh_mcts_prefix_beam_random_completion",
+    "rh_mcts_prefix_beam_complement",
     "rh_mcts_full",
     "ours_full",
     "ours_base",

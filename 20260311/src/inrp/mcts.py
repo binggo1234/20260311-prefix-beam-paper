@@ -923,6 +923,9 @@ class RecedingHorizonMCTS:
         )
         self.macro_action_enable = bool(getattr(cfg, "MACRO_ACTION_ENABLE", False))
         self.macro_action_topk = max(1, int(getattr(cfg, "MACRO_ACTION_TOPK", 12)))
+        self.macro_complement_enable = bool(getattr(cfg, "MACRO_COMPLEMENT_ENABLE", False))
+        self.macro_complement_topk = max(0, int(getattr(cfg, "MACRO_COMPLEMENT_TOPK", 2)))
+        self.macro_complement_pool = min(64, max(2, int(getattr(cfg, "MACRO_COMPLEMENT_POOL", 16))))
         self.macro_min_parts = max(2, int(getattr(cfg, "MACRO_MIN_PARTS", 2)))
         self.macro_max_parts = max(self.macro_min_parts, int(getattr(cfg, "MACRO_MAX_PARTS", 6)))
         self.macro_pattern_topk = max(0, int(getattr(cfg, "MACRO_PATTERN_TOPK", 4)))
@@ -1085,6 +1088,11 @@ class RecedingHorizonMCTS:
             "phase_time_s": {},
             "completion_mode_time_s": {},
             "puct_selections": 0.0,
+            "complement_enabled": self.macro_complement_enable,
+            "complement_pairs_considered": 0.0,
+            "macro_complement_actions": 0.0,
+            "candidate_unique_parts_max": 0.0,
+            "candidate_unique_parts_total": 0.0,
             "simulations": 0.0,
             "commit_rounds": 0.0,
             "commit_steps": 0.0,
@@ -1537,6 +1545,26 @@ class RecedingHorizonMCTS:
         if not ordered:
             return ordered[:limit]
 
+        if self.macro_complement_enable and self.macro_complement_topk > 0:
+            # Reserve the fallback, then spend the existing action budget on
+            # distinct pair sets before filling with the original action pool.
+            selected = [item for item in ordered if item.kind == "single"][:1]
+            part_sets = {item.part_ids for item in selected}
+            complements = [item for item in ordered if item.source == "complement"]
+            for item in complements:
+                if len(selected) >= min(limit, self.macro_complement_topk + 1):
+                    break
+                if item.part_ids not in part_sets:
+                    selected.append(item)
+                    part_sets.add(item.part_ids)
+            for item in ordered:
+                if len(selected) >= limit:
+                    break
+                if item.part_ids not in part_sets:
+                    selected.append(item)
+                    part_sets.add(item.part_ids)
+            return selected[:limit]
+
         patterns = [item for item in ordered if item.kind == "pattern"]
         if not patterns:
             return ordered[:limit]
@@ -1720,6 +1748,61 @@ class RecedingHorizonMCTS:
                     return candidates
         return candidates
 
+    @_timed_phase("complement_generation")
+    def _complement_macro_actions(
+        self, snapshot: LayoutSnapshot, remaining_mask: int, limit: int,
+    ) -> List[Tuple[str, Tuple[int, ...], float]]:
+        """Propose both orders of bounded pairs with a feasible envelope.
+
+        Envelopes use solver dimensions and only permitted orientations. They
+        screen candidates; the existing decoder still determines placements.
+        ``limit`` counts distinct pairs, not their two orderings.
+        """
+        if not self.macro_complement_enable or limit <= 0 or time.perf_counter() >= self.search_deadline:
+            return []
+        usable_w = max(0.0, float(self.cfg.BOARD_W) - 2.0 * self.trim)
+        usable_h = max(0.0, float(self.cfg.BOARD_H) - 2.0 * self.trim)
+        scouted = self._scout_actions(remaining_mask, max(2, self.macro_complement_pool // 2))
+        if len(scouted) > self.macro_complement_pool:
+            head = self.macro_complement_pool // 2
+            scouted = scouted[:head] + scouted[-(self.macro_complement_pool - head):]
+        spaces = [
+            (float(rect.w), float(rect.h))
+            for board in snapshot.boards.materialize()[-2:]
+            for rect in board.free_rects
+        ]
+        ranked = []
+        for first, second in combinations(scouted, 2):
+            if time.perf_counter() >= self.search_deadline:
+                break
+            self.meta["complement_pairs_considered"] += 1.0
+            part_a, part_b = self.parts_by_id[first], self.parts_by_id[second]
+            solver_area = float(part_a.w) * float(part_a.h) + float(part_b.w) * float(part_b.h)
+            nominal_util = (self.part_area0[first] + self.part_area0[second]) / max(
+                EPS, float(self.cfg.BOARD_W) * float(self.cfg.BOARD_H),
+            )
+            best = None
+            for aw, ah in self.part_orientations[first]:
+                for bw, bh in self.part_orientations[second]:
+                    for width, height in ((aw + bw, max(ah, bh)), (max(aw, bw), ah + bh)):
+                        if width > usable_w + EPS or height > usable_h + EPS:
+                            continue
+                        existing_fit = any(width <= w + EPS and height <= h + EPS for w, h in spaces)
+                        rank = (
+                            float(existing_fit), solver_area / max(EPS, width * height),
+                            nominal_util, -float(first), -float(second),
+                        )
+                        if best is None or rank > best:
+                            best = rank
+            if best is not None:
+                ranked.append((best, first, second, nominal_util))
+        ranked.sort(reverse=True)
+        out = []
+        for _, first, second, util in ranked[: min(limit, self.macro_complement_topk)]:
+            out.append(("anchor", (first, second), util))
+            out.append(("anchor", (second, first), util))
+        return out
+
     def _tail_macro_actions(
         self,
         snapshot: LayoutSnapshot,
@@ -1833,6 +1916,13 @@ class RecedingHorizonMCTS:
                 return
             key = int(seq_t[0]) if len(seq_t) == 1 else self._macro_action_key(seq_t)
             decoded = self._apply_sequence(snapshot, seq_t, key=key)
+            if source == "complement":
+                pair_boards = [
+                    board for board in decoded.snapshot.boards
+                    if any(int(placed.uid) in seq_t for placed in board.placed)
+                ]
+                if len(pair_boards) != 1:
+                    return
             prior, rank_key = self._macro_prior_rank(
                 snapshot,
                 remaining_mask,
@@ -1864,6 +1954,11 @@ class RecedingHorizonMCTS:
             register(kind, sequence, pred_util, "tail")
         for kind, sequence, pred_util in self._single_macro_actions(remaining_mask, stage_limits["single"]):
             register(kind, sequence, pred_util, "single")
+        complement_limit = min(self.macro_complement_topk, max(0, min(target_limit, self.macro_action_topk) - 1))
+        for kind, sequence, pred_util in self._complement_macro_actions(snapshot, remaining_mask, complement_limit):
+            if time.perf_counter() >= self.search_deadline:
+                break
+            register(kind, sequence, pred_util, "complement")
 
         ordered = self._select_macro_action_mix(
             list(candidates.values()),
@@ -1871,6 +1966,10 @@ class RecedingHorizonMCTS:
             target_limit=max(1, min(target_limit, self.macro_action_topk)),
         )
         actions = [int(item.key) for item in ordered]
+        unique_parts = len({pid for item in ordered for pid in item.part_ids})
+        self.meta["candidate_unique_parts_max"] = max(self.meta["candidate_unique_parts_max"], float(unique_parts))
+        self.meta["candidate_unique_parts_total"] += float(unique_parts)
+        self.meta["macro_complement_actions"] += float(sum(item.source == "complement" for item in ordered))
         self.meta["macro_actions_generated"] += float(len(actions))
         self.meta["macro_pattern_actions"] += float(sum(1 for item in ordered if item.kind == "pattern"))
         self.meta["macro_anchor_actions"] += float(sum(1 for item in ordered if item.kind == "anchor"))
