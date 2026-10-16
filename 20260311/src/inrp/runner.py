@@ -15,6 +15,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 from .dataio import read_sample_parts
 from .geometry import effective_safe_gap, effective_trim, resolve_geometry_policy
+from .ordering import baseline_sequence
 from .mcts import OmnipotentDecoder, RecedingHorizonMCTS, SearchResult, solve_with_receding_horizon_mcts
 from .packer import board_used_area
 from .preprocess import preprocess_parts
@@ -923,17 +924,7 @@ def _solve_rh_mcts(parts, cfg, seed: int) -> SearchResult:
 
 
 def _baseline_sequence(parts: Sequence) -> Tuple[int, ...]:
-    ranked = sorted(
-        parts,
-        key=lambda part: (
-            float(part.w0) * float(part.h0),
-            max(float(part.w0), float(part.h0)) / max(1e-9, min(float(part.w0), float(part.h0))),
-            float(max(part.w0, part.h0)),
-            -int(part.uid),
-        ),
-        reverse=True,
-    )
-    return tuple(int(part.uid) for part in ranked)
+    return baseline_sequence(parts)
 
 
 def _solve_baseline_greedy(parts, cfg, seed: int) -> SearchResult:

@@ -91,7 +91,7 @@ def test_simulation_preserves_incumbent_at_deadline(outcomes, expected):
     solver._record_layout_candidate = lambda *args, **kwargs: None
     solver._reward_scalar = lambda *args: 1.0
     solver._backup = lambda *args: None
-    def update(sequence, candidate):
+    def update(sequence, candidate, **context):
         if candidate.boards < solver.global_best_snapshot.boards:
             solver.global_best_snapshot = candidate
     solver._update_global_best = update
