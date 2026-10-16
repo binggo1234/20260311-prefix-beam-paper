@@ -2249,6 +2249,7 @@ class RecedingHorizonMCTS:
                     self.meta.get("oracle_completion_partial_returned", 0.0)
                 ) + 1.0
                 self.meta["oracle_completion_partial_best_mode"] = best_mode
+                self.meta["oracle_completion_last_best_mode"] = best_mode
                 self.meta["oracle_completion_partial_score"] = list(best_out[2])
                 self.meta["oracle_completion_partial_layout_hash"] = list(best_out[1].layout_hash)
                 self.meta["oracle_completion_partial_ordered_hash"] = int(best_out[1].ordered_hash)
@@ -2408,6 +2409,9 @@ class RecedingHorizonMCTS:
                     seq_t, snapshot, snapshots = normalized
                     seen.add(seq_t)
                     self.meta["greedy_floor_panels"] = len(snapshot.boards)
+                    # Keep the completed floor even if cache priming reaches the deadline.
+                    self._update_global_best(seq_t, snapshot, source="greedy_floor")
+                    self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
                     self._record_constructive_warmstart(
                         seq_t, snapshot, snapshots,
                         deadline=self.search_deadline,

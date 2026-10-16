@@ -63,6 +63,22 @@ def test_prefix_injects_exact_greedy_even_without_other_warmstarts():
     assert solver.meta["warmstart_best_panels"] == len(solver.global_best_snapshot.boards)
 
 
+def test_completed_greedy_survives_expiry_before_warmstart_cache_registration(monkeypatch):
+    solver = RecedingHorizonMCTS(_parts(), _cfg(), 1)
+
+    def expire_before_registration(*args, **kwargs):
+        raise BudgetExpired("constructive_warmstart")
+
+    monkeypatch.setattr(solver, "_record_constructive_warmstart", expire_before_registration)
+    solver._prime_constructive_warmstarts()
+
+    assert solver.global_best_sequence == (1, 3, 2)
+    assert solver.meta["solver_timeout_hit"] == 1.0
+    assert solver.meta["warmstart_best_panels"] == solver.meta["greedy_floor_panels"]
+    assert solver.meta["global_best_events"][0]["source"] == "greedy_floor"
+    validate_solution(_parts(), list(solver.global_best_snapshot.boards), 10.0, 10.0)
+
+
 def test_formal_prefix_keeps_greedy_when_later_replays_expire(monkeypatch):
     cfg = _cfg()
     cfg.BASELINE_RESTARTS = 2
@@ -112,6 +128,7 @@ def test_incumbent_events_use_solver_start_and_explicit_context(monkeypatch):
 
 def test_completion_timings_include_interrupted_mode_without_caching_group(monkeypatch):
     solver = RecedingHorizonMCTS(_parts(), _cfg(), 1)
+    solver.meta["oracle_completion_last_best_mode"] = "strip_first"
     original = solver.decoder.replay_order
     calls = []
 
@@ -130,6 +147,7 @@ def test_completion_timings_include_interrupted_mode_without_caching_group(monke
     assert len(snapshot.boards) >= 1
     assert solver.meta["oracle_completion_mode_completed"] == 1.0
     assert solver.meta["oracle_completion_mode_timeouts"] == 1.0
+    assert solver.meta["oracle_completion_last_best_mode"] == "baseline"
     assert set(solver.meta["completion_mode_time_s"]) == {"baseline", "long_edge"}
     assert all(value >= 0.0 for value in solver.meta["completion_mode_time_s"].values())
     assert solver.meta["phase_time_s"]["completion"] >= 0.0
