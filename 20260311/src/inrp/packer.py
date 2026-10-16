@@ -7,6 +7,9 @@ from typing import List, Optional, Sequence, Tuple
 from importlib import metadata as importlib_metadata
 import importlib.util
 import random
+import time
+
+from .budget import BudgetExpired
 
 def _version_tuple(text: str) -> Tuple[int, ...]:
     out = []
@@ -33,6 +36,11 @@ except Exception:
 
 
 EPS = 1e-9
+
+
+def _require_before(deadline: Optional[float], phase: str) -> None:
+    if deadline is not None and time.perf_counter() >= float(deadline):
+        raise BudgetExpired(phase)
 
 
 @jit(nopython=True)
@@ -385,8 +393,11 @@ def _local_blueprint_key(bp: LocalPlacementBlueprint) -> Tuple[float, float, flo
 
 
 def _part_dims(part, allow_rot: bool) -> List[Tuple[float, float, bool]]:
-    dims = [(float(part.w), float(part.h), False)]
-    if allow_rot and abs(float(part.w) - float(part.h)) > EPS:
+    allowed = tuple(getattr(part, "allowed_rotations_deg", (0, 90)))
+    dims = []
+    if 0 in allowed:
+        dims.append((float(part.w), float(part.h), False))
+    if allow_rot and 90 in allowed and (0 not in allowed or abs(float(part.w) - float(part.h)) > EPS):
         dims.append((float(part.h), float(part.w), True))
     return dims
 
@@ -559,9 +570,9 @@ def _fits_on_board(part, W: float, H: float, allow_rot: bool, trim: float) -> bo
     usable_h = H - 2.0 * float(trim)
     if usable_w <= 0 or usable_h <= 0:
         return False
-    return bool(
-        (part.w <= usable_w + EPS and part.h <= usable_h + EPS)
-        or (allow_rot and part.h <= usable_w + EPS and part.w <= usable_h + EPS)
+    return any(
+        w <= usable_w + EPS and h <= usable_h + EPS
+        for w, h, _ in _part_dims(part, allow_rot)
     )
 
 
@@ -579,7 +590,10 @@ def pack_one_board(
     place_mode: str = "maxrects_baf",
     rng: Optional[random.Random] = None,
     rand_topk: int = 3,
+    deadline: Optional[float] = None,
+    deadline_phase: str = "constructive_packing",
 ) -> Tuple[Board, List]:
+    _require_before(deadline, deadline_phase)
     board = Board(bid=bid, W=W, H=H, trim=float(trim), safe_gap=float(safe_gap), touch_tol=float(touch_tol))
     if str(place_mode).lower().startswith("maxrects"):
         _init_free_rects(board)
@@ -597,6 +611,7 @@ def pack_one_board(
 
     remaining = []
     for part in parts_sorted:
+        _require_before(deadline, deadline_phase)
         if not _place_one(board, part, allow_rot, place_mode=place_mode, rng=rng, rand_topk=rand_topk):
             remaining.append(part)
     return board, remaining
@@ -616,12 +631,15 @@ def pack_multi_board(
     place_mode: str = "maxrects_baf",
     rng: Optional[random.Random] = None,
     rand_topk: int = 3,
+    deadline: Optional[float] = None,
+    deadline_phase: str = "constructive_packing",
 ) -> List[Board]:
     left = list(parts)
     boards: List[Board] = []
     bid = 1
 
     while left:
+        _require_before(deadline, deadline_phase)
         if bid > max_boards:
             raise RuntimeError("Max boards limit reached.")
         board, left_next = pack_one_board(
@@ -637,6 +655,8 @@ def pack_multi_board(
             place_mode=place_mode,
             rng=rng,
             rand_topk=rand_topk,
+            deadline=deadline,
+            deadline_phase=deadline_phase,
         )
         if not board.placed:
             raise RuntimeError(f"Cannot place part: uid={left[0].uid}")

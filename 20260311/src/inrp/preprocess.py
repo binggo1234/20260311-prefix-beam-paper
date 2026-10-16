@@ -42,11 +42,12 @@ class PreprocessSummary:
         return asdict(self)
 
 
-def _shape_key(part: Part, *, allow_rot: bool) -> Tuple[float, float]:
+def _shape_key(part: Part, *, allow_rot: bool) -> Tuple[Any, ...]:
     dims = (float(part.w0), float(part.h0))
-    if allow_rot:
-        return tuple(sorted(dims))
-    return dims
+    allowed = tuple(getattr(part, "allowed_rotations_deg", (0, 90)))
+    effective_allowed = tuple(angle for angle in allowed if angle == 0 or allow_rot)
+    shape = tuple(sorted(dims)) if 90 in effective_allowed else dims
+    return (*shape, effective_allowed)
 
 
 def preprocess_parts(parts: Sequence[Part], cfg: Any) -> Tuple[List[Part], PreprocessSummary]:
@@ -65,7 +66,7 @@ def preprocess_parts(parts: Sequence[Part], cfg: Any) -> Tuple[List[Part], Prepr
 
     processed: List[Part] = []
     quantized_parts = 0
-    groups: Dict[Tuple[float, float], List[int]] = {}
+    groups: Dict[Tuple[Any, ...], List[int]] = {}
 
     for idx, part in enumerate(parts):
         w0 = float(part.w0)
