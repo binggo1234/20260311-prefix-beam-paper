@@ -18,7 +18,7 @@ This directory is the actual project root used by the solver and experiment scri
 ## Core files
 
 - `src/inrp/mcts.py`
-  - main implementation of `rh_mcts_ref`, `rh_mcts_beam`, and `rh_mcts_prefix_beam`
+  - main implementation of `rh_mcts_ref`, `rh_mcts_beam`, `rh_mcts_prefix_beam`, and the opt-in `rh_mcts_prefix_beam_complement`
 - `src/inrp/runner.py`
   - variant registry and run orchestration
 - `src/inrp/cfg.py`
@@ -32,3 +32,7 @@ This directory is the actual project root used by the solver and experiment scri
 
 - Final paper results live in `outputs/paper_final/`
 - Older exploratory outputs live in `outputs/archive_exploration/`
+
+## Development notes
+
+- [Restricted-prefix complement iteration, 2026-10-16](docs/development/prefix-complement-20261016.md): scope, budgeted usage, evidence fields, tests, and limitations. This development variant is not a replacement for frozen paper results.

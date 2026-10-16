@@ -33,34 +33,35 @@
 - [x] Copy frozen runtime/test sources into a fresh clone based on GitHub master.
 - [x] Reproduce baseline test failures and remove dependence on private manifest paths using synthetic schedule rows.
 - [x] Explicitly skip optional cross-chapter integration when pinned clean repositories are unavailable.
-- [ ] Run the full baseline suite and commit the code-only baseline import.
+- [x] Run the full baseline suite and commit the code-only baseline import (199 passed, 3 skipped; b972f4b).
 
 ## Task 2: Exact Greedy and evidence
 
 Files: src/inrp/ordering.py, runner.py, mcts.py; tests/test_prefix_development.py.
 
-- [ ] Write failing tests for exact Greedy injection, deadline survival, evidence source and nonnegative interrupted-phase timings.
-- [ ] Add baseline_sequence(parts) shared by both consumers, preserving runner._baseline_sequence compatibility.
-- [ ] Seed the prefix solver with exact Greedy before metadata-ranked initial solutions; record initial/final board counts.
-- [ ] Record warmstart, prefix-search, candidate-generation and per-mode completion time separately; distinguish nested timers.
-- [ ] Add source/phase/mode/depth fields to complete-incumbent events without changing the score or handoff schema.
-- [ ] Run targeted and full tests, then commit.
+- [x] Write failing tests for exact Greedy injection, deadline survival, evidence source and nonnegative interrupted-phase timings.
+- [x] Add baseline_sequence(parts) shared by both consumers, preserving runner._baseline_sequence compatibility.
+- [x] Seed the prefix solver with exact Greedy before metadata-ranked initial solutions; record initial/final board counts.
+- [x] Record warmstart, prefix-search, candidate-generation and per-mode completion time separately; distinguish nested timers.
+- [x] Add source/phase/mode/depth fields to complete-incumbent events without changing the score or handoff schema.
+- [x] Run targeted and full tests, then commit (c7a8371; 204 passed, 3 skipped).
 
 ## Task 3: Complementary candidates
 
 Files: cfg.py, runner.py, mcts.py; tests/test_prefix_development.py.
 
-- [ ] Write failing behavior tests for pair fit, rotation permissions, geometry inflation, action cap, deadline and opt-in handoff.
-- [ ] Implement _complement_macro_actions(snapshot, remaining_mask, limit) over a bounded deterministic scout subset.
-- [ ] Rank horizontal/vertical pair envelopes by compactness and actual free-space fit; replay both pair orders through the existing decoder.
-- [ ] Prefer distinct pair part sets and resulting layout states, while retaining a single fallback.
-- [ ] Integrate under rh_mcts_prefix_beam_complement; leave the existing variant's candidate behavior unchanged.
-- [ ] Record pair generation/selection and candidate coverage counters.
-- [ ] Run targeted and full tests, then commit.
+- [x] Write failing behavior tests for pair fit, rotation permissions, geometry inflation, action cap, deadline and opt-in handoff.
+- [x] Implement _complement_macro_actions(snapshot, remaining_mask, limit) over a bounded deterministic scout subset.
+- [x] Rank horizontal/vertical pair envelopes by compactness and actual free-space fit; replay both pair orders through the existing decoder.
+- [x] Prefer distinct pair part sets while retaining a single fallback; preserve existing beam-state deduplication. New action-level geometric-state deduplication is deferred.
+- [x] Integrate under rh_mcts_prefix_beam_complement; leave the existing variant's candidate behavior unchanged.
+- [x] Record pair generation/selection and candidate coverage counters.
+- [x] Run targeted and full tests, then commit (82d6efb; 214 passed, 3 skipped).
 
 ## Task 4: Verify and publish
 
-- [ ] Run small synthetic handoff/deadline checks and a bounded representative development comparison; retain negative results.
-- [ ] Document scope, exact commands, costs, remaining limitations and deferred staged-completion/repair work.
-- [ ] Review all diffs and confirm no factory input/output additions.
+- [x] Run small synthetic handoff/deadline checks and a bounded representative development comparison; retain negative results (12 runs, geometry audited).
+- [x] Document scope, exact commands, costs, remaining limitations and deferred staged-completion/repair work.
+- [x] Add red/green boundary regressions for completed Greedy before cache registration and interrupted completion mode attribution (c4ee424; targeted 24 passed, full 215 passed, 3 skipped).
+- [x] Review development diffs and baseline import file list; confirm no factory input/output additions.
 - [ ] Push only the development branch, create and attach a draft PR, verify remote SHA.
