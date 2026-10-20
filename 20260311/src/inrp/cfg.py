@@ -36,6 +36,9 @@ class CFG:
     # Decoder geometry mode
     BASELINE_PLACE_MODE: str = "maxrects_baf"
     BASELINE_RESTARTS: int = 24
+    PREFIX_WARMSTART_BUDGET_ENABLE: bool = True
+    PREFIX_WARMSTART_BUDGET_FRAC: float = 0.20
+    PREFIX_WARMSTART_BUDGET_MAX_S: float = 5.0
     SA_ITERS: int = 2500
     SA_T0: float = 0.03
     SA_ALPHA: float = 0.995

@@ -2309,7 +2309,10 @@ class RecedingHorizonMCTS:
             specs.append((order, place_mode, rand_topk, idx))
         return specs
 
-    def _pack_constructive_sequence(self, order: str, place_mode: str, rand_topk: int, restart_idx: int) -> Optional[Tuple[int, ...]]:
+    def _pack_constructive_sequence(
+        self, order: str, place_mode: str, rand_topk: int, restart_idx: int, *,
+        deadline: Optional[float] = None, deadline_phase: str = "constructive_warmstart",
+    ) -> Optional[Tuple[int, ...]]:
         parts = list(self.parts)
         if order == "area_aspect":
             parts = [self.parts_by_id[int(pid)] for pid in self._area_aspect_sequence()]
@@ -2328,10 +2331,12 @@ class RecedingHorizonMCTS:
                 place_mode=str(place_mode),
                 rng=rng,
                 rand_topk=max(1, int(rand_topk)),
-                deadline=self.search_deadline,
-                deadline_phase="constructive_warmstart",
+                deadline=self.search_deadline if deadline is None else deadline,
+                deadline_phase=deadline_phase,
             )
         except BudgetExpired:
+            if deadline_phase == "warmstart_budget":
+                raise
             self.meta["solver_timeout_hit"] = 1.0
             return None
         except Exception:
@@ -2394,95 +2399,104 @@ class RecedingHorizonMCTS:
 
     @_timed_phase("warmstart")
     def _prime_constructive_warmstarts(self) -> None:
-        if time.perf_counter() >= self.search_deadline:
+        started = time.perf_counter()
+        self.meta["warmstart_budget_enabled"] = False
+        self.meta["warmstart_budget_hit"] = False
+        self.meta["warmstart_stop_reason"] = "completed"
+        if started >= self.search_deadline:
             self.meta["solver_timeout_hit"] = 1.0
+            self.meta["warmstart_stop_reason"] = "search_deadline"
+            self.meta["search_budget_remaining_s"] = 0.0
             return
+        enabled = self.prefix_beam_enable and bool(getattr(self.cfg, "PREFIX_WARMSTART_BUDGET_ENABLE", True))
+        self.meta["warmstart_budget_enabled"] = enabled
+        deadline = self.search_deadline
+        phase = "constructive_warmstart"
+        if enabled:
+            fraction = float(getattr(self.cfg, "PREFIX_WARMSTART_BUDGET_FRAC", 0.20))
+            cap = float(getattr(self.cfg, "PREFIX_WARMSTART_BUDGET_MAX_S", 5.0))
+            if not math.isfinite(fraction) or not 0.0 <= fraction <= 1.0:
+                raise ValueError("PREFIX_WARMSTART_BUDGET_FRAC must be finite and in [0, 1]")
+            if not math.isfinite(cap) or cap < 0.0:
+                raise ValueError("PREFIX_WARMSTART_BUDGET_MAX_S must be finite and nonnegative")
+            allocation = min(cap, (self.search_deadline - started) * fraction) if fraction > 0.0 else 0.0
+            deadline = min(self.search_deadline, started + allocation)
+            phase = "warmstart_budget"
+            self.meta["warmstart_budget_s"] = allocation
+        try:
+            self._prime_constructive_candidates(deadline, phase)
+        except BudgetExpired as exc:
+            if exc.phase == "warmstart_budget" and time.perf_counter() < self.search_deadline:
+                self.meta["warmstart_budget_hit"] = True
+                self.meta["warmstart_stop_reason"] = "warmstart_budget"
+            else:
+                self.meta["solver_timeout_hit"] = 1.0
+                self.meta["warmstart_stop_reason"] = "search_deadline"
+        finally:
+            self.meta["search_budget_remaining_s"] = (
+                max(0.0, self.search_deadline - time.perf_counter())
+                if math.isfinite(self.search_deadline) else None
+            )
+
+    def _prime_constructive_candidates(self, deadline: float, deadline_phase: str) -> None:
+        """Mandatory Greedy uses the search deadline; all optional work uses the local one."""
         seen = set()
         if self.prefix_beam_enable:
-            try:
-                normalized = self._normalize_sequence_candidate(
-                    baseline_sequence(self.parts),
-                    deadline=self.search_deadline,
-                    deadline_phase="constructive_warmstart",
-                )
-                if normalized is not None:
-                    seq_t, snapshot, snapshots = normalized
-                    seen.add(seq_t)
-                    self.meta["greedy_floor_panels"] = len(snapshot.boards)
-                    # Keep the completed floor even if cache priming reaches the deadline.
-                    self._update_global_best(seq_t, snapshot, source="greedy_floor")
-                    self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
-                    self._record_constructive_warmstart(
-                        seq_t, snapshot, snapshots,
-                        deadline=self.search_deadline,
-                        source="greedy_floor",
-                    )
-            except BudgetExpired:
-                self.meta["solver_timeout_hit"] = 1.0
-                return
-        if self.global_pattern_include_baseline or self.baseline_restarts > 0:
-            try:
-                normalized = self._normalize_sequence_candidate(
-                    self._area_aspect_sequence(),
-                    deadline=self.search_deadline,
-                    deadline_phase="constructive_warmstart",
-                )
-            except BudgetExpired:
-                self.meta["solver_timeout_hit"] = 1.0
-                return
+            normalized = self._normalize_sequence_candidate(
+                baseline_sequence(self.parts),
+                deadline=self.search_deadline,
+                deadline_phase="constructive_warmstart",
+            )
             if normalized is not None:
                 seq_t, snapshot, snapshots = normalized
                 seen.add(seq_t)
-                try:
-                    self._record_constructive_warmstart(
-                        seq_t,
-                        snapshot,
-                        snapshots,
-                        deadline=self.search_deadline,
-                        deadline_phase="constructive_warmstart",
-                    )
-                except BudgetExpired:
-                    self.meta["solver_timeout_hit"] = 1.0
-                    return
+                self.meta["greedy_floor_panels"] = len(snapshot.boards)
+                self._update_global_best(seq_t, snapshot, source="greedy_floor")
+                self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
+                self._record_constructive_warmstart(
+                    seq_t, snapshot, snapshots, deadline=deadline,
+                    deadline_phase=deadline_phase, source="greedy_floor",
+                )
+        if self.global_pattern_include_baseline or self.baseline_restarts > 0:
+            normalized = self._normalize_sequence_candidate(
+                self._area_aspect_sequence(), deadline=deadline, deadline_phase=deadline_phase,
+            )
+            if normalized is not None:
+                seq_t, snapshot, snapshots = normalized
+                seen.add(seq_t)
+                self._update_global_best(seq_t, snapshot, source="constructive_warmstart")
+                self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
+                self._record_constructive_warmstart(
+                    seq_t, snapshot, snapshots, deadline=deadline, deadline_phase=deadline_phase,
+                )
                 self.meta["baseline_seed_injected"] = 1.0
         if self.baseline_restarts <= 0:
             return
         seed_specs: List[Tuple[str, str, int, int]] = [("area_aspect", self.decoder.place_mode, self.rand_topk, -1)]
         seed_specs.extend(self._constructive_seed_specs())
         for order, place_mode, rand_topk, restart_idx in seed_specs:
-            if time.perf_counter() >= self.search_deadline:
-                self.meta["solver_timeout_hit"] = 1.0
-                break
-            sequence = self._pack_constructive_sequence(order, place_mode, rand_topk, restart_idx)
+            if time.perf_counter() >= deadline:
+                raise BudgetExpired(deadline_phase)
+            sequence = self._pack_constructive_sequence(
+                order, place_mode, rand_topk, restart_idx, deadline=deadline, deadline_phase=deadline_phase,
+            )
             if sequence is None:
                 continue
             self.meta["warmstart_candidates_generated"] += 1.0
             if sequence in seen:
                 continue
             seen.add(sequence)
-            try:
-                normalized = self._normalize_sequence_candidate(
-                    sequence,
-                    deadline=self.search_deadline,
-                    deadline_phase="constructive_warmstart",
-                )
-            except BudgetExpired:
-                self.meta["solver_timeout_hit"] = 1.0
-                break
+            normalized = self._normalize_sequence_candidate(
+                sequence, deadline=deadline, deadline_phase=deadline_phase,
+            )
             if normalized is None:
                 continue
             seq_t, snapshot, snapshots = normalized
-            try:
-                self._record_constructive_warmstart(
-                    seq_t,
-                    snapshot,
-                    snapshots,
-                    deadline=self.search_deadline,
-                    deadline_phase="constructive_warmstart",
-                )
-            except BudgetExpired:
-                self.meta["solver_timeout_hit"] = 1.0
-                break
+            self._update_global_best(seq_t, snapshot, source="constructive_warmstart")
+            self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
+            self._record_constructive_warmstart(
+                seq_t, snapshot, snapshots, deadline=deadline, deadline_phase=deadline_phase,
+            )
 
     def _next_empty_board(self, snapshot: LayoutSnapshot) -> Board:
         return make_empty_board(
@@ -3481,6 +3495,10 @@ class RecedingHorizonMCTS:
     def _solve_prefix_beam(self, root: SearchNode) -> SearchResult:
         if not math.isfinite(self.solve_deadline):
             self._configure_solve_deadlines()
+        self.meta["prefix_search_budget_at_entry_s"] = (
+            max(0.0, self.search_deadline - time.perf_counter())
+            if math.isfinite(self.search_deadline) else None
+        )
         overall_deadline = self.solve_deadline
         search_deadline = self.search_deadline
         beam_width = max(1, int(self.prefix_beam_width))
