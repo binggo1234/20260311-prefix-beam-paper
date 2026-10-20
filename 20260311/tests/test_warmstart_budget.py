@@ -69,6 +69,10 @@ def test_greedy_may_exceed_local_cap_but_optional_work_yields_to_search(
     )
     solver._run_simulations(root, 1)
     assert solver.meta["simulations"] == 1.0
+    solver.meta["formal_total_budget"] = 1.0
+    result = solver._solve_prefix_beam(root)
+    assert solver.meta["prefix_search_budget_at_entry_s"] == 100.0 + available - after_greedy
+    validate_solution(parts, result.boards, 10.0, 10.0)
 
 
 def test_extra_replay_obeys_local_deadline_without_claiming_total_timeout(monkeypatch):
@@ -107,6 +111,8 @@ def test_cache_registration_also_yields_at_local_deadline(monkeypatch):
     assert now[0] == 102.0
     assert solver.meta["warmstart_budget_hit"] is True
     assert 0 < len(solver.seed_suffix_cache) < 4
+    assert solver.meta["warmstart_candidates_kept"] == len(solver.constructive_warmstarts)
+    assert solver.meta["warmstart_cache_states"] == len(solver.seed_suffix_cache)
     assert solver.meta["solver_timeout_hit"] == 0.0
     assert solver.global_best_snapshot is not None
 
@@ -129,6 +135,77 @@ def test_constructive_packer_receives_local_deadline(monkeypatch):
     assert solver.meta["warmstart_budget_hit"] is True
     assert solver.meta["solver_timeout_hit"] == 0.0
     assert solver.meta["search_budget_remaining_s"] == 22.0
+
+
+def test_disabled_cap_reports_expiry_in_last_constructive_pack(monkeypatch):
+    solver, now, _ = _solver(monkeypatch, enabled=False)
+    original = mcts_module.pack_multi_board
+    attempts = []
+
+    def expire_last_pack(*args, **kwargs):
+        attempts.append(kwargs["deadline"])
+        if len(attempts) == 3:
+            now[0] = 127.0
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(mcts_module, "pack_multi_board", expire_last_pack)
+    solver._prime_constructive_warmstarts()
+
+    assert len(attempts) == 3
+    assert solver.meta["solver_timeout_hit"] == 1.0
+    assert solver.meta["warmstart_stop_reason"] == "search_deadline"
+    assert solver.meta["search_budget_remaining_s"] == 0.0
+
+
+def test_pattern_archive_registration_stops_between_boards(monkeypatch):
+    base, now, _ = _solver(monkeypatch, available=10.0)
+    base.cfg.GLOBAL_PATTERN_MEMORY_ENABLE = True
+    parts = [Part(i, str(i), 6.0, 10.0, 6.0, 10.0, allowed_rotations_deg=(0,)) for i in (1, 2, 3)]
+    solver = RecedingHorizonMCTS(parts, base.cfg, 1)
+    solver.search_deadline = 110.0
+    original = solver._record_pattern_candidate
+
+    def timed_pattern(pattern):
+        original(pattern)
+        now[0] += 1.0
+
+    monkeypatch.setattr(solver, "_record_pattern_candidate", timed_pattern)
+    solver._prime_constructive_warmstarts()
+
+    assert now[0] == 102.0
+    assert len(solver.global_best_snapshot.boards) == 3
+    assert len(solver.global_pattern_memory) == 2
+    assert solver.meta["warmstart_budget_hit"] is True
+    assert solver.meta["solver_timeout_hit"] == 0.0
+
+
+def test_completed_better_warmstart_survives_registration_cutoff(monkeypatch):
+    base, now, _ = _solver(monkeypatch, available=10.0)
+    dims = ((6, 3), (4, 4), (2, 4), (4, 2), (4, 7), (2, 8))
+    parts = [Part(i, str(i), float(w), float(h), float(w), float(h)) for i, (w, h) in enumerate(dims, 1)]
+    parts[-1].is_strip = True
+    solver = RecedingHorizonMCTS(parts, base.cfg, 1)
+    solver.search_deadline = 110.0
+    original = solver.decoder.replay_order
+    replays = []
+
+    def finish_at_registration_boundary(sequence, **kwargs):
+        result = original(sequence, **kwargs)
+        replays.append(tuple(sequence))
+        if len(replays) == 2:
+            now[0] = 102.0
+        return result
+
+    monkeypatch.setattr(solver.decoder, "replay_order", finish_at_registration_boundary)
+    solver._prime_constructive_warmstarts()
+
+    assert solver.meta["greedy_floor_panels"] == 2
+    assert len(solver.global_best_snapshot.boards) == 1
+    assert solver.global_best_sequence == (6, 5, 1, 2, 3, 4)
+    assert solver.meta["warmstart_best_panels"] == 1
+    assert solver.meta["warmstart_budget_hit"] is True
+    assert solver.meta["solver_timeout_hit"] == 0.0
+    validate_solution(parts, list(solver.global_best_snapshot.boards), 10.0, 10.0)
 
 
 def test_unbounded_search_still_caps_optional_initialization(monkeypatch):
@@ -187,6 +264,8 @@ def test_disabled_or_nonprefix_initialization_retains_legacy_budget(monkeypatch,
 def test_zero_optional_budget_keeps_only_completed_greedy(monkeypatch):
     solver, _, _ = _solver(monkeypatch)
     solver.cfg.PREFIX_WARMSTART_BUDGET_MAX_S = 0.0
+    solver.global_pattern_memory_enable = True
+    solver.global_pattern_memory_min_util = 0.0
     solver._prime_constructive_warmstarts()
 
     assert solver.global_best_sequence == (1, 3, 2)
@@ -194,6 +273,9 @@ def test_zero_optional_budget_keeps_only_completed_greedy(monkeypatch):
     assert solver.meta["warmstart_budget_s"] == 0.0
     assert solver.meta["solver_timeout_hit"] == 0.0
     assert not solver.constructive_warmstarts
+    assert not solver.elite_archive
+    assert not solver.harvested_layouts
+    assert not solver.global_pattern_memory
 
 
 def test_mandatory_greedy_still_obeys_search_deadline(monkeypatch):

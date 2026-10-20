@@ -2335,7 +2335,7 @@ class RecedingHorizonMCTS:
                 deadline_phase=deadline_phase,
             )
         except BudgetExpired:
-            if deadline_phase == "warmstart_budget":
+            if deadline is not None:
                 raise
             self.meta["solver_timeout_hit"] = 1.0
             return None
@@ -2359,9 +2359,12 @@ class RecedingHorizonMCTS:
         seq_t = tuple(int(x) for x in sequence)
         score = self._terminal_score(snapshot)
         reward_scalar = self._reward_scalar(snapshot, 0)
-        self._update_global_best(seq_t, snapshot, source=source)
+        self._update_global_best(seq_t, snapshot, source=source, record_archive=False)
         self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
-        self._record_layout_candidate(seq_t, snapshot, source="constructive")
+        self._record_elite_candidate(seq_t, snapshot, deadline=deadline, deadline_phase=deadline_phase)
+        self._record_layout_candidate(
+            seq_t, snapshot, source="constructive", deadline=deadline, deadline_phase=deadline_phase,
+        )
 
         candidate = EliteCandidate(
             sequence=seq_t,
@@ -2433,6 +2436,8 @@ class RecedingHorizonMCTS:
                 self.meta["solver_timeout_hit"] = 1.0
                 self.meta["warmstart_stop_reason"] = "search_deadline"
         finally:
+            self.meta["warmstart_candidates_kept"] = float(len(self.constructive_warmstarts))
+            self.meta["warmstart_cache_states"] = float(len(self.seed_suffix_cache))
             self.meta["search_budget_remaining_s"] = (
                 max(0.0, self.search_deadline - time.perf_counter())
                 if math.isfinite(self.search_deadline) else None
@@ -2451,7 +2456,7 @@ class RecedingHorizonMCTS:
                 seq_t, snapshot, snapshots = normalized
                 seen.add(seq_t)
                 self.meta["greedy_floor_panels"] = len(snapshot.boards)
-                self._update_global_best(seq_t, snapshot, source="greedy_floor")
+                self._update_global_best(seq_t, snapshot, source="greedy_floor", record_archive=False)
                 self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
                 self._record_constructive_warmstart(
                     seq_t, snapshot, snapshots, deadline=deadline,
@@ -2464,7 +2469,7 @@ class RecedingHorizonMCTS:
             if normalized is not None:
                 seq_t, snapshot, snapshots = normalized
                 seen.add(seq_t)
-                self._update_global_best(seq_t, snapshot, source="constructive_warmstart")
+                self._update_global_best(seq_t, snapshot, source="constructive_warmstart", record_archive=False)
                 self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
                 self._record_constructive_warmstart(
                     seq_t, snapshot, snapshots, deadline=deadline, deadline_phase=deadline_phase,
@@ -2492,7 +2497,7 @@ class RecedingHorizonMCTS:
             if normalized is None:
                 continue
             seq_t, snapshot, snapshots = normalized
-            self._update_global_best(seq_t, snapshot, source="constructive_warmstart")
+            self._update_global_best(seq_t, snapshot, source="constructive_warmstart", record_archive=False)
             self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
             self._record_constructive_warmstart(
                 seq_t, snapshot, snapshots, deadline=deadline, deadline_phase=deadline_phase,
@@ -2992,11 +2997,12 @@ class RecedingHorizonMCTS:
     def _update_global_best(
         self, sequence: Sequence[int], snapshot: LayoutSnapshot, *,
         source: str = "search", completion_mode: Optional[str] = None,
-        prefix_depth: Optional[int] = None,
+        prefix_depth: Optional[int] = None, record_archive: bool = True,
     ) -> None:
         if not self._is_complete_sequence(sequence):
             return
-        self._record_elite_candidate(sequence, snapshot)
+        if record_archive:
+            self._record_elite_candidate(sequence, snapshot)
         score = self._terminal_score(snapshot)
         if self.global_best_score is None or score > self.global_best_score:
             self.global_best_score = score
@@ -3839,7 +3845,12 @@ class RecedingHorizonMCTS:
             )
         )
 
-    def _record_layout_candidate(self, sequence: Sequence[int], snapshot: LayoutSnapshot, *, source: str) -> None:
+    def _record_layout_candidate(
+        self, sequence: Sequence[int], snapshot: LayoutSnapshot, *, source: str,
+        deadline: Optional[float] = None, deadline_phase: str = "constructive_warmstart",
+    ) -> None:
+        if deadline is not None and time.perf_counter() >= deadline:
+            raise BudgetExpired(deadline_phase)
         seq_t = tuple(int(x) for x in sequence)
         if not self._is_complete_sequence(seq_t):
             return
@@ -3854,6 +3865,8 @@ class RecedingHorizonMCTS:
             source=str(source),
         )
         for idx, existing in enumerate(self.harvested_layouts):
+            if deadline is not None and time.perf_counter() >= deadline:
+                raise BudgetExpired(deadline_phase)
             if existing.board_signature != board_signature:
                 continue
             if candidate.score > existing.score:
@@ -3864,7 +3877,9 @@ class RecedingHorizonMCTS:
         self.harvested_layouts.sort(key=lambda item: (item.score, -len(item.board_signature), item.source), reverse=True)
         self.harvested_layouts = self.harvested_layouts[: self.global_layout_pool_limit]
         self.meta["layout_harvest_layouts"] = float(len(self.harvested_layouts))
-        self._record_snapshot_patterns(snapshot, source=f"layout:{source}")
+        self._record_snapshot_patterns(
+            snapshot, source=f"layout:{source}", deadline=deadline, deadline_phase=deadline_phase,
+        )
 
     def _record_pattern_candidate(self, pattern: PatternCandidate) -> None:
         if not self.global_pattern_memory_enable:
@@ -3893,10 +3908,15 @@ class RecedingHorizonMCTS:
             }
         self.meta["global_pattern_memory_patterns"] = float(len(self.global_pattern_memory))
 
-    def _record_snapshot_patterns(self, snapshot: LayoutSnapshot, *, source: str) -> None:
+    def _record_snapshot_patterns(
+        self, snapshot: LayoutSnapshot, *, source: str,
+        deadline: Optional[float] = None, deadline_phase: str = "constructive_warmstart",
+    ) -> None:
         if not self.global_pattern_memory_enable:
             return
         for board in snapshot.boards.materialize():
+            if deadline is not None and time.perf_counter() >= deadline:
+                raise BudgetExpired(deadline_phase)
             if not board.placed:
                 continue
             util = float(board_utilization(board))
@@ -3914,11 +3934,18 @@ class RecedingHorizonMCTS:
             )
             self._record_pattern_candidate(pattern)
 
-    def _record_elite_candidate(self, sequence: Sequence[int], snapshot: LayoutSnapshot) -> None:
+    def _record_elite_candidate(
+        self, sequence: Sequence[int], snapshot: LayoutSnapshot, *,
+        deadline: Optional[float] = None, deadline_phase: str = "constructive_warmstart",
+    ) -> None:
         seq_t = tuple(int(x) for x in sequence)
         if not seq_t:
             return
-        self._record_layout_candidate(seq_t, snapshot, source="elite")
+        self._record_layout_candidate(
+            seq_t, snapshot, source="elite", deadline=deadline, deadline_phase=deadline_phase,
+        )
+        if deadline is not None and time.perf_counter() >= deadline:
+            raise BudgetExpired(deadline_phase)
         score = self._terminal_score(snapshot)
         tail_sig = self._elite_tail_signature(seq_t)
         candidate = EliteCandidate(sequence=seq_t, snapshot=snapshot, score=score, tail_signature=tail_sig)
