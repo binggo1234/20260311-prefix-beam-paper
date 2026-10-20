@@ -3723,7 +3723,7 @@ class RecedingHorizonMCTS:
         return max(0.0, reserve)
 
     def _formal_result_from_incumbent(self) -> SearchResult:
-        """Close a formal run without optional post-processing after search."""
+        """Close a budgeted run without optional post-processing after search."""
 
         if (
             self.global_best_sequence is None
@@ -3739,8 +3739,11 @@ class RecedingHorizonMCTS:
         final_snapshot = self.global_best_snapshot
         if time.perf_counter() >= self.solve_deadline:
             raise BudgetExpired("incumbent_close")
-        self.meta["result_source"] = "formal_deadline_incumbent"
-        self.meta["formal_optional_postprocess_skipped"] = 1.0
+        formal = bool(self.meta.get("formal_total_budget", 0.0))
+        self.meta["result_source"] = "formal_deadline_incumbent" if formal else "prefix_deadline_incumbent"
+        self.meta["optional_postprocess_skipped"] = 1.0
+        if formal:
+            self.meta["formal_optional_postprocess_skipped"] = 1.0
         self.meta["elite_archive_size"] = float(len(self.elite_archive))
         self.meta["rollout_cache_entries"] = float(len(self.rollout_cache))
         self.meta["decode_cache_hits"] = float(self.decoder.decode_hits)
@@ -7326,7 +7329,13 @@ class RecedingHorizonMCTS:
             try:
                 return self._solve_prefix_beam(root)
             except BudgetExpired as exc:
-                if not bool(self.meta.get("formal_total_budget", 0.0)) or exc.phase != "completion_replay":
+                if exc.phase != "completion_replay":
+                    raise
+                if not bool(self.meta.get("formal_total_budget", 0.0)) and (
+                    self.global_best_sequence is None
+                    or self.global_best_snapshot is None
+                    or self.global_best_score is None
+                ):
                     raise
                 self.meta["solver_timeout_hit"] = 1.0
                 return self._formal_result_from_incumbent()

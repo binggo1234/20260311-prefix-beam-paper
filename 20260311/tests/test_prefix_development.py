@@ -106,6 +106,43 @@ def test_formal_prefix_keeps_greedy_when_later_replays_expire(monkeypatch):
     validate_solution(_parts(), result.boards, 10.0, 10.0)
 
 
+def test_local_time_limit_prefix_returns_completed_greedy_after_search_expiry(monkeypatch):
+    cfg = _cfg()
+    cfg.BASELINE_RESTARTS = 2
+    cfg.GLOBAL_PATTERN_INCLUDE_BASELINE = True
+    solver = RecedingHorizonMCTS(_parts(), cfg, 1)
+    original = solver.decoder.replay_order
+    calls = []
+
+    def expire_after_greedy(sequence, **kwargs):
+        calls.append(tuple(sequence))
+        if len(calls) > 1:
+            solver.search_deadline = 0.0
+            raise BudgetExpired(kwargs.get("deadline_phase", "completion_replay"))
+        return original(sequence, **kwargs)
+
+    monkeypatch.setattr(solver.decoder, "replay_order", expire_after_greedy)
+    result = solver.solve()
+
+    assert result.sequence == (1, 3, 2)
+    assert result.meta["formal_total_budget"] == 0.0
+    assert result.meta["result_source"] == "prefix_deadline_incumbent"
+    assert result.meta["optional_postprocess_skipped"] == 1.0
+    assert result.meta.get("formal_optional_postprocess_skipped", 0.0) == 0.0
+    validate_solution(_parts(), result.boards, 10.0, 10.0)
+
+
+def test_local_incumbent_closing_still_enforces_overall_deadline():
+    solver = RecedingHorizonMCTS(_parts(), _cfg(), 1)
+    solver._configure_solve_deadlines()
+    solver._prime_constructive_warmstarts()
+    assert solver.global_best_snapshot is not None
+    solver.solve_deadline = 0.0
+
+    with pytest.raises(BudgetExpired, match="incumbent_close"):
+        solver._formal_result_from_incumbent()
+
+
 def test_incumbent_events_use_solver_start_and_explicit_context(monkeypatch):
     now = [100.0]
     monkeypatch.setattr(mcts_module.time, "perf_counter", lambda: now[0])
