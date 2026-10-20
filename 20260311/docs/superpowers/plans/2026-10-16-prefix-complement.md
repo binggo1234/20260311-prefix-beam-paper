@@ -65,4 +65,4 @@ Files: cfg.py, runner.py, mcts.py; tests/test_prefix_development.py.
 - [x] Add red/green boundary regressions for completed Greedy before cache registration and interrupted completion mode attribution (c4ee424; targeted 24 passed, full 215 passed, 3 skipped).
 - [x] Review development diffs and baseline import file list; confirm no factory input/output additions.
 - [x] Address independent review's non-formal completed-incumbent closure finding; preserve no-incumbent diagnostics and overall deadline enforcement (aa83e33; full 217 passed, 3 skipped on 2026-10-20).
-- [ ] Push only the development branch, create and attach a draft PR, verify remote SHA.
+- [x] Push only the development branch, create and attach [draft PR #1](https://github.com/binggo1234/20260311-prefix-beam-paper/pull/1), verify remote SHA and unchanged master (2026-10-20). Independent review found no remaining blocker in the development diff; prerequisite-import and external-integration merge coverage remain outside that review.
