@@ -72,7 +72,7 @@ In interrupted completion groups, `oracle_completion_last_best_mode` is updated 
 
 ## Validation
 
-Executed locally with Python 3.9.6:
+Final verification on 2026-10-20, locally with Python 3.9.6:
 
 ```sh
 cd 20260311
@@ -81,15 +81,17 @@ python3 -m pytest -q -rs
 git diff --check
 ```
 
-The targeted suite has 24 passing tests; the full suite has 215 passing tests and 3 skips. The skipped tests require clean pinned external CutEval/joint repositories; the local CutEval checkout has user changes and was left untouched. On a machine without these optional repositories, the cross-chapter test module is explicitly skipped. Its source-identity unit checks still run when the source roots exist. Restoring the expected clean external versions and rerunning `tests/test_minibatch.py` is necessary to claim full cross-chapter integration coverage; do not discard user changes to obtain it.
+The targeted suite has 26 passing tests; the full suite has 217 passing tests and 3 skips. The skipped tests require clean pinned external CutEval/joint repositories; the local CutEval checkout has user changes and was left untouched. On a machine without these optional repositories, the cross-chapter test module is explicitly skipped. Its source-identity unit checks still run when the source roots exist. Restoring the expected clean external versions and rerunning `tests/test_minibatch.py` is necessary to claim full cross-chapter integration coverage; do not discard user changes to obtain it.
 
 The manifest-schedule test uses synthetic 11-task rows rather than a private absolute manifest path. New tests exercise exact Greedy injection, deadline survival before cache registration and during later replay, stable timestamps, interrupted completion attribution, actual PUCT selection, pair compactness, per-part/global rotation permissions, inflated geometry/trim, candidate caps, disabled/zero-quota behavior, and a real budgeted handoff.
+
+Independent pre-publication review identified a further local-time-limit path: a completed Greedy incumbent existed, but a later `completion_replay` timeout was re-raised rather than closed into a result. Commit `aa83e33` permits closing that incumbent for non-formal prefix calls too, without changing the absolute closing-deadline checks. Non-formal calls with no complete incumbent still re-raise the original timeout; formal metadata/behavior remain compatible. Regression tests cover the usable fallback, absence of misleading formal metadata, and refusal to close after the overall deadline. The broader 135-test prefix/handoff/quality subset also passes.
 
 ### Bounded local diagnostic, not formal paper evidence
 
 Three representative local tasks were run once per method, seed 1000, serially in the fixed order Greedy / warmstart-only / corrected prefix / complement prefix. Each run used a 30 s total budget with 3 s closing reserve and an independent geometry audit. Warmstart-only used the corrected prefix configuration but stopped after constructive initialization. Source hashes, event details, and the harness remain in local QA storage, outside this repository.
 
-The diagnostic was run at `82d6efb601198824fb07925ebd2403098f9a894d`, before the separately regression-tested cache-registration/partial-mode attribution boundary fixes in `c4ee424`. It must not be presented as a final-commit benchmark.
+The diagnostic was run at `82d6efb601198824fb07925ebd2403098f9a894d`, before the separately regression-tested cache-registration/partial-mode attribution boundary fixes in `c4ee424` and local-time-limit closure fix in `aa83e33`. It must not be presented as a final-commit benchmark.
 
 | Parts | Greedy boards | Warmstart-only boards | Corrected prefix boards / elapsed s | Complement prefix boards / elapsed s |
 | ---: | ---: | ---: | ---: | ---: |
