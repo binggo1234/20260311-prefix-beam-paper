@@ -36,6 +36,9 @@ class CFG:
     # Decoder geometry mode
     BASELINE_PLACE_MODE: str = "maxrects_baf"
     BASELINE_RESTARTS: int = 24
+    PREFIX_WARMSTART_BUDGET_ENABLE: bool = True
+    PREFIX_WARMSTART_BUDGET_FRAC: float = 0.20
+    PREFIX_WARMSTART_BUDGET_MAX_S: float = 5.0
     SA_ITERS: int = 2500
     SA_T0: float = 0.03
     SA_ALPHA: float = 0.995
@@ -158,6 +161,9 @@ class CFG:
     GLOBAL_PATTERN_MEMORY_FOCUS_TAIL_BOARDS: int = 1
     MACRO_ACTION_ENABLE: bool = False
     MACRO_ACTION_TOPK: int = 12
+    MACRO_COMPLEMENT_ENABLE: bool = False
+    MACRO_COMPLEMENT_TOPK: int = 2
+    MACRO_COMPLEMENT_POOL: int = 16
     MACRO_MIN_PARTS: int = 2
     MACRO_MAX_PARTS: int = 6
     MACRO_PATTERN_TOPK: int = 4
@@ -217,6 +223,8 @@ class CFG:
     PREFIX_BEAM_ALLOW_SINGLE_FALLBACK: bool = True
     PREFIX_BEAM_ORACLE_CACHE_ENABLE: bool = True
     PREFIX_BEAM_ORACLE_MODES: tuple = ("baseline", "long_edge", "strip_bias")
+    PREFIX_BEAM_COMPLETION_POLICY: str = "deterministic"
+    PREFIX_BEAM_COMPLETION_SAMPLES: int = 3
     PREFIX_BEAM_LIGHT_REPAIR_ENABLE: bool = True
     PREFIX_BEAM_LIGHT_REPAIR_TOPK: int = 1
 

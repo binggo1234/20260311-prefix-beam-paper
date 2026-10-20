@@ -15,6 +15,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 from .dataio import read_sample_parts
 from .geometry import effective_safe_gap, effective_trim, resolve_geometry_policy
+from .ordering import baseline_sequence
 from .mcts import OmnipotentDecoder, RecedingHorizonMCTS, SearchResult, solve_with_receding_horizon_mcts
 from .packer import board_used_area
 from .preprocess import preprocess_parts
@@ -309,11 +310,20 @@ RH_MCTS_PREFIX_BEAM_OVERRIDES: Dict[str, Any] = {
     "POST_REPAIR_ALNS_ENABLE": False,
 }
 
+RH_MCTS_PREFIX_BEAM_RANDOM_COMPLETION_OVERRIDES: Dict[str, Any] = {
+    "SOLVER_ROLE": "prefix_beam_random_completion_ablation",
+    "SOLVER_BUNDLE": "prefix_beam_random_completion_control",
+    "PREFIX_BEAM_COMPLETION_POLICY": "random",
+    "PREFIX_BEAM_COMPLETION_SAMPLES": 3,
+}
+
 RH_MCTS_PROFILE_BASES: Dict[str, str] = {
     "rh_mcts": "rh_mcts_ref",
     "rh_mcts_main": "rh_mcts_ref",
     "rh_mcts_beam": "rh_mcts_main",
     "rh_mcts_prefix_beam": "rh_mcts_main",
+    "rh_mcts_prefix_beam_random_completion": "rh_mcts_prefix_beam",
+    "rh_mcts_prefix_beam_complement": "rh_mcts_prefix_beam",
     "rh_mcts_full": "rh_mcts_main",
     "ours_full": "rh_mcts_full",
     "ours_base": "rh_mcts_main",
@@ -338,6 +348,12 @@ RH_MCTS_PROFILE_OVERRIDES: Dict[str, Dict[str, Any]] = {
     "rh_mcts_main": RH_MCTS_MAIN_OVERRIDES,
     "rh_mcts_beam": RH_MCTS_BEAM_OVERRIDES,
     "rh_mcts_prefix_beam": RH_MCTS_PREFIX_BEAM_OVERRIDES,
+    "rh_mcts_prefix_beam_random_completion": RH_MCTS_PREFIX_BEAM_RANDOM_COMPLETION_OVERRIDES,
+    "rh_mcts_prefix_beam_complement": {
+        "SOLVER_ROLE": "prefix_beam_complement_development",
+        "SOLVER_BUNDLE": "prefix_beam_complement",
+        "MACRO_COMPLEMENT_ENABLE": True,
+    },
     "rh_mcts_full": RH_MCTS_FULL_OVERRIDES,
     "ours_full": {},
     "ours_base": {
@@ -429,6 +445,8 @@ MCTS_MAIN_VARIANTS = {
     "rh_mcts_main",
     "rh_mcts_beam",
     "rh_mcts_prefix_beam",
+    "rh_mcts_prefix_beam_random_completion",
+    "rh_mcts_prefix_beam_complement",
     "rh_mcts_full",
     "ours_full",
     "ours_base",
@@ -913,24 +931,22 @@ def _solve_rh_mcts(parts, cfg, seed: int) -> SearchResult:
 
 
 def _baseline_sequence(parts: Sequence) -> Tuple[int, ...]:
-    ranked = sorted(
-        parts,
-        key=lambda part: (
-            float(part.w0) * float(part.h0),
-            max(float(part.w0), float(part.h0)) / max(1e-9, min(float(part.w0), float(part.h0))),
-            float(max(part.w0, part.h0)),
-            -int(part.uid),
-        ),
-        reverse=True,
-    )
-    return tuple(int(part.uid) for part in ranked)
+    return baseline_sequence(parts)
 
 
 def _solve_baseline_greedy(parts, cfg, seed: int) -> SearchResult:
     del seed
     decoder = OmnipotentDecoder({int(part.uid): part for part in parts}, cfg)
     sequence = _baseline_sequence(parts)
-    snapshot, _ = decoder.replay_order(sequence)
+    formal_deadline = float(getattr(cfg, "FORMAL_TOTAL_DEADLINE", math.inf))
+    deadline = (
+        formal_deadline - float(getattr(cfg, "FORMAL_CLOSING_RESERVE_S", 0.0))
+        if math.isfinite(formal_deadline)
+        else math.inf
+    )
+    snapshot, _ = decoder.replay_order(
+        sequence, deadline=deadline, deadline_phase="baseline_greedy_replay"
+    )
     return SearchResult(
         boards=list(snapshot.boards),
         sequence=sequence,

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from functools import wraps
 from itertools import combinations
 import logging
 import math
@@ -14,7 +15,9 @@ try:
 except Exception:  # pragma: no cover - validated in integration env
     cp_model = None
 
+from .budget import BudgetExpired
 from .geometry import effective_safe_gap, effective_trim
+from .ordering import baseline_sequence
 
 
 def _load_cp_model():
@@ -46,6 +49,24 @@ EPS = 1e-9
 MASK64 = (1 << 64) - 1
 HASH_BASE = 11400714819323198485
 UNBOUNDED_TIME_SENTINEL_S = 43200.0
+
+
+def _timed_phase(name: str):
+    """Inclusive phase timers: nested phases must not be summed as wall time."""
+    def decorate(method):
+        @wraps(method)
+        def measured(self, *args, **kwargs):
+            started = time.perf_counter()
+            previous = getattr(self, "evidence_phase", "search")
+            self.evidence_phase = name
+            try:
+                return method(self, *args, **kwargs)
+            finally:
+                times = self.meta.setdefault("phase_time_s", {})
+                times[name] = times.get(name, 0.0) + max(0.0, time.perf_counter() - started)
+                self.evidence_phase = previous
+        return measured
+    return decorate
 
 
 def _bit_count(value: int) -> int:
@@ -415,8 +436,9 @@ def _empty_snapshot() -> LayoutSnapshot:
     return LayoutSnapshot(boards=PersistentBoards.empty(), sum_u_gamma=0.0, layout_hash=(0, 0), ordered_hash=0)
 
 
-def _part_dims_signature(part, nd: int = 3) -> Tuple[float, float]:
-    return (round(float(part.w), nd), round(float(part.h), nd))
+def _part_dims_signature(part, nd: int = 3) -> Tuple[Any, ...]:
+    allowed = tuple(getattr(part, "allowed_rotations_deg", (0, 90)))
+    return (round(float(part.w), nd), round(float(part.h), nd), allowed)
 
 
 def _avg_u_gamma(snapshot: LayoutSnapshot) -> float:
@@ -489,9 +511,10 @@ def _scalar_reward(snapshot: LayoutSnapshot, big_m: float) -> float:
 
 
 def _compat(part, rect, allow_rot: bool) -> float:
-    fits = (part.w <= rect.w + EPS and part.h <= rect.h + EPS)
-    if allow_rot:
-        fits = fits or (part.h <= rect.w + EPS and part.w <= rect.h + EPS)
+    fits = any(
+        w <= rect.w + EPS and h <= rect.h + EPS
+        for w, h in _orientations(part, allow_rot)
+    )
     if not fits:
         return 0.0
     area_part = float(part.w0) * float(part.h0)
@@ -500,8 +523,11 @@ def _compat(part, rect, allow_rot: bool) -> float:
 
 
 def _orientations(part, allow_rot: bool) -> Tuple[Tuple[float, float], ...]:
-    out = [(float(part.w), float(part.h))]
-    if allow_rot and abs(float(part.w) - float(part.h)) > EPS:
+    allowed = tuple(getattr(part, "allowed_rotations_deg", (0, 90)))
+    out = []
+    if 0 in allowed:
+        out.append((float(part.w), float(part.h)))
+    if allow_rot and 90 in allowed and (0 not in allowed or abs(float(part.w) - float(part.h)) > EPS):
         out.append((float(part.h), float(part.w)))
     return tuple(out)
 
@@ -602,7 +628,20 @@ class OmnipotentDecoder:
         self.micro_cache[key] = out
         return out
 
-    def decode(self, snapshot: LayoutSnapshot, action: int) -> DecodeResult:
+    @staticmethod
+    def _require_before(deadline: float, phase: str) -> None:
+        if time.perf_counter() >= float(deadline):
+            raise BudgetExpired(phase)
+
+    def decode(
+        self,
+        snapshot: LayoutSnapshot,
+        action: int,
+        *,
+        deadline: float = math.inf,
+        deadline_phase: str = "completion_replay",
+    ) -> DecodeResult:
+        self._require_before(deadline, deadline_phase)
         decode_key = (snapshot.layout_hash, snapshot.ordered_hash, len(snapshot.boards), int(action))
         cached = self.decode_cache.get(decode_key)
         if cached is not None:
@@ -615,6 +654,7 @@ class OmnipotentDecoder:
         best: Optional[DecodeResult] = None
 
         for idx, board in boards.enumerate():
+            self._require_before(deadline, deadline_phase)
             micro = self._micro_decode(board, part)
             if micro is None:
                 continue
@@ -660,6 +700,7 @@ class OmnipotentDecoder:
             if best is None or cand.lex_score > best.lex_score:
                 best = cand
 
+        self._require_before(deadline, deadline_phase)
         empty_board = make_empty_board(
             n_before + 1,
             self.cfg.BOARD_W,
@@ -708,12 +749,26 @@ class OmnipotentDecoder:
         self.decode_cache[decode_key] = best
         return best
 
-    def replay_order(self, order: Sequence[int], *, prefix_snapshot: Optional[LayoutSnapshot] = None) -> Tuple[LayoutSnapshot, List[LayoutSnapshot]]:
+    def replay_order(
+        self,
+        order: Sequence[int],
+        *,
+        prefix_snapshot: Optional[LayoutSnapshot] = None,
+        deadline: float = math.inf,
+        deadline_phase: str = "completion_replay",
+    ) -> Tuple[LayoutSnapshot, List[LayoutSnapshot]]:
         snapshot = prefix_snapshot if prefix_snapshot is not None else _empty_snapshot()
         snapshots = [snapshot]
         for action in order:
-            snapshot = self.decode(snapshot, int(action)).snapshot
+            self._require_before(deadline, deadline_phase)
+            snapshot = self.decode(
+                snapshot,
+                int(action),
+                deadline=deadline,
+                deadline_phase=deadline_phase,
+            ).snapshot
             snapshots.append(snapshot)
+        self._require_before(deadline, deadline_phase)
         return snapshot, snapshots
 
 
@@ -726,6 +781,7 @@ class RecedingHorizonMCTS:
         self.part_bit = {pid: 1 << idx for idx, pid in enumerate(self.part_ids)}
         self.full_remaining_mask = (1 << len(self.part_ids)) - 1
         self.cfg = cfg
+        self.seed = int(seed)
         self.rng = random.Random(seed)
         self.trim = effective_trim(cfg)
         self.safe_gap = effective_safe_gap(cfg)
@@ -867,6 +923,9 @@ class RecedingHorizonMCTS:
         )
         self.macro_action_enable = bool(getattr(cfg, "MACRO_ACTION_ENABLE", False))
         self.macro_action_topk = max(1, int(getattr(cfg, "MACRO_ACTION_TOPK", 12)))
+        self.macro_complement_enable = bool(getattr(cfg, "MACRO_COMPLEMENT_ENABLE", False))
+        self.macro_complement_topk = max(0, int(getattr(cfg, "MACRO_COMPLEMENT_TOPK", 2)))
+        self.macro_complement_pool = min(64, max(2, int(getattr(cfg, "MACRO_COMPLEMENT_POOL", 16))))
         self.macro_min_parts = max(2, int(getattr(cfg, "MACRO_MIN_PARTS", 2)))
         self.macro_max_parts = max(self.macro_min_parts, int(getattr(cfg, "MACRO_MAX_PARTS", 6)))
         self.macro_pattern_topk = max(0, int(getattr(cfg, "MACRO_PATTERN_TOPK", 4)))
@@ -950,6 +1009,23 @@ class RecedingHorizonMCTS:
         if not oracle_modes:
             oracle_modes = ["baseline"]
         self.prefix_beam_oracle_modes = tuple(oracle_modes)
+        self.prefix_beam_completion_policy = str(
+            getattr(cfg, "PREFIX_BEAM_COMPLETION_POLICY", "deterministic")
+        ).strip().lower()
+        if self.prefix_beam_completion_policy not in {"deterministic", "random"}:
+            raise ValueError(
+                "PREFIX_BEAM_COMPLETION_POLICY must be 'deterministic' or 'random'"
+            )
+        self.prefix_beam_completion_samples = max(
+            1,
+            int(
+                getattr(
+                    cfg,
+                    "PREFIX_BEAM_COMPLETION_SAMPLES",
+                    len(self.prefix_beam_oracle_modes),
+                )
+            ),
+        )
         self.sig_nd = int(getattr(cfg, "STATE_SIG_ND", 3))
         usable_w = max(0.0, float(getattr(self.cfg, "BOARD_W", 0.0)) - 2.0 * float(self.trim))
         usable_h = max(0.0, float(getattr(self.cfg, "BOARD_H", 0.0)) - 2.0 * float(self.trim))
@@ -998,7 +1074,25 @@ class RecedingHorizonMCTS:
             "generic": 1.0,
         }
         self.solve_deadline = math.inf
+        self.search_deadline = math.inf
+        self.formal_total_deadline = float(getattr(cfg, "FORMAL_TOTAL_DEADLINE", math.inf))
+        self.formal_closing_reserve_s = max(
+            0.0,
+            float(getattr(cfg, "FORMAL_CLOSING_RESERVE_S", 0.0)),
+        )
+        self.evidence_started_at = time.perf_counter()
         self.meta = {
+            "evidence_version": "prefix-development-v1",
+            "evidence_time_origin": "solver_init",
+            "main_profile_tier": str(getattr(cfg, "MAIN_PROFILE_TIER", "base")),
+            "phase_time_s": {},
+            "completion_mode_time_s": {},
+            "puct_selections": 0.0,
+            "complement_enabled": self.macro_complement_enable,
+            "complement_pairs_considered": 0.0,
+            "macro_complement_actions": 0.0,
+            "candidate_unique_parts_max": 0.0,
+            "candidate_unique_parts_total": 0.0,
             "simulations": 0.0,
             "commit_rounds": 0.0,
             "commit_steps": 0.0,
@@ -1110,6 +1204,9 @@ class RecedingHorizonMCTS:
             "oracle_completion_cache_hits": 0.0,
             "oracle_completion_cache_entries": 0.0,
             "oracle_completion_mode_evals": 0.0,
+            "oracle_completion_mode_completed": 0.0,
+            "oracle_completion_mode_timeouts": 0.0,
+            "global_best_events": [],
             "oracle_completion_last_best_mode": "",
             "prefix_candidates_generated": 0.0,
             "prefix_depth_reached": 0.0,
@@ -1448,6 +1545,26 @@ class RecedingHorizonMCTS:
         if not ordered:
             return ordered[:limit]
 
+        if self.macro_complement_enable and self.macro_complement_topk > 0:
+            # Reserve the fallback, then spend the existing action budget on
+            # distinct pair sets before filling with the original action pool.
+            selected = [item for item in ordered if item.kind == "single"][:1]
+            part_sets = {item.part_ids for item in selected}
+            complements = [item for item in ordered if item.source == "complement"]
+            for item in complements:
+                if len(selected) >= min(limit, self.macro_complement_topk + 1):
+                    break
+                if item.part_ids not in part_sets:
+                    selected.append(item)
+                    part_sets.add(item.part_ids)
+            for item in ordered:
+                if len(selected) >= limit:
+                    break
+                if item.part_ids not in part_sets:
+                    selected.append(item)
+                    part_sets.add(item.part_ids)
+            return selected[:limit]
+
         patterns = [item for item in ordered if item.kind == "pattern"]
         if not patterns:
             return ordered[:limit]
@@ -1631,6 +1748,61 @@ class RecedingHorizonMCTS:
                     return candidates
         return candidates
 
+    @_timed_phase("complement_generation")
+    def _complement_macro_actions(
+        self, snapshot: LayoutSnapshot, remaining_mask: int, limit: int,
+    ) -> List[Tuple[str, Tuple[int, ...], float]]:
+        """Propose both orders of bounded pairs with a feasible envelope.
+
+        Envelopes use solver dimensions and only permitted orientations. They
+        screen candidates; the existing decoder still determines placements.
+        ``limit`` counts distinct pairs, not their two orderings.
+        """
+        if not self.macro_complement_enable or limit <= 0 or time.perf_counter() >= self.search_deadline:
+            return []
+        usable_w = max(0.0, float(self.cfg.BOARD_W) - 2.0 * self.trim)
+        usable_h = max(0.0, float(self.cfg.BOARD_H) - 2.0 * self.trim)
+        scouted = self._scout_actions(remaining_mask, max(2, self.macro_complement_pool // 2))
+        if len(scouted) > self.macro_complement_pool:
+            head = self.macro_complement_pool // 2
+            scouted = scouted[:head] + scouted[-(self.macro_complement_pool - head):]
+        spaces = [
+            (float(rect.w), float(rect.h))
+            for board in snapshot.boards.materialize()[-2:]
+            for rect in board.free_rects
+        ]
+        ranked = []
+        for first, second in combinations(scouted, 2):
+            if time.perf_counter() >= self.search_deadline:
+                break
+            self.meta["complement_pairs_considered"] += 1.0
+            part_a, part_b = self.parts_by_id[first], self.parts_by_id[second]
+            solver_area = float(part_a.w) * float(part_a.h) + float(part_b.w) * float(part_b.h)
+            nominal_util = (self.part_area0[first] + self.part_area0[second]) / max(
+                EPS, float(self.cfg.BOARD_W) * float(self.cfg.BOARD_H),
+            )
+            best = None
+            for aw, ah in self.part_orientations[first]:
+                for bw, bh in self.part_orientations[second]:
+                    for width, height in ((aw + bw, max(ah, bh)), (max(aw, bw), ah + bh)):
+                        if width > usable_w + EPS or height > usable_h + EPS:
+                            continue
+                        existing_fit = any(width <= w + EPS and height <= h + EPS for w, h in spaces)
+                        rank = (
+                            float(existing_fit), solver_area / max(EPS, width * height),
+                            nominal_util, -float(first), -float(second),
+                        )
+                        if best is None or rank > best:
+                            best = rank
+            if best is not None:
+                ranked.append((best, first, second, nominal_util))
+        ranked.sort(reverse=True)
+        out = []
+        for _, first, second, util in ranked[: min(limit, self.macro_complement_topk)]:
+            out.append(("anchor", (first, second), util))
+            out.append(("anchor", (second, first), util))
+        return out
+
     def _tail_macro_actions(
         self,
         snapshot: LayoutSnapshot,
@@ -1710,6 +1882,7 @@ class RecedingHorizonMCTS:
             ordered.append(int(action))
         return ordered, action_meta
 
+    @_timed_phase("candidate_generation")
     def _generate_macro_actions(
         self,
         snapshot: LayoutSnapshot,
@@ -1743,6 +1916,13 @@ class RecedingHorizonMCTS:
                 return
             key = int(seq_t[0]) if len(seq_t) == 1 else self._macro_action_key(seq_t)
             decoded = self._apply_sequence(snapshot, seq_t, key=key)
+            if source == "complement":
+                pair_boards = [
+                    board for board in decoded.snapshot.boards
+                    if any(int(placed.uid) in seq_t for placed in board.placed)
+                ]
+                if len(pair_boards) != 1:
+                    return
             prior, rank_key = self._macro_prior_rank(
                 snapshot,
                 remaining_mask,
@@ -1774,6 +1954,11 @@ class RecedingHorizonMCTS:
             register(kind, sequence, pred_util, "tail")
         for kind, sequence, pred_util in self._single_macro_actions(remaining_mask, stage_limits["single"]):
             register(kind, sequence, pred_util, "single")
+        complement_limit = min(self.macro_complement_topk, max(0, min(target_limit, self.macro_action_topk) - 1))
+        for kind, sequence, pred_util in self._complement_macro_actions(snapshot, remaining_mask, complement_limit):
+            if time.perf_counter() >= self.search_deadline:
+                break
+            register(kind, sequence, pred_util, "complement")
 
         ordered = self._select_macro_action_mix(
             list(candidates.values()),
@@ -1781,6 +1966,10 @@ class RecedingHorizonMCTS:
             target_limit=max(1, min(target_limit, self.macro_action_topk)),
         )
         actions = [int(item.key) for item in ordered]
+        unique_parts = len({pid for item in ordered for pid in item.part_ids})
+        self.meta["candidate_unique_parts_max"] = max(self.meta["candidate_unique_parts_max"], float(unique_parts))
+        self.meta["candidate_unique_parts_total"] += float(unique_parts)
+        self.meta["macro_complement_actions"] += float(sum(item.source == "complement" for item in ordered))
         self.meta["macro_actions_generated"] += float(len(actions))
         self.meta["macro_pattern_actions"] += float(sum(1 for item in ordered if item.kind == "pattern"))
         self.meta["macro_anchor_actions"] += float(sum(1 for item in ordered if item.kind == "anchor"))
@@ -1951,6 +2140,38 @@ class RecedingHorizonMCTS:
             int(prefix_depth),
         )
 
+    def _random_completion_order(
+        self,
+        prefix_snapshot: LayoutSnapshot,
+        remaining_mask: int,
+        *,
+        prefix_depth: int,
+        sample_index: int,
+    ) -> Tuple[int, ...]:
+        """Return a state-seeded random suffix for the completion ablation.
+
+        The seed depends only on the run seed, prefix state, and sample index,
+        so traversal order and cache hits cannot change the sampled suffixes.
+        """
+
+        values = (
+            self.seed,
+            int(prefix_snapshot.layout_hash[0]),
+            int(prefix_snapshot.layout_hash[1]),
+            int(prefix_snapshot.ordered_hash),
+            int(remaining_mask),
+            int(prefix_depth),
+            int(sample_index),
+        )
+        mixed = 1469598103934665603
+        for value in values:
+            mixed ^= int(value) & MASK64
+            mixed = (mixed * 1099511628211) & MASK64
+        suffix = list(self._candidate_actions_static(remaining_mask))
+        random.Random(mixed).shuffle(suffix)
+        return tuple(int(pid) for pid in suffix)
+
+    @_timed_phase("completion")
     def _complete_with_baseline(
         self,
         prefix_snapshot: LayoutSnapshot,
@@ -1963,23 +2184,80 @@ class RecedingHorizonMCTS:
         cached = self.oracle_completion_cache.get(cache_key)
         if cached is not None:
             self.meta["oracle_completion_cache_hits"] += 1.0
-            best_mode = str(self.oracle_completion_mode_cache.get(cache_key, self.prefix_beam_oracle_modes[0]))
+            default_mode = (
+                "random-0"
+                if self.prefix_beam_completion_policy == "random"
+                else self.prefix_beam_oracle_modes[0]
+            )
+            best_mode = str(self.oracle_completion_mode_cache.get(cache_key, default_mode))
             self.meta[f"oracle_completion_best_{best_mode}"] = float(
                 self.meta.get(f"oracle_completion_best_{best_mode}", 0.0)
             ) + 1.0
             self.meta["oracle_completion_last_best_mode"] = best_mode
             return cached
 
-        best_mode = "baseline"
+        best_mode = (
+            "random-0"
+            if self.prefix_beam_completion_policy == "random"
+            else "baseline"
+        )
         best_rank: Optional[Tuple[float, ...]] = None
         best_out: Optional[Tuple[Tuple[int, ...], LayoutSnapshot, Tuple[float, ...]]] = None
-        for mode in self.prefix_beam_oracle_modes:
+        if self.prefix_beam_completion_policy == "random":
+            completion_specs = tuple(
+                (
+                    f"random-{sample_index}",
+                    self._random_completion_order(
+                        prefix_snapshot,
+                        remaining_mask,
+                        prefix_depth=prefix_depth,
+                        sample_index=sample_index,
+                    ),
+                )
+                for sample_index in range(self.prefix_beam_completion_samples)
+            )
+        else:
+            completion_specs = tuple(
+                (
+                    mode,
+                    self._baseline_completion_order(remaining_mask, mode=mode),
+                )
+                for mode in self.prefix_beam_oracle_modes
+            )
+        for mode, suffix in completion_specs:
+            mode_started = time.perf_counter()
             self.meta["oracle_completion_mode_evals"] += 1.0
             self.meta[f"oracle_completion_mode_eval_{mode}"] = float(
                 self.meta.get(f"oracle_completion_mode_eval_{mode}", 0.0)
             ) + 1.0
-            suffix = self._baseline_completion_order(remaining_mask, mode=mode)
-            final_snapshot, _ = self.decoder.replay_order(suffix, prefix_snapshot=prefix_snapshot)
+            try:
+                final_snapshot, _ = self.decoder.replay_order(
+                    suffix,
+                    prefix_snapshot=prefix_snapshot,
+                    deadline=self.search_deadline,
+                    deadline_phase="completion_replay",
+                )
+            except BudgetExpired:
+                self.meta["oracle_completion_mode_timeouts"] += 1.0
+                self.meta["solver_timeout_hit"] = 1.0
+                self.meta["oracle_completion_deadline_mode"] = str(mode)
+                if best_out is None:
+                    raise
+                # A completed feasible mode is usable even when the mode group
+                # is interrupted. Do not cache it as a fully evaluated group.
+                self.meta["oracle_completion_partial_returned"] = float(
+                    self.meta.get("oracle_completion_partial_returned", 0.0)
+                ) + 1.0
+                self.meta["oracle_completion_partial_best_mode"] = best_mode
+                self.meta["oracle_completion_last_best_mode"] = best_mode
+                self.meta["oracle_completion_partial_score"] = list(best_out[2])
+                self.meta["oracle_completion_partial_layout_hash"] = list(best_out[1].layout_hash)
+                self.meta["oracle_completion_partial_ordered_hash"] = int(best_out[1].ordered_hash)
+                return best_out
+            finally:
+                times = self.meta.setdefault("completion_mode_time_s", {})
+                times[mode] = times.get(mode, 0.0) + max(0.0, time.perf_counter() - mode_started)
+            self.meta["oracle_completion_mode_completed"] += 1.0
             score = tuple(self._terminal_score(final_snapshot))
             rank = self._prefix_beam_completed_rank(final_snapshot, prefix_depth=prefix_depth)
             if best_rank is None or rank > best_rank:
@@ -2031,7 +2309,10 @@ class RecedingHorizonMCTS:
             specs.append((order, place_mode, rand_topk, idx))
         return specs
 
-    def _pack_constructive_sequence(self, order: str, place_mode: str, rand_topk: int, restart_idx: int) -> Optional[Tuple[int, ...]]:
+    def _pack_constructive_sequence(
+        self, order: str, place_mode: str, rand_topk: int, restart_idx: int, *,
+        deadline: Optional[float] = None, deadline_phase: str = "constructive_warmstart",
+    ) -> Optional[Tuple[int, ...]]:
         parts = list(self.parts)
         if order == "area_aspect":
             parts = [self.parts_by_id[int(pid)] for pid in self._area_aspect_sequence()]
@@ -2050,7 +2331,14 @@ class RecedingHorizonMCTS:
                 place_mode=str(place_mode),
                 rng=rng,
                 rand_topk=max(1, int(rand_topk)),
+                deadline=self.search_deadline if deadline is None else deadline,
+                deadline_phase=deadline_phase,
             )
+        except BudgetExpired:
+            if deadline is not None:
+                raise
+            self.meta["solver_timeout_hit"] = 1.0
+            return None
         except Exception:
             return None
         sequence = tuple(int(pp.uid) for board in boards for pp in board.placed)
@@ -2061,12 +2349,22 @@ class RecedingHorizonMCTS:
         sequence: Sequence[int],
         snapshot: LayoutSnapshot,
         snapshots: Sequence[LayoutSnapshot],
+        *,
+        deadline: Optional[float] = None,
+        deadline_phase: str = "constructive_warmstart",
+        source: str = "constructive_warmstart",
     ) -> None:
+        if deadline is not None and time.perf_counter() >= float(deadline):
+            raise BudgetExpired(deadline_phase)
         seq_t = tuple(int(x) for x in sequence)
         score = self._terminal_score(snapshot)
         reward_scalar = self._reward_scalar(snapshot, 0)
-        self._update_global_best(seq_t, snapshot)
-        self._record_layout_candidate(seq_t, snapshot, source="constructive")
+        self._update_global_best(seq_t, snapshot, source=source, record_archive=False)
+        self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
+        self._record_elite_candidate(seq_t, snapshot, deadline=deadline, deadline_phase=deadline_phase)
+        self._record_layout_candidate(
+            seq_t, snapshot, source="constructive", deadline=deadline, deadline_phase=deadline_phase,
+        )
 
         candidate = EliteCandidate(
             sequence=seq_t,
@@ -2086,6 +2384,8 @@ class RecedingHorizonMCTS:
 
         remaining_mask = int(self.full_remaining_mask)
         for idx, snap in enumerate(snapshots):
+            if deadline is not None and time.perf_counter() >= float(deadline):
+                raise BudgetExpired(deadline_phase)
             key = self._state_key(snap, remaining_mask)
             suffix = seq_t[idx:]
             prev = self.seed_suffix_cache.get(key)
@@ -2100,32 +2400,108 @@ class RecedingHorizonMCTS:
         self.meta["warmstart_candidates_kept"] = float(len(self.constructive_warmstarts))
         self.meta["warmstart_cache_states"] = float(len(self.seed_suffix_cache))
 
+    @_timed_phase("warmstart")
     def _prime_constructive_warmstarts(self) -> None:
+        started = time.perf_counter()
+        self.meta["warmstart_budget_enabled"] = False
+        self.meta["warmstart_budget_hit"] = False
+        self.meta["warmstart_stop_reason"] = "completed"
+        if started >= self.search_deadline:
+            self.meta["solver_timeout_hit"] = 1.0
+            self.meta["warmstart_stop_reason"] = "search_deadline"
+            self.meta["search_budget_remaining_s"] = 0.0
+            return
+        enabled = self.prefix_beam_enable and bool(getattr(self.cfg, "PREFIX_WARMSTART_BUDGET_ENABLE", True))
+        self.meta["warmstart_budget_enabled"] = enabled
+        deadline = self.search_deadline
+        phase = "constructive_warmstart"
+        if enabled:
+            fraction = float(getattr(self.cfg, "PREFIX_WARMSTART_BUDGET_FRAC", 0.20))
+            cap = float(getattr(self.cfg, "PREFIX_WARMSTART_BUDGET_MAX_S", 5.0))
+            if not math.isfinite(fraction) or not 0.0 <= fraction <= 1.0:
+                raise ValueError("PREFIX_WARMSTART_BUDGET_FRAC must be finite and in [0, 1]")
+            if not math.isfinite(cap) or cap < 0.0:
+                raise ValueError("PREFIX_WARMSTART_BUDGET_MAX_S must be finite and nonnegative")
+            allocation = min(cap, (self.search_deadline - started) * fraction) if fraction > 0.0 else 0.0
+            deadline = min(self.search_deadline, started + allocation)
+            phase = "warmstart_budget"
+            self.meta["warmstart_budget_s"] = allocation
+        try:
+            self._prime_constructive_candidates(deadline, phase)
+        except BudgetExpired as exc:
+            if exc.phase == "warmstart_budget" and time.perf_counter() < self.search_deadline:
+                self.meta["warmstart_budget_hit"] = True
+                self.meta["warmstart_stop_reason"] = "warmstart_budget"
+            else:
+                self.meta["solver_timeout_hit"] = 1.0
+                self.meta["warmstart_stop_reason"] = "search_deadline"
+        finally:
+            self.meta["warmstart_candidates_kept"] = float(len(self.constructive_warmstarts))
+            self.meta["warmstart_cache_states"] = float(len(self.seed_suffix_cache))
+            self.meta["search_budget_remaining_s"] = (
+                max(0.0, self.search_deadline - time.perf_counter())
+                if math.isfinite(self.search_deadline) else None
+            )
+
+    def _prime_constructive_candidates(self, deadline: float, deadline_phase: str) -> None:
+        """Mandatory Greedy uses the search deadline; all optional work uses the local one."""
         seen = set()
-        if self.global_pattern_include_baseline or self.baseline_restarts > 0:
-            normalized = self._normalize_sequence_candidate(self._area_aspect_sequence())
+        if self.prefix_beam_enable:
+            normalized = self._normalize_sequence_candidate(
+                baseline_sequence(self.parts),
+                deadline=self.search_deadline,
+                deadline_phase="constructive_warmstart",
+            )
             if normalized is not None:
                 seq_t, snapshot, snapshots = normalized
                 seen.add(seq_t)
-                self._record_constructive_warmstart(seq_t, snapshot, snapshots)
+                self.meta["greedy_floor_panels"] = len(snapshot.boards)
+                self._update_global_best(seq_t, snapshot, source="greedy_floor", record_archive=False)
+                self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
+                self._record_constructive_warmstart(
+                    seq_t, snapshot, snapshots, deadline=deadline,
+                    deadline_phase=deadline_phase, source="greedy_floor",
+                )
+        if self.global_pattern_include_baseline or self.baseline_restarts > 0:
+            normalized = self._normalize_sequence_candidate(
+                self._area_aspect_sequence(), deadline=deadline, deadline_phase=deadline_phase,
+            )
+            if normalized is not None:
+                seq_t, snapshot, snapshots = normalized
+                seen.add(seq_t)
+                self._update_global_best(seq_t, snapshot, source="constructive_warmstart", record_archive=False)
+                self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
+                self._record_constructive_warmstart(
+                    seq_t, snapshot, snapshots, deadline=deadline, deadline_phase=deadline_phase,
+                )
                 self.meta["baseline_seed_injected"] = 1.0
         if self.baseline_restarts <= 0:
             return
         seed_specs: List[Tuple[str, str, int, int]] = [("area_aspect", self.decoder.place_mode, self.rand_topk, -1)]
         seed_specs.extend(self._constructive_seed_specs())
         for order, place_mode, rand_topk, restart_idx in seed_specs:
-            sequence = self._pack_constructive_sequence(order, place_mode, rand_topk, restart_idx)
+            if time.perf_counter() >= deadline:
+                raise BudgetExpired(deadline_phase)
+            sequence = self._pack_constructive_sequence(
+                order, place_mode, rand_topk, restart_idx, deadline=deadline, deadline_phase=deadline_phase,
+            )
             if sequence is None:
                 continue
             self.meta["warmstart_candidates_generated"] += 1.0
             if sequence in seen:
                 continue
             seen.add(sequence)
-            normalized = self._normalize_sequence_candidate(sequence)
+            normalized = self._normalize_sequence_candidate(
+                sequence, deadline=deadline, deadline_phase=deadline_phase,
+            )
             if normalized is None:
                 continue
             seq_t, snapshot, snapshots = normalized
-            self._record_constructive_warmstart(seq_t, snapshot, snapshots)
+            self._update_global_best(seq_t, snapshot, source="constructive_warmstart", record_archive=False)
+            self.meta["warmstart_best_panels"] = len(self.global_best_snapshot.boards)
+            self._record_constructive_warmstart(
+                seq_t, snapshot, snapshots, deadline=deadline, deadline_phase=deadline_phase,
+            )
 
     def _next_empty_board(self, snapshot: LayoutSnapshot) -> Board:
         return make_empty_board(
@@ -2401,6 +2777,7 @@ class RecedingHorizonMCTS:
                 path.append(child)
                 return path
             prior_sum = sum(float(node.priors.get(int(a), 0.0)) for a in allowed)
+            self.meta["puct_selections"] = float(self.meta.get("puct_selections", 0.0)) + 1.0
             best_action = max(allowed, key=lambda a: self._puct_score(node, int(a), prior_sum))
             node = node.children[int(best_action)]
             path.append(node)
@@ -2617,15 +2994,33 @@ class RecedingHorizonMCTS:
         self._record_snapshot_patterns(final_snapshot, source="rollout_final")
         return final_snapshot, seq
 
-    def _update_global_best(self, sequence: Sequence[int], snapshot: LayoutSnapshot) -> None:
+    def _update_global_best(
+        self, sequence: Sequence[int], snapshot: LayoutSnapshot, *,
+        source: str = "search", completion_mode: Optional[str] = None,
+        prefix_depth: Optional[int] = None, record_archive: bool = True,
+    ) -> None:
         if not self._is_complete_sequence(sequence):
             return
-        self._record_elite_candidate(sequence, snapshot)
+        if record_archive:
+            self._record_elite_candidate(sequence, snapshot)
         score = self._terminal_score(snapshot)
         if self.global_best_score is None or score > self.global_best_score:
             self.global_best_score = score
             self.global_best_sequence = tuple(int(x) for x in sequence)
             self.global_best_snapshot = snapshot
+            self.meta["global_best_events"].append(
+                {
+                    "elapsed_s": max(0.0, time.perf_counter() - self.evidence_started_at),
+                    "source": str(source),
+                    "phase": getattr(self, "evidence_phase", "search"),
+                    "completion_mode": completion_mode,
+                    "prefix_depth": prefix_depth,
+                    "panel_count": len(snapshot.boards),
+                    "score": list(score),
+                    "layout_hash": list(snapshot.layout_hash),
+                    "ordered_hash": int(snapshot.ordered_hash),
+                }
+            )
 
     def _backup(self, path: Sequence[SearchNode], reward_scalar: float) -> None:
         for node in path:
@@ -3102,9 +3497,16 @@ class RecedingHorizonMCTS:
         self._update_global_best(best_sequence, best_snapshot)
         return best_sequence, best_snapshot
 
+    @_timed_phase("prefix_search")
     def _solve_prefix_beam(self, root: SearchNode) -> SearchResult:
-        overall_deadline = time.perf_counter() + self.solver_time_limit_s if self.solver_time_limit_s > 0.0 else math.inf
-        self.solve_deadline = overall_deadline
+        if not math.isfinite(self.solve_deadline):
+            self._configure_solve_deadlines()
+        self.meta["prefix_search_budget_at_entry_s"] = (
+            max(0.0, self.search_deadline - time.perf_counter())
+            if math.isfinite(self.search_deadline) else None
+        )
+        overall_deadline = self.solve_deadline
+        search_deadline = self.search_deadline
         beam_width = max(1, int(self.prefix_beam_width))
         post_topk = max(1, int(self.prefix_beam_post_topk))
 
@@ -3113,7 +3515,7 @@ class RecedingHorizonMCTS:
         self.meta["beam_active_states_max"] = max(self.meta["beam_active_states_max"], float(len(active_roots)))
 
         while active_roots:
-            if time.perf_counter() >= overall_deadline:
+            if time.perf_counter() >= search_deadline:
                 self.meta["solver_timeout_hit"] = 1.0
                 break
             self.meta["beam_rounds"] += 1.0
@@ -3130,7 +3532,7 @@ class RecedingHorizonMCTS:
 
                 round_sims = 0
                 candidate_chains: List[List[Tuple[int, SearchNode]]] = []
-                while time.perf_counter() < overall_deadline:
+                while time.perf_counter() < search_deadline:
                     sims_now = max(1, self.sims_per_step)
                     self._run_simulations(beam_root, sims_now)
                     round_sims += sims_now
@@ -3187,6 +3589,9 @@ class RecedingHorizonMCTS:
                 self.meta["beam_active_states_max"],
                 float(len(active_roots)),
             )
+
+        if bool(self.meta.get("formal_total_budget", 0.0)):
+            return self._formal_result_from_incumbent()
 
         candidate_roots = completed_roots + active_roots
         if not candidate_roots:
@@ -3292,21 +3697,33 @@ class RecedingHorizonMCTS:
 
     def _run_simulations(self, root: SearchNode, n_sims: int) -> None:
         for _ in range(max(1, n_sims)):
+            if time.perf_counter() >= self.search_deadline:
+                self.meta["solver_timeout_hit"] = 1.0
+                break
             path = self._select_leaf(root)
             leaf = path[-1]
             if self.prefix_beam_enable:
-                full_sequence, final_snapshot, _ = self._evaluate_prefix_with_baseline(
-                    leaf.prefix_sequence,
-                    leaf.snapshot,
-                    leaf.remaining_mask,
-                    prefix_depth=int(leaf.depth),
-                )
+                try:
+                    full_sequence, final_snapshot, _ = self._evaluate_prefix_with_baseline(
+                        leaf.prefix_sequence,
+                        leaf.snapshot,
+                        leaf.remaining_mask,
+                        prefix_depth=int(leaf.depth),
+                    )
+                except BudgetExpired:
+                    self.meta["solver_timeout_hit"] = 1.0
+                    break
                 rollout_seq = tuple(int(pid) for pid in full_sequence[len(tuple(leaf.prefix_sequence)) :])
             else:
                 final_snapshot, rollout_seq = self._rollout(leaf.snapshot, leaf.remaining_mask)
                 full_sequence = tuple(leaf.prefix_sequence) + tuple(int(x) for x in rollout_seq)
             self._record_layout_candidate(full_sequence, final_snapshot, source="simulation")
-            self._update_global_best(full_sequence, final_snapshot)
+            self._update_global_best(
+                full_sequence, final_snapshot,
+                source="prefix_completion" if self.prefix_beam_enable else "simulation",
+                completion_mode=self.meta.get("oracle_completion_last_best_mode") if self.prefix_beam_enable else None,
+                prefix_depth=int(leaf.depth),
+            )
             reward_scalar = self._reward_scalar(final_snapshot, 0)
             if self.beam_enable and self.beam_reward_enable and int(leaf.remaining_mask) != 0:
                 reward_scalar += self._beam_reward_bonus(leaf.snapshot, leaf.remaining_mask)
@@ -3328,6 +3745,74 @@ class RecedingHorizonMCTS:
         reserve = min(reserve, self.post_mcts_reserve_max_s)
         reserve = min(reserve, max(0.0, self.solver_time_limit_s - 0.25))
         return max(0.0, reserve)
+
+    def _formal_result_from_incumbent(self) -> SearchResult:
+        """Close a budgeted run without optional post-processing after search."""
+
+        if (
+            self.global_best_sequence is None
+            or self.global_best_snapshot is None
+            or self.global_best_score is None
+        ):
+            raise BudgetExpired("search_no_complete_incumbent")
+        if time.perf_counter() >= self.solve_deadline:
+            raise BudgetExpired("incumbent_close")
+        final_sequence = tuple(int(pid) for pid in self.global_best_sequence)
+        if not self._is_complete_sequence(final_sequence):
+            raise BudgetExpired("search_no_complete_incumbent")
+        final_snapshot = self.global_best_snapshot
+        if time.perf_counter() >= self.solve_deadline:
+            raise BudgetExpired("incumbent_close")
+        formal = bool(self.meta.get("formal_total_budget", 0.0))
+        self.meta["result_source"] = "formal_deadline_incumbent" if formal else "prefix_deadline_incumbent"
+        self.meta["optional_postprocess_skipped"] = 1.0
+        if formal:
+            self.meta["formal_optional_postprocess_skipped"] = 1.0
+        self.meta["elite_archive_size"] = float(len(self.elite_archive))
+        self.meta["rollout_cache_entries"] = float(len(self.rollout_cache))
+        self.meta["decode_cache_hits"] = float(self.decoder.decode_hits)
+        self.meta["decode_cache_misses"] = float(self.decoder.decode_misses)
+        self.meta["decode_cache_entries"] = float(len(self.decoder.decode_cache))
+        self.meta["micro_cache_hits"] = float(self.decoder.micro_hits)
+        self.meta["micro_cache_misses"] = float(self.decoder.micro_misses)
+        self.meta["micro_cache_entries"] = float(len(self.decoder.micro_cache))
+        self.meta["macro_cache_entries"] = float(len(self.macro_cache))
+        self.meta["coarse_fit_cache_entries"] = float(len(self.coarse_fit_cache))
+        self.meta["oracle_completion_cache_entries"] = float(len(self.oracle_completion_cache))
+        return SearchResult(
+            boards=list(final_snapshot.boards),
+            sequence=final_sequence,
+            score_global=self._terminal_score(final_snapshot),
+            scalar_reward=self._reward_scalar(final_snapshot, 0),
+            meta=dict(self.meta),
+        )
+
+    def _configure_solve_deadlines(self) -> None:
+        """Resolve one absolute deadline before any warm-start work begins."""
+
+        now = time.perf_counter()
+        if math.isfinite(self.formal_total_deadline):
+            overall_deadline = float(self.formal_total_deadline)
+            reserve_s = min(
+                self.formal_closing_reserve_s,
+                max(0.0, overall_deadline - now),
+            )
+            search_deadline = overall_deadline - reserve_s
+            self.meta["formal_total_budget"] = 1.0
+        else:
+            overall_deadline = (
+                now + self.solver_time_limit_s
+                if self.solver_time_limit_s > 0.0
+                else math.inf
+            )
+            reserve_s = self._post_mcts_reserve_s()
+            search_deadline = overall_deadline
+            if math.isfinite(overall_deadline) and reserve_s > 0.0:
+                search_deadline = max(now + 0.25, overall_deadline - reserve_s)
+            self.meta["formal_total_budget"] = 0.0
+        self.solve_deadline = overall_deadline
+        self.search_deadline = search_deadline
+        self.meta["post_mcts_reserve_s"] = float(reserve_s)
 
     def _elite_tail_signature(self, sequence: Sequence[int]) -> Tuple[int, ...]:
         seq_t = tuple(int(x) for x in sequence)
@@ -3360,7 +3845,12 @@ class RecedingHorizonMCTS:
             )
         )
 
-    def _record_layout_candidate(self, sequence: Sequence[int], snapshot: LayoutSnapshot, *, source: str) -> None:
+    def _record_layout_candidate(
+        self, sequence: Sequence[int], snapshot: LayoutSnapshot, *, source: str,
+        deadline: Optional[float] = None, deadline_phase: str = "constructive_warmstart",
+    ) -> None:
+        if deadline is not None and time.perf_counter() >= deadline:
+            raise BudgetExpired(deadline_phase)
         seq_t = tuple(int(x) for x in sequence)
         if not self._is_complete_sequence(seq_t):
             return
@@ -3375,6 +3865,8 @@ class RecedingHorizonMCTS:
             source=str(source),
         )
         for idx, existing in enumerate(self.harvested_layouts):
+            if deadline is not None and time.perf_counter() >= deadline:
+                raise BudgetExpired(deadline_phase)
             if existing.board_signature != board_signature:
                 continue
             if candidate.score > existing.score:
@@ -3385,7 +3877,9 @@ class RecedingHorizonMCTS:
         self.harvested_layouts.sort(key=lambda item: (item.score, -len(item.board_signature), item.source), reverse=True)
         self.harvested_layouts = self.harvested_layouts[: self.global_layout_pool_limit]
         self.meta["layout_harvest_layouts"] = float(len(self.harvested_layouts))
-        self._record_snapshot_patterns(snapshot, source=f"layout:{source}")
+        self._record_snapshot_patterns(
+            snapshot, source=f"layout:{source}", deadline=deadline, deadline_phase=deadline_phase,
+        )
 
     def _record_pattern_candidate(self, pattern: PatternCandidate) -> None:
         if not self.global_pattern_memory_enable:
@@ -3414,10 +3908,15 @@ class RecedingHorizonMCTS:
             }
         self.meta["global_pattern_memory_patterns"] = float(len(self.global_pattern_memory))
 
-    def _record_snapshot_patterns(self, snapshot: LayoutSnapshot, *, source: str) -> None:
+    def _record_snapshot_patterns(
+        self, snapshot: LayoutSnapshot, *, source: str,
+        deadline: Optional[float] = None, deadline_phase: str = "constructive_warmstart",
+    ) -> None:
         if not self.global_pattern_memory_enable:
             return
         for board in snapshot.boards.materialize():
+            if deadline is not None and time.perf_counter() >= deadline:
+                raise BudgetExpired(deadline_phase)
             if not board.placed:
                 continue
             util = float(board_utilization(board))
@@ -3435,11 +3934,18 @@ class RecedingHorizonMCTS:
             )
             self._record_pattern_candidate(pattern)
 
-    def _record_elite_candidate(self, sequence: Sequence[int], snapshot: LayoutSnapshot) -> None:
+    def _record_elite_candidate(
+        self, sequence: Sequence[int], snapshot: LayoutSnapshot, *,
+        deadline: Optional[float] = None, deadline_phase: str = "constructive_warmstart",
+    ) -> None:
         seq_t = tuple(int(x) for x in sequence)
         if not seq_t:
             return
-        self._record_layout_candidate(seq_t, snapshot, source="elite")
+        self._record_layout_candidate(
+            seq_t, snapshot, source="elite", deadline=deadline, deadline_phase=deadline_phase,
+        )
+        if deadline is not None and time.perf_counter() >= deadline:
+            raise BudgetExpired(deadline_phase)
         score = self._terminal_score(snapshot)
         tail_sig = self._elite_tail_signature(seq_t)
         candidate = EliteCandidate(sequence=seq_t, snapshot=snapshot, score=score, tail_signature=tail_sig)
@@ -3505,12 +4011,21 @@ class RecedingHorizonMCTS:
     def _normalize_sequence_candidate(
         self,
         sequence: Sequence[int],
+        *,
+        deadline: Optional[float] = None,
+        deadline_phase: str = "sequence_normalization",
     ) -> Optional[Tuple[Tuple[int, ...], LayoutSnapshot, List[LayoutSnapshot]]]:
         seq_t = tuple(int(x) for x in sequence)
         if not self._is_complete_sequence(seq_t):
             return None
         try:
-            snapshot, snapshots = self.decoder.replay_order(seq_t)
+            snapshot, snapshots = self.decoder.replay_order(
+                seq_t,
+                deadline=math.inf if deadline is None else float(deadline),
+                deadline_phase=deadline_phase,
+            )
+        except BudgetExpired:
+            raise
         except Exception:
             return None
         return seq_t, snapshot, snapshots
@@ -6657,13 +7172,10 @@ class RecedingHorizonMCTS:
         return best_sequence, best_snapshot
 
     def _solve_beam(self, root: SearchNode) -> SearchResult:
-        overall_deadline = time.perf_counter() + self.solver_time_limit_s if self.solver_time_limit_s > 0.0 else math.inf
-        reserve_s = self._post_mcts_reserve_s()
-        search_deadline = overall_deadline
-        if math.isfinite(overall_deadline) and reserve_s > 0.0:
-            search_deadline = max(time.perf_counter() + 0.25, overall_deadline - reserve_s)
-        self.solve_deadline = overall_deadline
-        self.meta["post_mcts_reserve_s"] = float(reserve_s)
+        if not math.isfinite(self.solve_deadline):
+            self._configure_solve_deadlines()
+        overall_deadline = self.solve_deadline
+        search_deadline = self.search_deadline
 
         active_roots: List[SearchNode] = [root]
         completed_roots: List[SearchNode] = []
@@ -6848,21 +7360,35 @@ class RecedingHorizonMCTS:
         )
 
     def solve(self) -> SearchResult:
-        self._prime_constructive_warmstarts()
+        self._configure_solve_deadlines()
+        try:
+            self._prime_constructive_warmstarts()
+        except BudgetExpired:
+            if not bool(self.meta.get("formal_total_budget", 0.0)):
+                raise
+            self.meta["solver_timeout_hit"] = 1.0
+            return self._formal_result_from_incumbent()
         root = SearchNode(snapshot=_empty_snapshot(), remaining_mask=self.full_remaining_mask, prefix_sequence=tuple())
         self._warm_start(root)
         if self.prefix_beam_enable:
-            return self._solve_prefix_beam(root)
+            try:
+                return self._solve_prefix_beam(root)
+            except BudgetExpired as exc:
+                if exc.phase != "completion_replay":
+                    raise
+                if not bool(self.meta.get("formal_total_budget", 0.0)) and (
+                    self.global_best_sequence is None
+                    or self.global_best_snapshot is None
+                    or self.global_best_score is None
+                ):
+                    raise
+                self.meta["solver_timeout_hit"] = 1.0
+                return self._formal_result_from_incumbent()
         if self.beam_enable and self.beam_width > 1:
             return self._solve_beam(root)
         committed_snapshot = root.snapshot
-        overall_deadline = time.perf_counter() + self.solver_time_limit_s if self.solver_time_limit_s > 0.0 else math.inf
-        reserve_s = self._post_mcts_reserve_s()
-        search_deadline = overall_deadline
-        if math.isfinite(overall_deadline) and reserve_s > 0.0:
-            search_deadline = max(time.perf_counter() + 0.25, overall_deadline - reserve_s)
-        self.solve_deadline = overall_deadline
-        self.meta["post_mcts_reserve_s"] = float(reserve_s)
+        overall_deadline = self.solve_deadline
+        search_deadline = self.search_deadline
 
         while root.remaining_mask:
             if time.perf_counter() >= search_deadline:
