@@ -268,6 +268,13 @@ class ActionGeomStats:
 
 
 @dataclass
+class StagedCompletionEntry:
+    # Each value is a completed suffix, never an interrupted decoder state.
+    modes: Dict[str, Tuple[Tuple[int, ...], LayoutSnapshot, Tuple[float, ...]]] = field(default_factory=dict)
+    promoted: bool = False
+
+
+@dataclass
 class SearchNode:
     snapshot: LayoutSnapshot
     remaining_mask: int
@@ -1026,6 +1033,20 @@ class RecedingHorizonMCTS:
                 )
             ),
         )
+        self.staged_completion_enable = self.prefix_beam_enable and bool(getattr(cfg, "PREFIX_BEAM_STAGED_ENABLE", False))
+        self.staged_promote_every = int(getattr(cfg, "PREFIX_BEAM_STAGED_PROMOTE_EVERY", 4))
+        self.staged_explore_credits = int(getattr(cfg, "PREFIX_BEAM_STAGED_EXPLORE_CREDITS", 2))
+        self.staged_panel_margin = int(getattr(cfg, "PREFIX_BEAM_STAGED_PANEL_MARGIN", 1))
+        if self.staged_completion_enable:
+            if self.prefix_beam_completion_policy != "deterministic":
+                raise ValueError("staged completion requires deterministic completion policy")
+            for setting, value, minimum in (
+                ("PREFIX_BEAM_STAGED_PROMOTE_EVERY", self.staged_promote_every, 1),
+                ("PREFIX_BEAM_STAGED_EXPLORE_CREDITS", self.staged_explore_credits, 1),
+                ("PREFIX_BEAM_STAGED_PANEL_MARGIN", self.staged_panel_margin, 0),
+            ):
+                if value < minimum:
+                    raise ValueError(f"{setting} must be >= {minimum}")
         self.sig_nd = int(getattr(cfg, "STATE_SIG_ND", 3))
         usable_w = max(0.0, float(getattr(self.cfg, "BOARD_W", 0.0)) - 2.0 * float(self.trim))
         usable_h = max(0.0, float(getattr(self.cfg, "BOARD_H", 0.0)) - 2.0 * float(self.trim))
@@ -1058,6 +1079,8 @@ class RecedingHorizonMCTS:
         self.seed_suffix_cache: Dict[Tuple, Tuple[LayoutSnapshot, Tuple[int, ...]]] = {}
         self.oracle_completion_cache: Dict[Tuple, Tuple[Tuple[int, ...], LayoutSnapshot, Tuple[float, ...]]] = {}
         self.oracle_completion_mode_cache: Dict[Tuple, str] = {}
+        self.staged_completion_cache: Dict[Tuple, StagedCompletionEntry] = {}
+        self.completion_evaluated_states: Set[Tuple] = set()
         self.global_best_sequence: Optional[Tuple[int, ...]] = None
         self.global_best_snapshot: Optional[LayoutSnapshot] = None
         self.global_best_score: Optional[Tuple[float, ...]] = None
@@ -1087,6 +1110,15 @@ class RecedingHorizonMCTS:
             "main_profile_tier": str(getattr(cfg, "MAIN_PROFILE_TIER", "base")),
             "phase_time_s": {},
             "completion_mode_time_s": {},
+            "staged_completion_enabled": self.staged_completion_enable,
+            "staged_primary_completed": 0.0,
+            "staged_promotions": 0.0,
+            "staged_promotions_quality": 0.0,
+            "staged_promotions_exploration": 0.0,
+            "staged_completion_cache_hits": 0.0,
+            "staged_completion_cache_entries": 0.0,
+            "oracle_completion_last_tier": "",
+            "oracle_completion_unique_states": 0.0,
             "puct_selections": 0.0,
             "complement_enabled": self.macro_complement_enable,
             "complement_pairs_considered": 0.0,
@@ -2194,7 +2226,16 @@ class RecedingHorizonMCTS:
                 self.meta.get(f"oracle_completion_best_{best_mode}", 0.0)
             ) + 1.0
             self.meta["oracle_completion_last_best_mode"] = best_mode
+            self.meta["oracle_completion_last_tier"] = "full"
+            if getattr(self, "staged_completion_enable", False):
+                self.meta["oracle_completion_last_modes_completed"] = list(self.prefix_beam_oracle_modes)
             return cached
+
+        if getattr(self, "staged_completion_enable", False):
+            out = self._complete_staged(prefix_snapshot, remaining_mask, prefix_depth, cache_key)
+            self.completion_evaluated_states.add(cache_key)
+            self.meta["oracle_completion_unique_states"] = float(len(self.completion_evaluated_states))
+            return out
 
         best_mode = (
             "random-0"
@@ -2250,6 +2291,7 @@ class RecedingHorizonMCTS:
                 ) + 1.0
                 self.meta["oracle_completion_partial_best_mode"] = best_mode
                 self.meta["oracle_completion_last_best_mode"] = best_mode
+                self.meta["oracle_completion_last_tier"] = "exhaustive_partial"
                 self.meta["oracle_completion_partial_score"] = list(best_out[2])
                 self.meta["oracle_completion_partial_layout_hash"] = list(best_out[1].layout_hash)
                 self.meta["oracle_completion_partial_ordered_hash"] = int(best_out[1].ordered_hash)
@@ -2258,6 +2300,9 @@ class RecedingHorizonMCTS:
                 times = self.meta.setdefault("completion_mode_time_s", {})
                 times[mode] = times.get(mode, 0.0) + max(0.0, time.perf_counter() - mode_started)
             self.meta["oracle_completion_mode_completed"] += 1.0
+            if hasattr(self, "completion_evaluated_states"):
+                self.completion_evaluated_states.add(cache_key)
+                self.meta["oracle_completion_unique_states"] = float(len(self.completion_evaluated_states))
             score = tuple(self._terminal_score(final_snapshot))
             rank = self._prefix_beam_completed_rank(final_snapshot, prefix_depth=prefix_depth)
             if best_rank is None or rank > best_rank:
@@ -2274,6 +2319,98 @@ class RecedingHorizonMCTS:
             self.meta.get(f"oracle_completion_best_{best_mode}", 0.0)
         ) + 1.0
         self.meta["oracle_completion_last_best_mode"] = best_mode
+        self.meta["oracle_completion_last_tier"] = "full"
+        self.meta["oracle_completion_cache_entries"] = float(len(self.oracle_completion_cache))
+        return out
+
+    def _complete_staged(
+        self, prefix_snapshot: LayoutSnapshot, remaining_mask: int,
+        prefix_depth: int, cache_key: Tuple,
+    ) -> Tuple[Tuple[int, ...], LayoutSnapshot, Tuple[float, ...]]:
+        """Screen complete layouts cheaply; promote a bounded subset of states.
+
+        Partial fidelity is cached separately from fully evaluated mode groups.
+        Completed modes survive interruption and can be resumed on a revisit.
+        """
+        entry = self.staged_completion_cache.get(cache_key) if self.prefix_beam_oracle_cache_enable else None
+        if entry is None:
+            entry = StagedCompletionEntry()
+        else:
+            self.meta["staged_completion_cache_hits"] += 1.0
+
+        def evaluate(mode: str) -> None:
+            suffix = self._baseline_completion_order(remaining_mask, mode=mode)
+            started = time.perf_counter()
+            self.meta["oracle_completion_mode_evals"] += 1.0
+            self.meta[f"oracle_completion_mode_eval_{mode}"] = float(
+                self.meta.get(f"oracle_completion_mode_eval_{mode}", 0.0)
+            ) + 1.0
+            try:
+                final_snapshot, _ = self.decoder.replay_order(
+                    suffix, prefix_snapshot=prefix_snapshot,
+                    deadline=self.search_deadline, deadline_phase="completion_replay",
+                )
+            except BudgetExpired:
+                self.meta["oracle_completion_mode_timeouts"] += 1.0
+                self.meta["solver_timeout_hit"] = 1.0
+                self.meta["oracle_completion_deadline_mode"] = mode
+                raise
+            finally:
+                times = self.meta["completion_mode_time_s"]
+                times[mode] = times.get(mode, 0.0) + max(0.0, time.perf_counter() - started)
+            self.meta["oracle_completion_mode_completed"] += 1.0
+            entry.modes[mode] = (suffix, final_snapshot, tuple(self._terminal_score(final_snapshot)))
+
+        primary = self.prefix_beam_oracle_modes[0]
+        if primary not in entry.modes:
+            evaluate(primary)  # If this fails, no usable entry is created.
+            self.meta["staged_primary_completed"] += 1.0
+            if self.prefix_beam_oracle_cache_enable:
+                self.staged_completion_cache[cache_key] = entry
+        credits = int(self.meta["staged_primary_completed"]) // self.staged_promote_every - int(self.meta["staged_promotions"])
+        primary_panels = len(entry.modes[primary][1].boards)
+        near_incumbent = self.global_best_snapshot is None or (
+            primary_panels <= len(self.global_best_snapshot.boards) + self.staged_panel_margin
+        )
+        exploration = credits >= self.staged_explore_credits
+        if len(self.prefix_beam_oracle_modes) > 1 and not entry.promoted and credits > 0 and (near_incumbent or exploration):
+            entry.promoted = True
+            self.meta["staged_promotions"] += 1.0
+            reason = "quality" if near_incumbent else "exploration"
+            self.meta[f"staged_promotions_{reason}"] += 1.0
+
+        interrupted = False
+        if entry.promoted:
+            for mode in self.prefix_beam_oracle_modes[1:]:
+                if mode in entry.modes:
+                    continue
+                try:
+                    evaluate(mode)
+                except BudgetExpired:
+                    interrupted = True
+                    break
+
+        best_mode = max(
+            entry.modes,
+            key=lambda mode: self._prefix_beam_completed_rank(entry.modes[mode][1], prefix_depth=prefix_depth),
+        )
+        out = entry.modes[best_mode]
+        full = len(entry.modes) == len(self.prefix_beam_oracle_modes)
+        self.meta["oracle_completion_last_tier"] = "full" if full else ("promoted_partial" if entry.promoted else "primary_only")
+        self.meta["oracle_completion_last_best_mode"] = best_mode
+        self.meta["oracle_completion_last_modes_completed"] = list(entry.modes)
+        self.meta[f"oracle_completion_best_{best_mode}"] = float(self.meta.get(f"oracle_completion_best_{best_mode}", 0.0)) + 1.0
+        if interrupted:
+            self.meta["oracle_completion_partial_returned"] = float(self.meta.get("oracle_completion_partial_returned", 0.0)) + 1.0
+            self.meta["oracle_completion_partial_best_mode"] = best_mode
+            self.meta["oracle_completion_partial_score"] = list(out[2])
+            self.meta["oracle_completion_partial_layout_hash"] = list(out[1].layout_hash)
+            self.meta["oracle_completion_partial_ordered_hash"] = int(out[1].ordered_hash)
+        if full and self.prefix_beam_oracle_cache_enable:
+            self.oracle_completion_cache[cache_key] = out
+            self.oracle_completion_mode_cache[cache_key] = best_mode
+            self.staged_completion_cache.pop(cache_key, None)
+        self.meta["staged_completion_cache_entries"] = float(len(self.staged_completion_cache))
         self.meta["oracle_completion_cache_entries"] = float(len(self.oracle_completion_cache))
         return out
 
@@ -2291,6 +2428,15 @@ class RecedingHorizonMCTS:
             prefix_depth=int(prefix_depth if prefix_depth is not None else len(tuple(prefix_sequence))),
         )
         full_sequence = tuple(int(pid) for pid in prefix_sequence) + tuple(int(pid) for pid in suffix)
+        if getattr(self, "staged_completion_enable", False):
+            # A ranking-time promotion can discover a new incumbent before the
+            # next simulation. Retain it without optional archive side effects.
+            self._update_global_best(
+                full_sequence, final_snapshot, source="prefix_completion",
+                completion_mode=self.meta["oracle_completion_last_best_mode"],
+                prefix_depth=prefix_depth if prefix_depth is not None else len(tuple(prefix_sequence)),
+                record_archive=False,
+            )
         return full_sequence, final_snapshot, tuple(score)
 
     def _constructive_seed_specs(self) -> List[Tuple[str, str, int, int]]:
@@ -3014,6 +3160,7 @@ class RecedingHorizonMCTS:
                     "source": str(source),
                     "phase": getattr(self, "evidence_phase", "search"),
                     "completion_mode": completion_mode,
+                    "completion_tier": self.meta.get("oracle_completion_last_tier") if source == "prefix_completion" else None,
                     "prefix_depth": prefix_depth,
                     "panel_count": len(snapshot.boards),
                     "score": list(score),
