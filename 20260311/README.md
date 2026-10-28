@@ -37,3 +37,4 @@ This directory is the actual project root used by the solver and experiment scri
 
 - [Restricted-prefix complement iteration, 2026-10-16](docs/development/prefix-complement-20261016.md): scope, budgeted usage, evidence fields, tests, and limitations. This development variant is not a replacement for frozen paper results.
 - [Warmstart budget split, 2026-10-20](docs/development/warmstart-budget-20261020.md): preserve search time with a 20% / 5 s optional-initialization allowance while retaining exact Greedy.
+- [Staged prefix completion, 2026-10-28](docs/development/staged-completion-20261028.md): opt-in single-mode screening and quota-controlled promotion, separate fidelity caches, paired development results and acceptance limits.
