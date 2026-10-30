@@ -111,7 +111,7 @@ def test_type_evidence_is_bounded(monkeypatch):
     assert len(subject.meta["prefix_type_fair_first_kinds"]) == 32
 
 
-@pytest.mark.parametrize("n_parts", [6, 739, 2416])
+@pytest.mark.parametrize("n_parts", [6, 178, 739, 2416])
 def test_variant_changes_only_expansion_policy_and_identity(n_parts):
     cfg = CFG()
     stats = _case_stats(parts(), cfg)
