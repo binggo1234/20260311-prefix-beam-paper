@@ -990,6 +990,11 @@ class RecedingHorizonMCTS:
         self.beam_focused_repair_tail_waste_w = max(0.0, float(getattr(cfg, "BEAM_FOCUSED_REPAIR_TAIL_WASTE_W", 1.0)))
         self.beam_focused_repair_small_window_bonus = max(0.0, float(getattr(cfg, "BEAM_FOCUSED_REPAIR_SMALL_WINDOW_BONUS", 0.25)))
         self.prefix_beam_enable = bool(getattr(cfg, "PREFIX_BEAM_ENABLE", False))
+        self.prefix_type_fair_expansion_enable = self.prefix_beam_enable and self.macro_action_enable and bool(
+            getattr(cfg, "PREFIX_BEAM_TYPE_FAIR_EXPANSION", False)
+        )
+        if self.prefix_type_fair_expansion_enable and self.disable_geom_prior:
+            raise ValueError("type-fair expansion requires geometry priors")
         self.prefix_beam_depth = max(1, int(getattr(cfg, "PREFIX_BEAM_DEPTH", 3)))
         self.prefix_beam_width = max(1, int(getattr(cfg, "PREFIX_BEAM_WIDTH", 2)))
         self.prefix_beam_branch_topk = max(1, int(getattr(cfg, "PREFIX_BEAM_BRANCH_TOPK", 3)))
@@ -1120,6 +1125,11 @@ class RecedingHorizonMCTS:
             "oracle_completion_last_tier": "",
             "oracle_completion_unique_states": 0.0,
             "puct_selections": 0.0,
+            "prefix_type_fair_expansion_enabled": self.prefix_type_fair_expansion_enable,
+            "prefix_type_fair_expansions": 0.0,
+            "prefix_type_fair_reordered": 0.0,
+            "prefix_type_fair_by_kind": {},
+            "prefix_type_fair_first_kinds": [],
             "complement_enabled": self.macro_complement_enable,
             "complement_pairs_considered": 0.0,
             "macro_complement_actions": 0.0,
@@ -2903,6 +2913,27 @@ class RecedingHorizonMCTS:
         u = self.c_puct * prior * math.sqrt(max(1.0, float(node.visits))) / (1.0 + float(child.visits))
         return q + u
 
+    def _type_fair_unexpanded_action(
+        self, node: SearchNode, allowed: Sequence[int], unexpanded: Sequence[int],
+    ) -> int:
+        # Only count children in the current progressive-widening set. Never
+        # change that set, priors, within-kind order, or subsequent PUCT scores.
+        expanded_by_kind: Dict[str, int] = {}
+        for action in allowed:
+            if int(action) in node.children:
+                kind = str(node.action_meta[int(action)].kind)
+                expanded_by_kind[kind] = expanded_by_kind.get(kind, 0) + 1
+        kind_order = {"single": 0, "pattern": 1, "anchor": 2, "tail": 3}
+        _, action = min(
+            enumerate(unexpanded),
+            key=lambda item: (
+                expanded_by_kind.get(str(node.action_meta[int(item[1])].kind), 0),
+                kind_order.get(str(node.action_meta[int(item[1])].kind), len(kind_order)),
+                item[0],
+            ),
+        )
+        return int(action)
+
     def _select_leaf(self, root: SearchNode) -> List[SearchNode]:
         path = [root]
         node = root
@@ -2919,7 +2950,18 @@ class RecedingHorizonMCTS:
                 allowed = sorted(allowed_base, key=lambda a: (node.priors.get(int(a), 0.0), int(a)), reverse=True)
             unexpanded = [a for a in allowed if a not in node.children]
             if unexpanded:
-                child = self._expand(node, int(unexpanded[0]))
+                type_fair = getattr(self, "prefix_type_fair_expansion_enable", False)
+                action = self._type_fair_unexpanded_action(node, allowed, unexpanded) if type_fair else int(unexpanded[0])
+                child = self._expand(node, action)
+                if type_fair:
+                    kind = str(node.action_meta[action].kind)
+                    self.meta["prefix_type_fair_expansions"] += 1.0
+                    self.meta["prefix_type_fair_reordered"] += float(action != int(unexpanded[0]))
+                    counts = self.meta["prefix_type_fair_by_kind"]
+                    counts[kind] = counts.get(kind, 0) + 1
+                    first_kinds = self.meta["prefix_type_fair_first_kinds"]
+                    if len(first_kinds) < 32:
+                        first_kinds.append(kind)
                 path.append(child)
                 return path
             prior_sum = sum(float(node.priors.get(int(a), 0.0)) for a in allowed)
