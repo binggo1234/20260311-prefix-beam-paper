@@ -182,6 +182,19 @@ def test_partial_fidelity_complete_layout_can_advance_without_full_cache(monkeyp
     assert len(solver.staged_completion_cache) == 1
 
 
+def test_cached_deeper_return_is_not_fresh_decoder_work(monkeypatch):
+    solver, root = subject()
+    child = solver._expand(root, 2)
+    grandchild = solver._expand(child, 5)
+    solver._evaluate_prefix_with_baseline(grandchild.prefix_sequence, grandchild.snapshot,
+                                         grandchild.remaining_mask, prefix_depth=2)
+    solver.prefix_witness_advanced_prefixes.add(tuple(child.prefix_sequence))
+    monkeypatch.setattr(solver, "_select_leaf", lambda current: [child, grandchild])
+    solver._run_simulations(child, 1)
+    assert solver.meta["prefix_witness_deeper_evals"] == 1
+    assert solver.meta["prefix_witness_deeper_fresh_evals"] == 0
+
+
 def test_commit_reuses_witness_and_actually_completes_deeper_evaluation(monkeypatch):
     solver, root = subject()
     solver.meta["formal_total_budget"] = 1.0
@@ -205,6 +218,7 @@ def test_commit_reuses_witness_and_actually_completes_deeper_evaluation(monkeypa
     assert len(result.boards) == 2
     assert solver.meta["prefix_witness_advances"] == 1
     assert solver.meta["prefix_witness_deeper_evals"] >= 1
+    assert solver.meta["prefix_witness_deeper_fresh_evals"] >= 1
     assert solver.meta["prefix_witness_deeper_depth_max"] == 2
     assert solver.meta["prefix_witness_events"][0]["from_depth"] == 0
     assert solver.meta["prefix_witness_events"][0]["to_depth"] == 1

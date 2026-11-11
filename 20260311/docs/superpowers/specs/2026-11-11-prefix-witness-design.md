@@ -13,7 +13,7 @@ Lowering all visit gates would also advance unproven prefixes. Adding more candi
 - The entire selected path must be a legal existing commit chain, length at most `COMMIT_MAX_STEPS`, leaf depth at most `PREFIX_BEAM_DEPTH`, every edge admissible under existing single fallback restrictions. A terminal leaf or an expired search budget does not trigger advancement. A deeper inadmissible witness still keeps its complete incumbent but does not bypass limits.
 - Return an optional witness chain plus its already completed snapshot from `_run_simulations`. The prefix beam consumes it before the unchanged round-floor check, detaches it through the existing path, and ranks it from that saved complete snapshot. Do not call another completion or mark partial fidelity as a full cache entry. No pending witness state crosses batches or roots.
 - All ordinary paths, including disabled/no-witness paths and ordinary commit ranking, remain unchanged. Early concentration may lose alternatives; the experiment must report regressions.
-- Add bounded event evidence and counts for strict triggers, advances, and successful deeper evaluations after a witnessed commit. A depth counter alone is not mechanism success.
+- Add bounded event evidence and counts for strict triggers, advances, and successful deeper evaluations after a witnessed commit. Separately count deeper complete returns that performed at least one fresh successful completion-mode replay; cache-only returns are not fresh work. A depth counter alone is not mechanism success.
 
 ## Experiment and acceptance
 

@@ -1136,6 +1136,7 @@ class RecedingHorizonMCTS:
             "prefix_witness_triggers": 0.0,
             "prefix_witness_advances": 0.0,
             "prefix_witness_deeper_evals": 0.0,
+            "prefix_witness_deeper_fresh_evals": 0.0,
             "prefix_witness_deeper_depth_max": 0.0,
             "prefix_witness_events": [],
             "complement_enabled": self.macro_complement_enable,
@@ -3917,6 +3918,7 @@ class RecedingHorizonMCTS:
                 len(self.global_best_snapshot.boards)
                 if witness_enabled and self.global_best_snapshot is not None else None
             )
+            modes_before = self.meta["oracle_completion_mode_completed"] if witness_enabled else 0.0
             path = self._select_leaf(root)
             leaf = path[-1]
             if self.prefix_beam_enable:
@@ -3951,6 +3953,8 @@ class RecedingHorizonMCTS:
                 if (complete and tuple(root.prefix_sequence) in self.prefix_witness_advanced_prefixes
                         and int(leaf.depth) > int(root.depth)):
                     self.meta["prefix_witness_deeper_evals"] += 1.0
+                    if self.meta["oracle_completion_mode_completed"] > modes_before:
+                        self.meta["prefix_witness_deeper_fresh_evals"] += 1.0
                     self.meta["prefix_witness_deeper_depth_max"] = max(
                         self.meta["prefix_witness_deeper_depth_max"], float(leaf.depth),
                     )
