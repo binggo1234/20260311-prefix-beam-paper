@@ -51,6 +51,12 @@ def _constructive_orders(parts: Sequence) -> Tuple[Tuple[int, ...], ...]:
     return tuple(orders)
 
 
+def _sequence_sa_energy(snapshot) -> float:
+    occupancies = [sum(p.rect.w * p.rect.h for p in board.placed) / (board.W * board.H)
+                   for board in snapshot.boards]
+    return -float(len(occupancies)) + 0.01 * sum(u * u for u in occupancies) / max(1, len(occupancies))
+
+
 def solve_evaluation_baseline(parts: Sequence, cfg, seed: int) -> SearchResult:
     """Retain the best complete layout under the same decoder and total deadline."""
     kind = str(getattr(cfg, "SOLVER_KIND", ""))
@@ -74,10 +80,6 @@ def solve_evaluation_baseline(parts: Sequence, cfg, seed: int) -> SearchResult:
     interrupted = sa_completed = accepted_worse = 0
     orders = _constructive_orders(parts)
     is_sa = kind == "baseline_sequence_sa_budgeted"
-
-    def energy(snapshot):
-        count = len(snapshot.boards)
-        return -float(count) + 0.01 * snapshot.sum_u_gamma / max(1, count)
 
     for iteration in range(len(orders) + 6000):
         if time.perf_counter() >= deadline:
@@ -114,7 +116,7 @@ def solve_evaluation_baseline(parts: Sequence, cfg, seed: int) -> SearchResult:
         accept = improved
         if is_sa and not portfolio:
             temperature = max(0.01, 0.25 * 0.995 ** sa_completed)
-            delta = energy(snapshot) - energy(current_snapshot)
+            delta = _sequence_sa_energy(snapshot) - _sequence_sa_energy(current_snapshot)
             accept = delta >= 0 or rng.random() < math.exp(delta / temperature)
             accepted_worse += int(accept and delta < 0)
             sa_completed += 1

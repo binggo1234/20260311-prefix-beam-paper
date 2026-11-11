@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from decimal import Decimal, ROUND_CEILING
+from decimal import Decimal
+from fractions import Fraction
+import math
 from typing import TYPE_CHECKING, Any, Dict
 
 if TYPE_CHECKING:
@@ -15,7 +17,7 @@ def packing_area_bounds(request: PackingRequest) -> Dict[str, Any]:
         result = Decimal(str(value))
         if not result.is_finite() or result < 0 or (result == 0 and not zero_allowed):
             raise ValueError("geometry dimensions must be finite and positive (reserves may be zero)")
-        return result
+        return Fraction(result)
 
     if request.geometry_semantics != "nominal_with_tool_clearance" or not request.parts:
         raise ValueError("bounds require a nonempty nominal-with-tool-clearance order")
@@ -25,7 +27,7 @@ def packing_area_bounds(request: PackingRequest) -> Dict[str, Any]:
     usable_width, usable_height = width - 2 * trim, height - 2 * trim
     if usable_width <= 0 or usable_height <= 0:
         raise ValueError("trim leaves no usable board area")
-    nominal_area = envelope_area = Decimal(0)
+    nominal_area = envelope_area = Fraction(0)
     for part in request.parts:
         w, h = dimension(part.nominal_width_mm), dimension(part.nominal_height_mm)
         ew, eh = w + tool, h + tool
@@ -42,8 +44,8 @@ def packing_area_bounds(request: PackingRequest) -> Dict[str, Any]:
         nominal_area += w * h
         envelope_area += ew * eh
     board_area, usable_area = width * height, usable_width * usable_height
-    nominal_lb = int((nominal_area / board_area).to_integral_value(rounding=ROUND_CEILING))
-    envelope_lb = int((envelope_area / usable_area).to_integral_value(rounding=ROUND_CEILING))
+    nominal_lb = math.ceil(nominal_area / board_area)
+    envelope_lb = math.ceil(envelope_area / usable_area)
     lower_bound = max(nominal_lb, envelope_lb)
     return {
         "nominal_area_mm2": float(nominal_area), "envelope_area_mm2": float(envelope_area),

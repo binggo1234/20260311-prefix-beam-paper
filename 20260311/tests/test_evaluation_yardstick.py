@@ -56,6 +56,28 @@ def test_decimal_boundary_does_not_add_a_spurious_board():
     assert bounds["panel_lower_bound"] == 1
 
 
+def test_exact_area_bound_handles_products_beyond_decimal_context_precision():
+    request = _request(
+        board_width_mm=1000.0000000000001, board_height_mm=1403.0882837141125,
+        trim_mm=0, tool_diameter_mm=0,
+        parts=(PackingPart("a", "a", 352.8549422087063, 1403.0882837141125, (0,)),
+               PackingPart("b", "b", 647.1450577912938, 1403.0882837141125, (0,))),
+    )
+    bounds = _module("inrp.evaluation_bounds").packing_area_bounds(request)
+    assert bounds["nominal_area_lower_bound"] == bounds["envelope_area_lower_bound"] == 1
+    assert bounds["net_utilization_ceiling"] == 1.0
+
+
+def test_sa_energy_uses_squared_envelope_occupancy_independently_of_decoder_gamma():
+    module = _module("inrp.evaluation_baselines")
+    assert hasattr(module, "_sequence_sa_energy"), "missing explicit envelope SA energy"
+    parts, _ = _build_solver_input(_request())
+    cfg = CFG(BOARD_W=100, BOARD_H=100, TRIM=5, BINARY_SPACING=False, SAFE_GAP=0, UTIL_GAMMA=3)
+    snapshot, _ = OmnipotentDecoder({p.uid: p for p in parts}, cfg).replay_order(baseline_sequence(parts))
+    # Two 46x90 envelopes on two 100x100 boards: -2 + .01 * .414**2.
+    assert module._sequence_sa_energy(snapshot) == pytest.approx(-1.99828604, abs=1e-12)
+
+
 @pytest.mark.parametrize("overrides", [
     {"board_width_mm": float("nan")}, {"trim_mm": 50},
     {"tool_diameter_mm": -1}, {"parts": ()},
