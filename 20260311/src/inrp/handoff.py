@@ -8,6 +8,7 @@ from typing import Any, Mapping, Tuple
 
 from .budget import TotalBudget
 from .cfg import CFG
+from .evaluation_baselines import solve_evaluation_baseline
 from .dataio import Part
 from .mcts import SearchResult, solve_with_receding_horizon_mcts
 from .preprocess import preprocess_parts
@@ -142,6 +143,8 @@ def _solve_with_config(parts: list[Part], cfg, seed: int) -> SearchResult:
     solver_kind = str(getattr(cfg, "SOLVER_KIND", "rh_mcts"))
     if solver_kind == "baseline_greedy":
         return _solve_baseline_greedy(parts, cfg, seed)
+    if solver_kind in {"baseline_order_multistart", "baseline_sequence_sa_budgeted"}:
+        return solve_evaluation_baseline(parts, cfg, seed)
     if solver_kind != "rh_mcts":
         raise ValueError(f"unsupported handoff solver kind: {solver_kind}")
     return solve_with_receding_horizon_mcts(parts, cfg, seed)

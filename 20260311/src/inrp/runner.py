@@ -16,6 +16,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 from .dataio import read_sample_parts
 from .geometry import effective_safe_gap, effective_trim, resolve_geometry_policy
 from .ordering import baseline_sequence
+from .evaluation_baselines import solve_evaluation_baseline
 from .mcts import OmnipotentDecoder, RecedingHorizonMCTS, SearchResult, solve_with_receding_horizon_mcts
 from .packer import board_used_area
 from .preprocess import preprocess_parts
@@ -327,6 +328,8 @@ RH_MCTS_PROFILE_BASES: Dict[str, str] = {
     "rh_mcts_prefix_beam_staged": "rh_mcts_prefix_beam",
     "rh_mcts_prefix_beam_staged_type_fair": "rh_mcts_prefix_beam_staged",
     "rh_mcts_prefix_beam_staged_witness": "rh_mcts_prefix_beam_staged",
+    "baseline_order_multistart": "rh_mcts_prefix_beam_staged",
+    "baseline_sequence_sa_budgeted": "rh_mcts_prefix_beam_staged",
     "rh_mcts_full": "rh_mcts_main",
     "ours_full": "rh_mcts_full",
     "ours_base": "rh_mcts_main",
@@ -335,6 +338,8 @@ RH_MCTS_PROFILE_BASES: Dict[str, str] = {
 
 RH_MCTS_PROFILE_OVERRIDES: Dict[str, Dict[str, Any]] = {
     "baseline_greedy": {"SOLVER_KIND": "baseline_greedy"},
+    "baseline_order_multistart": {"SOLVER_KIND": "baseline_order_multistart"},
+    "baseline_sequence_sa_budgeted": {"SOLVER_KIND": "baseline_sequence_sa_budgeted"},
     "baseline_sa": {
         "SOLVER_KIND": "baseline_sa",
         "MACRO_ACTION_ENABLE": False,
@@ -460,6 +465,8 @@ RH_MCTS_MAIN_ADAPTIVE_PROFILES: Tuple[Dict[str, Any], ...] = (
 )
 
 MCTS_MAIN_VARIANTS = {
+    "baseline_order_multistart",
+    "baseline_sequence_sa_budgeted",
     "rh_mcts_main",
     "rh_mcts_beam",
     "rh_mcts_prefix_beam",
@@ -1097,6 +1104,8 @@ def run_one_seed(parts, cfg, seed: int, out_case_dir: Path, variant: str) -> Dic
         solver_result = _solve_baseline_greedy(parts, cfg, seed)
     elif solver_kind == "baseline_sa":
         solver_result = _solve_baseline_sa(parts, cfg, seed)
+    elif solver_kind in {"baseline_order_multistart", "baseline_sequence_sa_budgeted"}:
+        solver_result = solve_evaluation_baseline(parts, cfg, seed)
     else:
         solver_result = _solve_rh_mcts(parts, cfg, seed)
     boards, solver_meta, sequence = _solver_payload(solver_result)
