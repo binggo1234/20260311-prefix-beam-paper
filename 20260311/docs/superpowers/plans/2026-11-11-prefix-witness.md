@@ -44,8 +44,8 @@
 
 **Interfaces:** Consume Task 1 runtime commit/variant/meta; use existing handoff and independent geometry auditor. Private progress retains failures plus saved-result identities.
 
-- [ ] Test private cleanup boundary/failure reporting before freezing runner; both methods use identical worker lifecycle.
-- [ ] Lock 21-run manifest and execute once; verify all outcomes including failures, source/result hashes, net/envelope utilization, actual deeper evaluations and Greedy floor.
-- [ ] Summarize all task×seed outcomes; decide stop/continue using additional final saving evidence, never only deeper search.
-- [ ] Obtain one fresh code review of the single-feature diff before runtime freeze; address important issues with failing tests. Do not edit runtime during the batch.
-- [ ] Update docs with exact results/limits, rerun suite and compile/diff checks; commit and push current research branch; update/attach existing draft PR; do not merge master.
+- [x] Test private cleanup boundary/failure reporting before freezing runner; both methods use identical worker lifecycle.
+- [x] Lock 21-run manifest and execute once; verify all outcomes including failures, source/result hashes, net/envelope utilization, actual deeper evaluations and Greedy floor.
+- [x] Summarize all task×seed outcomes; decide stop/continue using additional final saving evidence, never only deeper search.
+- [x] Obtain one fresh code review of the single-feature diff before runtime freeze; address important issues with failing tests. Do not edit runtime during the batch.
+- [x] Update docs with exact results/limits, rerun suite and compile/diff checks; commit and push current research branch; update/attach existing draft PR; do not merge master.
