@@ -15,7 +15,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 from .dataio import read_sample_parts
 from .geometry import effective_safe_gap, effective_trim, resolve_geometry_policy
-from .ordering import baseline_sequence
+from .ordering import baseline_sequence, short_edge_sequence
 from .evaluation_baselines import solve_evaluation_baseline
 from .mcts import OmnipotentDecoder, RecedingHorizonMCTS, SearchResult, solve_with_receding_horizon_mcts
 from .packer import board_used_area
@@ -330,6 +330,7 @@ RH_MCTS_PROFILE_BASES: Dict[str, str] = {
     "rh_mcts_prefix_beam_staged_witness": "rh_mcts_prefix_beam_staged",
     "baseline_order_multistart": "rh_mcts_prefix_beam_staged",
     "baseline_sequence_sa_budgeted": "rh_mcts_prefix_beam_staged",
+    "baseline_short_edge": "rh_mcts_prefix_beam_staged",
     "rh_mcts_full": "rh_mcts_main",
     "ours_full": "rh_mcts_full",
     "ours_base": "rh_mcts_main",
@@ -338,6 +339,7 @@ RH_MCTS_PROFILE_BASES: Dict[str, str] = {
 
 RH_MCTS_PROFILE_OVERRIDES: Dict[str, Dict[str, Any]] = {
     "baseline_greedy": {"SOLVER_KIND": "baseline_greedy"},
+    "baseline_short_edge": {"SOLVER_KIND": "baseline_short_edge"},
     "baseline_order_multistart": {"SOLVER_KIND": "baseline_order_multistart"},
     "baseline_sequence_sa_budgeted": {"SOLVER_KIND": "baseline_sequence_sa_budgeted"},
     "baseline_sa": {
@@ -465,6 +467,7 @@ RH_MCTS_MAIN_ADAPTIVE_PROFILES: Tuple[Dict[str, Any], ...] = (
 )
 
 MCTS_MAIN_VARIANTS = {
+    "baseline_short_edge",
     "baseline_order_multistart",
     "baseline_sequence_sa_budgeted",
     "rh_mcts_main",
@@ -965,7 +968,9 @@ def _baseline_sequence(parts: Sequence) -> Tuple[int, ...]:
 def _solve_baseline_greedy(parts, cfg, seed: int) -> SearchResult:
     del seed
     decoder = OmnipotentDecoder({int(part.uid): part for part in parts}, cfg)
-    sequence = _baseline_sequence(parts)
+    short_edge = str(getattr(cfg, "SOLVER_KIND", "")) == "baseline_short_edge"
+    solver_kind = "baseline_short_edge" if short_edge else "baseline_greedy"
+    sequence = short_edge_sequence(parts) if short_edge else _baseline_sequence(parts)
     formal_deadline = float(getattr(cfg, "FORMAL_TOTAL_DEADLINE", math.inf))
     deadline = (
         formal_deadline - float(getattr(cfg, "FORMAL_CLOSING_RESERVE_S", 0.0))
@@ -973,7 +978,7 @@ def _solve_baseline_greedy(parts, cfg, seed: int) -> SearchResult:
         else math.inf
     )
     snapshot, _ = decoder.replay_order(
-        sequence, deadline=deadline, deadline_phase="baseline_greedy_replay"
+        sequence, deadline=deadline, deadline_phase=f"{solver_kind}_replay"
     )
     return SearchResult(
         boards=list(snapshot.boards),
@@ -981,8 +986,8 @@ def _solve_baseline_greedy(parts, cfg, seed: int) -> SearchResult:
         score_global=tuple(),
         scalar_reward=0.0,
         meta={
-            "solver_kind": "baseline_greedy",
-            "baseline_order": "area_aspect_desc",
+            "solver_kind": solver_kind,
+            "baseline_order": "short_edge_desc" if short_edge else "area_aspect_desc",
             "decode_cache_hits": float(decoder.decode_hits),
             "decode_cache_misses": float(decoder.decode_misses),
             "decode_cache_entries": float(len(decoder.decode_cache)),
@@ -1100,7 +1105,7 @@ def run_one_seed(parts, cfg, seed: int, out_case_dir: Path, variant: str) -> Dic
 
     t0 = time.perf_counter()
     solver_kind = str(getattr(cfg, "SOLVER_KIND", "rh_mcts"))
-    if solver_kind == "baseline_greedy":
+    if solver_kind in {"baseline_greedy", "baseline_short_edge"}:
         solver_result = _solve_baseline_greedy(parts, cfg, seed)
     elif solver_kind == "baseline_sa":
         solver_result = _solve_baseline_sa(parts, cfg, seed)

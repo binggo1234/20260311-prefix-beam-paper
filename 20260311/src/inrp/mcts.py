@@ -614,7 +614,8 @@ class OmnipotentDecoder:
         return val
 
     def _micro_key(self, board: Board, part) -> Tuple:
-        return (_board_state_hash(board, self.sig_nd), self.part_hash[int(part.uid)], self.env_signature)
+        # The cached post-placement hash includes UID, even for equal shapes.
+        return (_board_state_hash(board, self.sig_nd), self.part_hash[int(part.uid)], self.env_signature, int(part.uid))
 
     def _micro_decode(self, board: Board, part) -> Optional[MicroDecodeResult]:
         key = self._micro_key(board, part)

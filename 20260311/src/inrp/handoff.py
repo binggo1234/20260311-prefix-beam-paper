@@ -141,7 +141,7 @@ def _build_solver_config(request: PackingRequest, parts: list[Part]):
 
 def _solve_with_config(parts: list[Part], cfg, seed: int) -> SearchResult:
     solver_kind = str(getattr(cfg, "SOLVER_KIND", "rh_mcts"))
-    if solver_kind == "baseline_greedy":
+    if solver_kind in {"baseline_greedy", "baseline_short_edge"}:
         return _solve_baseline_greedy(parts, cfg, seed)
     if solver_kind in {"baseline_order_multistart", "baseline_sequence_sa_budgeted"}:
         return solve_evaluation_baseline(parts, cfg, seed)
