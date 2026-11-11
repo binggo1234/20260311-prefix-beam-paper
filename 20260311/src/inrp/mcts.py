@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from functools import wraps
 from itertools import combinations
+import hashlib
 import logging
 import math
 import os
@@ -17,7 +18,7 @@ except Exception:  # pragma: no cover - validated in integration env
 
 from .budget import BudgetExpired
 from .geometry import effective_safe_gap, effective_trim
-from .ordering import baseline_sequence
+from .ordering import baseline_sequence, short_edge_sequence
 
 
 def _load_cp_model():
@@ -515,6 +516,14 @@ def _global_lex_score(snapshot: LayoutSnapshot, sparse_u: float = 0.55) -> Tuple
 
 def _scalar_reward(snapshot: LayoutSnapshot, big_m: float) -> float:
     return -float(big_m) * float(len(snapshot.boards)) + _avg_u_gamma(snapshot)
+
+
+def _complete_solution_fingerprints(sequence: Sequence[int], snapshot: LayoutSnapshot) -> Tuple[str, str]:
+    layout = tuple((board.bid, tuple((p.uid, p.rect.x, p.rect.y, p.rect.w, p.rect.h,
+                                     p.w0, p.h0, p.rotated) for p in board.placed))
+                   for board in snapshot.boards)
+    return (hashlib.sha256(repr(tuple(sequence)).encode("utf-8")).hexdigest(),
+            hashlib.sha256(repr(layout).encode("utf-8")).hexdigest())
 
 
 def _compat(part, rect, allow_rot: bool) -> float:
@@ -2566,6 +2575,39 @@ class RecedingHorizonMCTS:
         self.meta["warmstart_candidates_kept"] = float(len(self.constructive_warmstarts))
         self.meta["warmstart_cache_states"] = float(len(self.seed_suffix_cache))
 
+    @_timed_phase("common_initialization")
+    def _prime_common_initial_solution(self) -> None:
+        """Identical deterministic incumbent and decoder state for both arms."""
+        started = time.perf_counter()
+        self.meta.update({
+            "common_initial_enabled": True,
+            "prefix_ablation_search_enabled": bool(getattr(self.cfg, "PREFIX_ABLATION_SEARCH_ENABLE", True)),
+            "common_initial_complete": False,
+            "common_initial_candidate_panels": {},
+        })
+        try:
+            for label, sequence in (("greedy", baseline_sequence(self.parts)),
+                                    ("short_edge", short_edge_sequence(self.parts))):
+                snapshot, _ = self.decoder.replay_order(
+                    sequence, deadline=self.search_deadline, deadline_phase=f"common_initial_{label}",
+                )
+                self.meta["common_initial_candidate_panels"][label] = len(snapshot.boards)
+                if label == "greedy":
+                    self.meta["greedy_floor_panels"] = len(snapshot.boards)
+                self._update_global_best(sequence, snapshot, source=f"common_initial_{label}", record_archive=False)
+            snapshot = self.global_best_snapshot
+            sequence = self.global_best_sequence
+            sequence_digest, layout_digest = _complete_solution_fingerprints(sequence, snapshot)
+            self.meta.update({
+                "common_initial_complete": True,
+                "common_initial_panels": len(snapshot.boards),
+                "common_initial_score": list(self.global_best_score),
+                "common_initial_sequence_sha256": sequence_digest,
+                "common_initial_layout_sha256": layout_digest,
+            })
+        finally:
+            self.meta["common_initial_elapsed_s"] = max(0.0, time.perf_counter() - started)
+
     @_timed_phase("warmstart")
     def _prime_constructive_warmstarts(self) -> None:
         started = time.perf_counter()
@@ -4013,6 +4055,10 @@ class RecedingHorizonMCTS:
         if not self._is_complete_sequence(final_sequence):
             raise BudgetExpired("search_no_complete_incumbent")
         final_snapshot = self.global_best_snapshot
+        if bool(self.meta.get("common_initial_enabled", False)):
+            sequence_digest, layout_digest = _complete_solution_fingerprints(final_sequence, final_snapshot)
+            self.meta["ablation_final_sequence_sha256"] = sequence_digest
+            self.meta["ablation_final_layout_sha256"] = layout_digest
         if time.perf_counter() >= self.solve_deadline:
             raise BudgetExpired("incumbent_close")
         formal = bool(self.meta.get("formal_total_budget", 0.0))
@@ -7612,14 +7658,29 @@ class RecedingHorizonMCTS:
         )
 
     def solve(self) -> SearchResult:
+        common_initialization = bool(getattr(self.cfg, "PREFIX_COMMON_INIT_ABLATION", False))
+        if common_initialization:
+            if not math.isfinite(self.formal_total_deadline):
+                raise ValueError("common initialization ablation requires an absolute total deadline")
+            if not self.prefix_beam_enable:
+                raise ValueError("common initialization ablation requires prefix-beam mode")
         self._configure_solve_deadlines()
         try:
-            self._prime_constructive_warmstarts()
-        except BudgetExpired:
+            if common_initialization:
+                self._prime_common_initial_solution()
+            else:
+                self._prime_constructive_warmstarts()
+        except BudgetExpired as exc:
+            if common_initialization:
+                self.meta["common_initial_failure_phase"] = exc.phase
             if not bool(self.meta.get("formal_total_budget", 0.0)):
                 raise
             self.meta["solver_timeout_hit"] = 1.0
             return self._formal_result_from_incumbent()
+        if common_initialization and not bool(getattr(self.cfg, "PREFIX_ABLATION_SEARCH_ENABLE", True)):
+            result = self._formal_result_from_incumbent()
+            self.meta["result_source"] = result.meta["result_source"] = "common_initial_search_disabled"
+            return result
         root = SearchNode(snapshot=_empty_snapshot(), remaining_mask=self.full_remaining_mask, prefix_sequence=tuple())
         self._warm_start(root)
         if self.prefix_beam_enable:

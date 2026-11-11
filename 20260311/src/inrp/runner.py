@@ -328,6 +328,8 @@ RH_MCTS_PROFILE_BASES: Dict[str, str] = {
     "rh_mcts_prefix_beam_staged": "rh_mcts_prefix_beam",
     "rh_mcts_prefix_beam_staged_type_fair": "rh_mcts_prefix_beam_staged",
     "rh_mcts_prefix_beam_staged_witness": "rh_mcts_prefix_beam_staged",
+    "rh_mcts_prefix_common_init_on": "rh_mcts_prefix_beam_staged",
+    "rh_mcts_prefix_common_init_off": "rh_mcts_prefix_beam_staged",
     "baseline_order_multistart": "rh_mcts_prefix_beam_staged",
     "baseline_sequence_sa_budgeted": "rh_mcts_prefix_beam_staged",
     "baseline_short_edge": "rh_mcts_prefix_beam_staged",
@@ -368,6 +370,14 @@ RH_MCTS_PROFILE_OVERRIDES: Dict[str, Dict[str, Any]] = {
         "SOLVER_ROLE": "prefix_beam_staged_development",
         "SOLVER_BUNDLE": "prefix_beam_staged_completion",
         "PREFIX_BEAM_STAGED_ENABLE": True,
+    },
+    "rh_mcts_prefix_common_init_on": {
+        "PREFIX_COMMON_INIT_ABLATION": True,
+        "PREFIX_ABLATION_SEARCH_ENABLE": True,
+    },
+    "rh_mcts_prefix_common_init_off": {
+        "PREFIX_COMMON_INIT_ABLATION": True,
+        "PREFIX_ABLATION_SEARCH_ENABLE": False,
     },
     "rh_mcts_prefix_beam_staged_type_fair": {
         "SOLVER_ROLE": "prefix_beam_type_fair_development",
@@ -467,6 +477,8 @@ RH_MCTS_MAIN_ADAPTIVE_PROFILES: Tuple[Dict[str, Any], ...] = (
 )
 
 MCTS_MAIN_VARIANTS = {
+    "rh_mcts_prefix_common_init_on",
+    "rh_mcts_prefix_common_init_off",
     "baseline_short_edge",
     "baseline_order_multistart",
     "baseline_sequence_sa_budgeted",
