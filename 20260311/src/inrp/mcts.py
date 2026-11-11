@@ -1039,6 +1039,8 @@ class RecedingHorizonMCTS:
             ),
         )
         self.staged_completion_enable = self.prefix_beam_enable and bool(getattr(cfg, "PREFIX_BEAM_STAGED_ENABLE", False))
+        self.prefix_witness_enable = self.staged_completion_enable and bool(getattr(cfg, "PREFIX_BEAM_WITNESS_ADVANCE", False))
+        self.prefix_witness_advanced_prefixes: Set[Tuple[int, ...]] = set()
         self.staged_promote_every = int(getattr(cfg, "PREFIX_BEAM_STAGED_PROMOTE_EVERY", 4))
         self.staged_explore_credits = int(getattr(cfg, "PREFIX_BEAM_STAGED_EXPLORE_CREDITS", 2))
         self.staged_panel_margin = int(getattr(cfg, "PREFIX_BEAM_STAGED_PANEL_MARGIN", 1))
@@ -1130,6 +1132,12 @@ class RecedingHorizonMCTS:
             "prefix_type_fair_reordered": 0.0,
             "prefix_type_fair_by_kind": {},
             "prefix_type_fair_first_kinds": [],
+            "prefix_witness_enabled": self.prefix_witness_enable,
+            "prefix_witness_triggers": 0.0,
+            "prefix_witness_advances": 0.0,
+            "prefix_witness_deeper_evals": 0.0,
+            "prefix_witness_deeper_depth_max": 0.0,
+            "prefix_witness_events": [],
             "complement_enabled": self.macro_complement_enable,
             "complement_pairs_considered": 0.0,
             "macro_complement_actions": 0.0,
@@ -3721,10 +3729,15 @@ class RecedingHorizonMCTS:
 
                 round_sims = 0
                 candidate_chains: List[List[Tuple[int, SearchNode]]] = []
+                witness_snapshot: Optional[LayoutSnapshot] = None
                 while time.perf_counter() < search_deadline:
                     sims_now = max(1, self.sims_per_step)
-                    self._run_simulations(beam_root, sims_now)
+                    witness = self._run_simulations(beam_root, sims_now)
                     round_sims += sims_now
+                    if witness is not None and time.perf_counter() < search_deadline:
+                        candidate_chains = [witness[0]]
+                        witness_snapshot = witness[1]
+                        break
                     if round_sims < round_floor:
                         continue
                     candidate_chains = self._beam_commit_chains(beam_root)
@@ -3749,7 +3762,15 @@ class RecedingHorizonMCTS:
                         float(self.meta["prefix_depth_reached"]),
                         float(child_root.depth),
                     )
-                    successor_pool.append((self._prefix_beam_root_rank(child_root), child_root))
+                    if witness_snapshot is not None:
+                        self.meta["prefix_witness_advances"] += 1.0
+                        self.prefix_witness_advanced_prefixes.add(tuple(child_root.prefix_sequence))
+                        rank = self._prefix_beam_rank_tuple(witness_snapshot, prefix_depth=int(child_root.depth)) + (
+                            float(child_root.q_value()), float(child_root.visits),
+                        )
+                    else:
+                        rank = self._prefix_beam_root_rank(child_root)
+                    successor_pool.append((rank, child_root))
 
             if successor_pool:
                 dedup: Dict[Tuple, Tuple[Tuple[float, ...], SearchNode]] = {}
@@ -3884,11 +3905,18 @@ class RecedingHorizonMCTS:
             meta=dict(self.meta),
         )
 
-    def _run_simulations(self, root: SearchNode, n_sims: int) -> None:
+    def _run_simulations(
+        self, root: SearchNode, n_sims: int,
+    ) -> Optional[Tuple[List[Tuple[int, SearchNode]], LayoutSnapshot]]:
+        witness_enabled = getattr(self, "prefix_witness_enable", False)
         for _ in range(max(1, n_sims)):
             if time.perf_counter() >= self.search_deadline:
                 self.meta["solver_timeout_hit"] = 1.0
                 break
+            panels_before = (
+                len(self.global_best_snapshot.boards)
+                if witness_enabled and self.global_best_snapshot is not None else None
+            )
             path = self._select_leaf(root)
             leaf = path[-1]
             if self.prefix_beam_enable:
@@ -3918,6 +3946,36 @@ class RecedingHorizonMCTS:
                 reward_scalar += self._beam_reward_bonus(leaf.snapshot, leaf.remaining_mask)
             self._backup(path, reward_scalar)
             self.meta["simulations"] += 1.0
+            if witness_enabled:
+                complete = self._is_complete_sequence(full_sequence)
+                if (complete and tuple(root.prefix_sequence) in self.prefix_witness_advanced_prefixes
+                        and int(leaf.depth) > int(root.depth)):
+                    self.meta["prefix_witness_deeper_evals"] += 1.0
+                    self.meta["prefix_witness_deeper_depth_max"] = max(
+                        self.meta["prefix_witness_deeper_depth_max"], float(leaf.depth),
+                    )
+                # Staged evaluation already updates the incumbent: compare with
+                # its board count captured before evaluating this path.
+                if (
+                    panels_before is not None and len(final_snapshot.boards) < panels_before
+                    and complete
+                    and 1 < len(path) <= self.commit_max_steps + 1
+                    and int(leaf.depth) <= self.prefix_beam_depth and int(leaf.remaining_mask) != 0
+                    and time.perf_counter() < self.search_deadline
+                    and all(self._prefix_beam_child_allowed(parent, int(child.action_from_parent), child)
+                            for parent, child in zip(path, path[1:]))
+                ):
+                    self.meta["prefix_witness_triggers"] += 1.0
+                    if len(self.meta["prefix_witness_events"]) < 32:
+                        self.meta["prefix_witness_events"].append({
+                            "elapsed_s": max(0.0, time.perf_counter() - self.evidence_started_at),
+                            "from_depth": int(root.depth), "to_depth": int(leaf.depth),
+                            "previous_panels": panels_before, "panels": len(final_snapshot.boards),
+                            "completion_tier": self.meta["oracle_completion_last_tier"],
+                            "completion_mode": self.meta["oracle_completion_last_best_mode"],
+                        })
+                    return [(int(child.action_from_parent), child) for child in path[1:]], final_snapshot
+        return None
 
     def _round_sim_budget(self) -> int:
         return max(
