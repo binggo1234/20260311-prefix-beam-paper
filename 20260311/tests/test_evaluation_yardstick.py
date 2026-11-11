@@ -177,3 +177,31 @@ def test_global_sequence_moves_preserve_permutations_and_reach_the_tail():
     assert proposals == [module._sequence_proposal(sequence, right) for _ in range(100)]
     assert all(sorted(proposal) == list(sequence) for proposal in proposals)
     assert any(proposal[:80] == sequence[:80] and proposal[80:] != sequence[80:] for proposal in proposals)
+
+
+@pytest.mark.parametrize("variant", VARIANTS)
+def test_whole_order_replays_preserve_identity_for_duplicate_shapes(monkeypatch, variant):
+    module = _module("inrp.evaluation_baselines")
+    request = _request(trim_mm=0, tool_diameter_mm=0, parts=(
+        PackingPart("a", "a", 40, 10), PackingPart("b", "b", 40, 10), PackingPart("c", "c", 30, 20)))
+    parts, _ = _build_solver_input(request)
+    cfg = _variant_cfg(CFG(), variant, {"n_parts": 3})
+    cfg.BOARD_W = cfg.BOARD_H = 100
+    cfg.TRIM = cfg.TOOL_D = cfg.SAFE_GAP = 0
+    cfg.BINARY_SPACING = False
+    cfg.SOLVER_TIME_LIMIT_S = 0.03
+    monkeypatch.setattr(module, "_constructive_orders", lambda parts: ((1, 3, 2), (2, 3, 1)))
+    real_replay = OmnipotentDecoder.replay_order
+    checked = []
+
+    def checked_replay(self, *args, **kwargs):
+        out = real_replay(self, *args, **kwargs)
+        ids = sorted(p.uid for board in out[0].boards for p in board.placed)
+        assert ids == [1, 2, 3], f"complete candidate has wrong identities: {ids}"
+        checked.append(ids)
+        return out
+
+    monkeypatch.setattr(OmnipotentDecoder, "replay_order", checked_replay)
+    result = module.solve_evaluation_baseline(parts, cfg, 42)
+    assert len(checked) >= 3
+    assert sorted(result.sequence) == [1, 2, 3]

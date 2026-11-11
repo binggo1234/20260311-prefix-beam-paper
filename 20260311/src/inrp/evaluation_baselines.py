@@ -12,6 +12,13 @@ from .mcts import OmnipotentDecoder, SearchResult, _global_lex_score, _scalar_re
 from .ordering import baseline_sequence
 
 
+class _IdentitySafeDecoder(OmnipotentDecoder):
+    """Cached post-placement hashes include identity, so their keys must too."""
+
+    def _micro_key(self, board, part) -> Tuple:
+        return super()._micro_key(board, part) + (int(part.uid),)
+
+
 def _sequence_proposal(sequence: Tuple[int, ...], rng: random.Random) -> Tuple[int, ...]:
     """Sample a global permutation move; no fixed prefix is protected."""
     if len(sequence) < 2:
@@ -68,7 +75,7 @@ def solve_evaluation_baseline(parts: Sequence, cfg, seed: int) -> SearchResult:
     deadline = min(local_deadline, float(getattr(cfg, "FORMAL_TOTAL_DEADLINE", math.inf))
                    - float(getattr(cfg, "FORMAL_CLOSING_RESERVE_S", 0.0)))
     rng = random.Random(seed)
-    decoder = OmnipotentDecoder({int(p.uid): p for p in parts}, cfg)
+    decoder = _IdentitySafeDecoder({int(p.uid): p for p in parts}, cfg)
     current_sequence = baseline_sequence(parts)
     current_snapshot, current_snapshots = decoder.replay_order(
         current_sequence, deadline=deadline, deadline_phase="evaluation_greedy_replay")
