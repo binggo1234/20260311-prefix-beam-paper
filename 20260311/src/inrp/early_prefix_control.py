@@ -35,6 +35,7 @@ class _TwoCompletionSolver(RecedingHorizonMCTS):
         self.evaluation_captures = []
         self.completion_context = None
         self.control_stop_reason = None
+        self.latest_evidence_export = None
         replay = self.decoder.replay_order
 
         def counted_replay(order, **kwargs):
@@ -139,20 +140,18 @@ class _TwoCompletionSolver(RecedingHorizonMCTS):
                 "score": list(self._terminal_score(snapshot)), "sequence_sha256": sequence_sha,
                 "layout_sha256": layout_sha, "placements": rows}
 
-    def solve(self):
-        result = super().solve()
-        if not self.meta.get("common_initial_complete"):
-            reason = "initial_incomplete"
-        elif self.meta.get("solver_timeout_hit"):
-            reason = "search_deadline"
-        else:
-            reason = self.control_stop_reason or "natural_return"
+    def _export_evidence(self, reason):
         evidence = {"schema_version": "inrp-two-completion-control-v1", "arm": self.control_arm,
                     "limit": 2, "initial_starts": self.initial_starts, "initial_completed": self.initial_completed,
                     "completion_starts": self.completion_starts, "completion_completed": self.completion_completed,
                     "stop_reason": reason, "entry_state": self.entry_state,
-                    "initial_receipt": self._export_capture(self.initial_capture) if self.initial_capture is not None else None,
+                    "initial_receipt": None, "final_receipt": None,
                     "evaluations": [], "export_complete": False}
+        self.latest_evidence_export = evidence
+        if self.initial_capture is not None:
+            evidence["initial_receipt"] = self._export_capture(self.initial_capture)
+        if self.global_best_sequence is not None and self.global_best_snapshot is not None:
+            evidence["final_receipt"] = self._export_capture((tuple(self.global_best_sequence), self.global_best_snapshot))
         for record in self.evaluation_captures:
             row = {key: value for key, value in record.items() if key != "capture"}
             if "capture" in record:
@@ -165,10 +164,42 @@ class _TwoCompletionSolver(RecedingHorizonMCTS):
         if time.perf_counter() >= self.solve_deadline:
             raise BudgetExpired("two_completion_evidence_export")
         evidence["export_complete"] = True
-        self.meta["two_completion_control"] = result.meta["two_completion_control"] = evidence
-        if reason == "completion_quota":
-            self.meta["result_source"] = result.meta["result_source"] = "two_completion_quota_incumbent"
-        return result
+        return evidence
+
+    def solve(self):
+        try:
+            result = super().solve()
+            if not self.meta.get("common_initial_complete"):
+                reason = "initial_incomplete"
+            elif self.meta.get("solver_timeout_hit"):
+                reason = "search_deadline"
+            elif self.completion_starts == self.completion_completed == 2:
+                reason = "completion_quota"
+            else:
+                reason = self.control_stop_reason or "natural_return"
+            evidence = self._export_evidence(reason)
+            self.meta["two_completion_control"] = result.meta["two_completion_control"] = evidence
+            if reason == "completion_quota":
+                self.meta["result_source"] = result.meta["result_source"] = "two_completion_quota_incumbent"
+            return result
+        except Exception as error:
+            failure = {"schema_version": "inrp-two-completion-failure-v1", "arm": self.control_arm,
+                       "phase": getattr(error, "phase", "solve_or_export"), "error_type": type(error).__name__,
+                       "initial_starts": self.initial_starts, "initial_completed": self.initial_completed,
+                       "completion_starts": self.completion_starts, "completion_completed": self.completion_completed,
+                       "raw_receipts_status": "unavailable_deadline"}
+            # Preserve only exports made while the original absolute deadline is
+            # open. No packing/replay is performed in this failure path.
+            if time.perf_counter() < self.solve_deadline:
+                try:
+                    self._export_evidence("failed")
+                except Exception as export_error:
+                    failure["export_error"] = type(export_error).__name__
+            if self.latest_evidence_export is not None:
+                failure["evidence"] = self.latest_evidence_export
+                failure["raw_receipts_status"] = "exported" if self.latest_evidence_export["export_complete"] else "partial_export_before_deadline"
+            error.two_completion_failure = failure
+            raise
 
 
 def solve_two_completion_handoff(request: PackingRequest, budget: TotalBudget, arm: str) -> PackingHandoff:

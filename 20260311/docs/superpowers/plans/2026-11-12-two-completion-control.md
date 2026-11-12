@@ -47,7 +47,7 @@
 
 ### Task 2: One frozen pair, audit and publication
 
-**Files:** private `two_completion_control_20261112/`, QA research roadmap, public `docs/development/two-completion-control-20261112.md`, private prepared PR body.
+**Files:** private `two_completion_control_20261112/` (protocol prepared Nov12, execution Nov13), QA research roadmap, public `docs/development/two-completion-control-20261113.md`, private prepared PR body.
 
 **Interfaces:**
 - Consumes: reviewed Task1 adapter/harness, frozen known739 source identity and historical initial reference.

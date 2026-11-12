@@ -207,3 +207,66 @@ def test_changed_promotion_configuration_is_rejected_before_decoding(monkeypatch
     monkeypatch.setattr(OmnipotentDecoder, "__init__", lambda *a, **k: pytest.fail("unsupported promotion reached decoder"))
     with pytest.raises(ValueError, match="configuration"):
         solve_two_completion_handoff(request(), TotalBudget(3, 0.3), "current_search")
+
+
+@pytest.mark.parametrize("arm", ARMS)
+def test_second_success_at_search_boundary_is_quota_close_for_both_arms(monkeypatch, arm):
+    clock, completed = [0.0], []
+    replay = OmnipotentDecoder.replay_order
+
+    def boundary(self, order, **kwargs):
+        result = replay(self, order, **kwargs)
+        if kwargs["deadline_phase"] == "completion_replay":
+            completed.append(1)
+            if len(completed) == 2:
+                clock[0] = 9.0
+        return result
+
+    monkeypatch.setattr(time, "perf_counter", lambda: clock[0])
+    monkeypatch.setattr(OmnipotentDecoder, "replay_order", boundary)
+    result = solve_two_completion_handoff(request(), TotalBudget(10, 1, clock=lambda: clock[0]), arm)
+    evidence = result.provenance["solver_meta"]["two_completion_control"]
+    assert evidence["completion_completed"] == 2 and evidence["stop_reason"] == "completion_quota"
+    assert not result.provenance["solver_meta"]["solver_timeout_hit"]
+
+
+def test_generic_replay_failure_retains_completed_receipts_and_counts(monkeypatch):
+    replay, calls = OmnipotentDecoder.replay_order, []
+
+    def broken(self, order, **kwargs):
+        if kwargs["deadline_phase"] == "completion_replay":
+            calls.append(1)
+            if len(calls) == 2:
+                raise RuntimeError("injected second replay failure")
+        return replay(self, order, **kwargs)
+
+    monkeypatch.setattr(OmnipotentDecoder, "replay_order", broken)
+    with pytest.raises(RuntimeError, match="injected") as caught:
+        solve_two_completion_handoff(request(), TotalBudget(3, 0.3), "single_reference")
+    failure = getattr(caught.value, "two_completion_failure", {})
+    assert failure.get("completion_starts") == 2 and failure.get("completion_completed") == 1
+    assert failure["evidence"]["export_complete"]
+    assert failure["evidence"]["final_receipt"]["sequence"]
+    assert failure["evidence"]["evaluations"][0]["placements"]
+    assert failure["evidence"]["evaluations"][1]["status"] == "failed"
+
+
+def test_expired_close_retains_counts_without_extending_deadline(monkeypatch):
+    replay, clock, calls = OmnipotentDecoder.replay_order, [0.0], []
+
+    def expired(self, order, **kwargs):
+        result = replay(self, order, **kwargs)
+        if kwargs["deadline_phase"] == "completion_replay":
+            calls.append(1)
+            if len(calls) == 2:
+                clock[0] = 10.0
+        return result
+
+    monkeypatch.setattr(time, "perf_counter", lambda: clock[0])
+    monkeypatch.setattr(OmnipotentDecoder, "replay_order", expired)
+    with pytest.raises(BudgetExpired) as caught:
+        solve_two_completion_handoff(request(), TotalBudget(10, 1, clock=lambda: clock[0]), "single_reference")
+    failure = getattr(caught.value, "two_completion_failure", {})
+    assert failure.get("completion_starts") == failure.get("completion_completed") == 2
+    assert failure["raw_receipts_status"] == "unavailable_deadline"
+    assert clock[0] == 10.0 and len(calls) == 2
