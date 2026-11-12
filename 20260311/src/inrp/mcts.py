@@ -283,6 +283,7 @@ class SearchNode:
     parent: Optional["SearchNode"] = None
     action_from_parent: Optional[int] = None
     prefix_sequence: Tuple[int, ...] = field(default_factory=tuple)
+    receipt_macro_chain: Tuple[Tuple[str, str, Tuple[int, ...]], ...] = field(default_factory=tuple)
     candidate_actions: List[int] = field(default_factory=list)
     candidate_width: int = 0
     visits: int = 0
@@ -1051,6 +1052,13 @@ class RecedingHorizonMCTS:
         self.staged_completion_enable = self.prefix_beam_enable and bool(getattr(cfg, "PREFIX_BEAM_STAGED_ENABLE", False))
         self.prefix_witness_enable = self.staged_completion_enable and bool(getattr(cfg, "PREFIX_BEAM_WITNESS_ADVANCE", False))
         self.prefix_witness_advanced_prefixes: Set[Tuple[int, ...]] = set()
+        self.first_saving_receipt_enable = bool(getattr(cfg, "PREFIX_FIRST_SAVING_RECEIPT_ENABLE", False))
+        self._first_saving_snapshot: Optional[LayoutSnapshot] = None
+        if self.first_saving_receipt_enable and not (
+            self.staged_completion_enable and bool(getattr(cfg, "PREFIX_COMMON_INIT_ABLATION", False))
+            and bool(getattr(cfg, "PREFIX_ABLATION_SEARCH_ENABLE", True))
+        ):
+            raise ValueError("first-saving receipt requires staged common-initialization prefix search")
         self.staged_promote_every = int(getattr(cfg, "PREFIX_BEAM_STAGED_PROMOTE_EVERY", 4))
         self.staged_explore_credits = int(getattr(cfg, "PREFIX_BEAM_STAGED_EXPLORE_CREDITS", 2))
         self.staged_panel_margin = int(getattr(cfg, "PREFIX_BEAM_STAGED_PANEL_MARGIN", 1))
@@ -1276,6 +1284,9 @@ class RecedingHorizonMCTS:
             "prefix_light_repair_improvements": 0.0,
             "result_source": "",
         }
+        if self.first_saving_receipt_enable:
+            self.meta.update({"first_saving_receipt_enabled": True, "first_saving_receipt": None,
+                              "first_saving_receipt_capture_s": 0.0, "first_saving_receipt_export_s": 0.0})
 
     def _state_key(self, snapshot: LayoutSnapshot, remaining_mask: int) -> Tuple:
         return (snapshot.layout_hash, snapshot.ordered_hash, int(remaining_mask))
@@ -2453,13 +2464,41 @@ class RecedingHorizonMCTS:
         remaining_mask: int,
         *,
         prefix_depth: Optional[int] = None,
+        receipt_macro_chain: Optional[Tuple[Tuple[str, str, Tuple[int, ...]], ...]] = None,
     ) -> Tuple[Tuple[int, ...], LayoutSnapshot, Tuple[float, ...]]:
+        receipt_pending = getattr(self, "first_saving_receipt_enable", False) and self._first_saving_snapshot is None
+        if receipt_pending:
+            before = {mode: self.meta.get(f"oracle_completion_mode_eval_{mode}", 0.0)
+                      for mode in self.prefix_beam_oracle_modes}
+            full_hits = self.meta["oracle_completion_cache_hits"]
+            staged_hits = self.meta["staged_completion_cache_hits"]
+            mode_evals = self.meta["oracle_completion_mode_evals"]
         suffix, final_snapshot, score = self._complete_with_baseline(
             prefix_snapshot,
             remaining_mask,
             prefix_depth=int(prefix_depth if prefix_depth is not None else len(tuple(prefix_sequence))),
         )
         full_sequence = tuple(int(pid) for pid in prefix_sequence) + tuple(int(pid) for pid in suffix)
+        receipt_context = None
+        if receipt_pending:
+            mode = self.meta["oracle_completion_last_best_mode"]
+            fresh = self.meta.get(f"oracle_completion_mode_eval_{mode}", 0.0) > before.get(mode, 0.0)
+            chain = receipt_macro_chain if receipt_macro_chain is not None else (() if not prefix_sequence else None)
+            receipt_context = {
+                "prefix_sequence": [int(pid) for pid in prefix_sequence],
+                "prefix_piece_count": len(tuple(prefix_sequence)),
+                "macro_chain": ([{"kind": kind, "source": source, "sequence": list(seq)}
+                                  for kind, source, seq in chain] if chain is not None else None),
+                "context_complete": chain is not None and (
+                    tuple(pid for _, _, seq in chain for pid in seq) == tuple(prefix_sequence)
+                    and len(chain) == int(prefix_depth if prefix_depth is not None else len(tuple(prefix_sequence)))
+                ),
+                "completion_origin": "fresh_mode_evaluation" if fresh else "completed_mode_cache",
+                "cache_evidence": {"winning_mode_evaluated_now": fresh,
+                                   "new_mode_evaluations": self.meta["oracle_completion_mode_evals"] - mode_evals,
+                                   "full_group_cache_hit": self.meta["oracle_completion_cache_hits"] > full_hits,
+                                   "staged_entry_reused": self.meta["staged_completion_cache_hits"] > staged_hits},
+            }
         if getattr(self, "staged_completion_enable", False):
             # A ranking-time promotion can discover a new incumbent before the
             # next simulation. Retain it without optional archive side effects.
@@ -2468,6 +2507,7 @@ class RecedingHorizonMCTS:
                 completion_mode=self.meta["oracle_completion_last_best_mode"],
                 prefix_depth=prefix_depth if prefix_depth is not None else len(tuple(prefix_sequence)),
                 record_archive=False,
+                receipt_context=receipt_context,
             )
         return full_sequence, final_snapshot, tuple(score)
 
@@ -2945,6 +2985,11 @@ class RecedingHorizonMCTS:
             child_prefix = tuple(node.prefix_sequence) + (int(action),)
             child_snapshot = decoded.snapshot
             single_steps += 1
+        receipt_chain = ()
+        if getattr(self, "first_saving_receipt_enable", False) and self._first_saving_snapshot is None:
+            step = (str(meta.kind), str(meta.source), tuple(meta.sequence)) if self.macro_action_enable else (
+                "single", "single", (int(action),))
+            receipt_chain = node.receipt_macro_chain + (step,)
         child = SearchNode(
             snapshot=child_snapshot,
             remaining_mask=remaining_next,
@@ -2952,6 +2997,7 @@ class RecedingHorizonMCTS:
             parent=node,
             action_from_parent=int(action),
             prefix_sequence=child_prefix,
+            receipt_macro_chain=receipt_chain,
             path_pattern_steps=pattern_steps,
             path_anchor_steps=anchor_steps,
             path_tail_steps=tail_steps,
@@ -3241,6 +3287,7 @@ class RecedingHorizonMCTS:
         self, sequence: Sequence[int], snapshot: LayoutSnapshot, *,
         source: str = "search", completion_mode: Optional[str] = None,
         prefix_depth: Optional[int] = None, record_archive: bool = True,
+        receipt_context: Optional[Dict[str, Any]] = None,
     ) -> None:
         if not self._is_complete_sequence(sequence):
             return
@@ -3265,6 +3312,44 @@ class RecedingHorizonMCTS:
                     "ordered_hash": int(snapshot.ordered_hash),
                 }
             )
+            if (getattr(self, "first_saving_receipt_enable", False) and self._first_saving_snapshot is None
+                    and source == "prefix_completion" and self.meta.get("common_initial_complete") is True
+                    and len(snapshot.boards) < int(self.meta["common_initial_panels"])):
+                started = time.perf_counter()
+                sequence_digest, layout_digest = _complete_solution_fingerprints(sequence, snapshot)
+                self._first_saving_snapshot = snapshot
+                self.meta["first_saving_receipt"] = {
+                    "schema_version": "inrp-first-saving-receipt-v1",
+                    "event_index": len(self.meta["global_best_events"]) - 1,
+                    "event": dict(self.meta["global_best_events"][-1]),
+                    "initial_panel_count": int(self.meta["common_initial_panels"]),
+                    "panel_count": len(snapshot.boards), "prefix_depth": prefix_depth,
+                    "completion_mode": completion_mode,
+                    "completion_tier": self.meta["oracle_completion_last_tier"],
+                    "sequence": [int(pid) for pid in sequence], "score": list(score),
+                    "sequence_sha256": sequence_digest, "layout_sha256": layout_digest,
+                    "prefix_sequence": None, "prefix_piece_count": None, "macro_chain": None,
+                    "context_complete": False, "completion_origin": "unavailable", "cache_evidence": None,
+                    "export_complete": False,
+                    **(receipt_context or {}),
+                }
+                self.meta["first_saving_receipt_capture_s"] = max(0.0, time.perf_counter() - started)
+
+    def _export_first_saving_receipt(self) -> None:
+        receipt = self.meta.get("first_saving_receipt")
+        if receipt is None or receipt["export_complete"]:
+            return
+        started = time.perf_counter()
+        receipt["placements"] = [
+            {"board_id": int(board.bid), "uid": int(p.uid), "x": float(p.rect.x), "y": float(p.rect.y),
+             "w": float(p.rect.w), "h": float(p.rect.h), "w0": float(p.w0), "h0": float(p.h0),
+             "rotated": bool(p.rotated)}
+            for board in self._first_saving_snapshot.boards for p in board.placed
+        ]
+        receipt["export_complete"] = True
+        self.meta["first_saving_receipt_export_s"] = max(0.0, time.perf_counter() - started)
+        if time.perf_counter() >= self.solve_deadline:
+            raise BudgetExpired("first_saving_receipt_export")
 
     def _backup(self, path: Sequence[SearchNode], reward_scalar: float) -> None:
         for node in path:
@@ -3526,6 +3611,7 @@ class RecedingHorizonMCTS:
             root.snapshot,
             root.remaining_mask,
             prefix_depth=int(root.depth),
+            **({"receipt_macro_chain": root.receipt_macro_chain} if getattr(self, "first_saving_receipt_enable", False) else {}),
         )
         return self._prefix_beam_rank_tuple(final_snapshot, prefix_depth=int(root.depth)) + (
             float(root.q_value()),
@@ -3691,6 +3777,7 @@ class RecedingHorizonMCTS:
                 committed_snapshot,
                 root.remaining_mask,
                 prefix_depth=int(root.depth),
+                **({"receipt_macro_chain": root.receipt_macro_chain} if getattr(self, "first_saving_receipt_enable", False) else {}),
             )
             self._update_global_best(full_sequence, completed_snapshot)
             return full_sequence, completed_snapshot
@@ -3974,6 +4061,7 @@ class RecedingHorizonMCTS:
                         leaf.snapshot,
                         leaf.remaining_mask,
                         prefix_depth=int(leaf.depth),
+                        **({"receipt_macro_chain": leaf.receipt_macro_chain} if getattr(self, "first_saving_receipt_enable", False) else {}),
                     )
                 except BudgetExpired:
                     self.meta["solver_timeout_hit"] = 1.0
@@ -4065,6 +4153,8 @@ class RecedingHorizonMCTS:
         if time.perf_counter() >= self.solve_deadline:
             raise BudgetExpired("incumbent_close")
         formal = bool(self.meta.get("formal_total_budget", 0.0))
+        if getattr(self, "first_saving_receipt_enable", False):
+            self._export_first_saving_receipt()
         self.meta["result_source"] = "formal_deadline_incumbent" if formal else "prefix_deadline_incumbent"
         self.meta["optional_postprocess_skipped"] = 1.0
         if formal:
