@@ -1021,7 +1021,7 @@ class RecedingHorizonMCTS:
         )
         if isinstance(raw_prefix_beam_oracle_modes, str):
             raw_prefix_beam_oracle_modes = (raw_prefix_beam_oracle_modes,)
-        allowed_oracle_modes = {"baseline", "long_edge", "strip_bias", "meta"}
+        allowed_oracle_modes = {"baseline", "short_edge", "long_edge", "strip_bias", "meta"}
         oracle_modes: List[str] = []
         for mode in raw_prefix_beam_oracle_modes:
             name = str(mode).strip().lower()
@@ -1127,6 +1127,7 @@ class RecedingHorizonMCTS:
             "main_profile_tier": str(getattr(cfg, "MAIN_PROFILE_TIER", "base")),
             "phase_time_s": {},
             "completion_mode_time_s": {},
+            "oracle_completion_modes": list(self.prefix_beam_oracle_modes),
             "staged_completion_enabled": self.staged_completion_enable,
             "staged_primary_completed": 0.0,
             "staged_promotions": 0.0,
@@ -2171,6 +2172,8 @@ class RecedingHorizonMCTS:
         long_edge = max(float(part.w0), float(part.h0))
         short_edge = max(EPS, min(float(part.w0), float(part.h0)))
         aspect = long_edge / short_edge
+        if mode == "short_edge":
+            return (min(float(part.w0), float(part.h0)), area, -int(pid))
         if mode == "long_edge":
             return (long_edge, area, aspect, -int(pid))
         if mode == "strip_bias":

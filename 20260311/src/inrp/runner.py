@@ -330,6 +330,8 @@ RH_MCTS_PROFILE_BASES: Dict[str, str] = {
     "rh_mcts_prefix_beam_staged_witness": "rh_mcts_prefix_beam_staged",
     "rh_mcts_prefix_common_init_on": "rh_mcts_prefix_beam_staged",
     "rh_mcts_prefix_common_init_off": "rh_mcts_prefix_beam_staged",
+    "rh_mcts_prefix_short_completion_on": "rh_mcts_prefix_common_init_on",
+    "rh_mcts_prefix_short_completion_off": "rh_mcts_prefix_common_init_off",
     "baseline_order_multistart": "rh_mcts_prefix_beam_staged",
     "baseline_sequence_sa_budgeted": "rh_mcts_prefix_beam_staged",
     "baseline_short_edge": "rh_mcts_prefix_beam_staged",
@@ -378,6 +380,12 @@ RH_MCTS_PROFILE_OVERRIDES: Dict[str, Dict[str, Any]] = {
     "rh_mcts_prefix_common_init_off": {
         "PREFIX_COMMON_INIT_ABLATION": True,
         "PREFIX_ABLATION_SEARCH_ENABLE": False,
+    },
+    "rh_mcts_prefix_short_completion_on": {
+        "PREFIX_BEAM_ORACLE_MODES": ("short_edge", "long_edge", "strip_bias"),
+    },
+    "rh_mcts_prefix_short_completion_off": {
+        "PREFIX_BEAM_ORACLE_MODES": ("short_edge", "long_edge", "strip_bias"),
     },
     "rh_mcts_prefix_beam_staged_type_fair": {
         "SOLVER_ROLE": "prefix_beam_type_fair_development",
@@ -477,6 +485,8 @@ RH_MCTS_MAIN_ADAPTIVE_PROFILES: Tuple[Dict[str, Any], ...] = (
 )
 
 MCTS_MAIN_VARIANTS = {
+    "rh_mcts_prefix_short_completion_on",
+    "rh_mcts_prefix_short_completion_off",
     "rh_mcts_prefix_common_init_on",
     "rh_mcts_prefix_common_init_off",
     "baseline_short_edge",
