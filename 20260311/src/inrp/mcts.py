@@ -3317,6 +3317,8 @@ class RecedingHorizonMCTS:
                     and len(snapshot.boards) < int(self.meta["common_initial_panels"])):
                 started = time.perf_counter()
                 sequence_digest, layout_digest = _complete_solution_fingerprints(sequence, snapshot)
+                self.meta["global_best_events"][-1].update(
+                    sequence_sha256=sequence_digest, layout_sha256=layout_digest)
                 self._first_saving_snapshot = snapshot
                 self.meta["first_saving_receipt"] = {
                     "schema_version": "inrp-first-saving-receipt-v1",

@@ -73,6 +73,8 @@ def test_common_initializer_improvement_is_excluded_and_first_real_search_saving
     assert receipt["completion_mode"] == "short_edge" and receipt["completion_origin"] == "fresh_mode_evaluation"
     assert receipt["sequence"] == list(sequence)
     assert receipt["event"] == solver.meta["global_best_events"][receipt["event_index"]]
+    assert receipt["event"]["sequence_sha256"] == receipt["sequence_sha256"]
+    assert receipt["event"]["layout_sha256"] == receipt["layout_sha256"]
     assert receipt["event_index"] == next(i for i, e in enumerate(solver.meta["global_best_events"]) if e["panel_count"] < 2)
 
 
@@ -225,13 +227,15 @@ def test_opt_in_profile_changes_only_identity_and_receipt_flag(count):
         "VARIANTS", "PREFIX_FIRST_SAVING_RECEIPT_ENABLE"}
 
 
-def _receipt_payload():
-    solver = _solver(larger=True)
-    _evaluate(solver, _child(solver, 4))
-    _evaluate(solver, _child(solver, 6))
+def _receipt_payload(*, saving=True):
+    sizes = LARGER if saving else [(30, 50), (15, 35), (55, 50), (30, 35), (20, 70), (15, 75)]
+    solver = _solver(sizes=sizes)
+    if saving:
+        _evaluate(solver, _child(solver, 4))
+        _evaluate(solver, _child(solver, 6))
     result = solver._formal_result_from_incumbent()
     request = PackingRequest(case_id="receipt-toy", parts=tuple(
-        PackingPart(str(i), str(i), w, h) for i, (w, h) in enumerate(LARGER, 1)),
+        PackingPart(str(i), str(i), float(w), float(h)) for i, (w, h) in enumerate(sizes, 1)),
         board_width_mm=100, board_height_mm=100, trim_mm=0, tool_diameter_mm=0,
         seed=17, time_limit_s=5, solver_variant=DIAGNOSTIC)
     by_uid = {i: part for i, part in enumerate(request.parts, 1)}
