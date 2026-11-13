@@ -38,11 +38,13 @@
 
 **Interfaces:** Uses PackingRequest/PackingHandoff, TotalBudget and RecedingHorizonMCTS initialization/decoder/close. Exports versioned `solver_meta.single_prefix_scan` initial/final/evaluation receipts, entry identities, counts and stop reason. Does not modify `early_prefix_control` or its schema.
 
-- [ ] Write failing tests, run pytest, confirm missing scan behavior is the failure.
-- [ ] Implement minimal opt-in adapter, run new tests plus frozen two-completion tests.
-- [ ] Prepare fixed six-run schedule: known 178/739/2416 orders, seed1000, reference and scan once each, deterministic randomized block/arm order; freeze source/input/worker/auditor identities before execution. No retries or extra probes.
-- [ ] Run full runtime suite and meaningful private schedule/receipt checks; have one fresh read-only review of this change, fix material findings before data.
-- [ ] Commit clean runtime/protocol, run six bounded workers serially, independently audit all saved complete layouts and initial/first-two parity. Preserve failures; classify wins/ties/inconclusive honestly.
-- [ ] Write aggregate report; check links/whitespace/source/evidence identities; push existing development branch and update existing draft PR. Report material result, actual evaluation budget and limitations; no merge or formal/unseen claim.
+- [x] Write failing tests, run pytest, confirm missing scan behavior is the failure.
+- [x] Implement minimal opt-in adapter, run new tests plus frozen two-completion tests.
+- [x] Prepare fixed six-run schedule: known 178/739/2416 orders, seed1000, reference and scan once each, deterministic randomized block/arm order; freeze source/input/worker/auditor identities before execution. No retries or extra probes.
+- [x] Run full runtime suite and meaningful private schedule/receipt checks; have one fresh read-only review of this change, fix material findings before data.
+- [x] Commit clean runtime/protocol, run six bounded workers serially, independently audit all saved complete layouts and initial/first-two parity. Preserve failures; classify wins/ties/inconclusive honestly.
+- [x] Write aggregate report; check links/whitespace/source/evidence identities; push existing development branch and update existing draft PR. Report material result, actual evaluation budget and limitations; no merge or formal/unseen claim.
 
 Expected validation: new regression failures first, then all relevant tests pass; complete eligible pairs share initialization and first-two identities; measured board count/net utilization decide outcome, never hardcode desired 28/95 into method acceptance.
+
+Execution rulings: V1 and V2 each retained one validation timeout and two eligible pairs. Saved-data profiling led to validation-only whole-batch replacements, keeping algorithm, inputs, schedule and budgets fixed. V3 is separately frozen and yields six valid runs, one win/two ties,346 geometry records. Earlier batches are preserved, not pooled. Final report documents403/3 runtime checks,28 private checks, review limits and near-deadline risk. Private ledger retains RED/GREEN, profiling and version identities.
