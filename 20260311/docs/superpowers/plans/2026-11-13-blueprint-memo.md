@@ -32,8 +32,8 @@ Files: modify `src/inrp/packer.py::Board/_invalidate_board_cache` and `src/inrp/
 
 Interfaces: existing `best_local_placement`, `apply_local_blueprint`, UID micro caches and V3 evidence schema remain unchanged.
 
-- [ ] Freeze old micro method; add a failing repeated-query test requiring one geometry calculation with different actual UID/hash results; cover invalidation, clone, exact shape/nominal/rotation keys, fresh decoder and legacy cache equality.
-- [ ] Run `PYTHONPATH=src python3 -m pytest -q tests/test_decoder_blueprint_memo.py`; expect the reuse test to fail before implementation, then all cases pass after the minimal cache change. Run full suite, expect no new failures/skips.
-- [ ] Prepare and test frozen private schedules/gates; obtain one fresh read-only review before private inputs; fix material findings.
-- [ ] Commit source/protocol, lock all hashes, run six fixed-work pairs; if gate passes run the one timed pair. Independently audit saved output, all legacy source/dependency/reference and historical JSON hashes. Preserve every failure.
+- [x] Freeze old micro method; add a failing repeated-query test requiring one geometry calculation with different actual UID/hash results; cover invalidation, clone, exact shape/nominal/rotation keys, fresh decoder and legacy cache equality.
+- [x] Run `PYTHONPATH=src python3 -m pytest -q tests/test_decoder_blueprint_memo.py`; expect the reuse test to fail before implementation, then all cases pass after the minimal cache change. Run full suite, expect no new failures/skips.
+- [x] Prepare and test frozen private schedules/gates; obtain one fresh read-only review before private inputs; fix material findings.
+- [x] Commit source/protocol, lock all hashes, run six fixed-work pairs; if gate passes run the one timed pair. Independently audit saved output, all legacy source/dependency/reference and historical JSON hashes. Preserve every failure.
 - [ ] Report measured effects and limits, run task-done full suite, publish to existing draft branch and verify remote state. No formal efficacy or novelty claim.
