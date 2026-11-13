@@ -22,6 +22,8 @@ Retain the matched best initial, each completed evaluation and final raw receipt
 
 Reuse budgeted failure checkpoints and explicit deadline-limited raw unavailability. Reconcile saved failure/orphan files and audit recoverable receipts without counting failed execution as a valid outcome. An absent/duplicate/wrong row, geometry/identity violation or incomplete budgeted execution withholds the overall two-order signal. Preserve any valid per-order descriptive result and all failure records.
 
+Inventory run and failure artifacts by actual claims, including expected-number unclaimed failures beside passed rows; filename membership alone is not acceptance. Recoverable orphan failure metadata is explicitly post-failure evidence, never a successful outcome. With an intact verified manifest, missing/unparseable parent progress becomes an explicit inconclusive error and triggers artifact inspection. Replace parent progress atomically to reduce truncation risk; no guarantee of complete recovery after arbitrary OS/storage failure is made.
+
 ## Decision before outcomes
 
 Execution acceptance requires both scheduled runs clean, complete initialization matching their frozen references, exactly2 successful post-initial starts/completions, independent source-based geometry/receipt checks and output within budget. Compare each reference result with its own actual matched common initial solution. Panel count/net material utilization are primary; reserved-envelope occupancy is auxiliary, not product yield or exact cutter-path loss. Secondary score/layout changes at the same panel count are not material gain.
