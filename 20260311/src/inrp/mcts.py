@@ -633,7 +633,22 @@ class OmnipotentDecoder:
             self.micro_hits += 1
             return self.micro_cache[key]
         self.micro_misses += 1
-        bp = best_local_placement(board, part, self.allow_rot, place_mode=self.place_mode)
+        # Geometry is UID-independent; post-placement area/hash below are not.
+        # Use exact current values, not the rounded identity-cache signature.
+        shape_key = (
+            float(part.w), float(part.h), float(part.w0), float(part.h0),
+            tuple(getattr(part, "allowed_rotations_deg", (0, 90))),
+            self.allow_rot, self.place_mode,
+        )
+        blueprints = board._local_blueprint_cache
+        if blueprints is not None and shape_key in blueprints:
+            bp = blueprints[shape_key]
+        else:
+            bp = best_local_placement(board, part, self.allow_rot, place_mode=self.place_mode)
+            # A first query may initialize free rectangles and invalidate caches.
+            if board._local_blueprint_cache is None:
+                board._local_blueprint_cache = {}
+            board._local_blueprint_cache[shape_key] = bp
         if bp is None:
             self.micro_cache[key] = None
             return None

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 from importlib import metadata as importlib_metadata
 import importlib.util
 import random
@@ -106,6 +106,9 @@ class Board:
     _geom_sig_cache: Optional[Tuple] = field(default=None, init=False, repr=False)
     _geom_hash_cache_nd: int = field(default=-1, init=False, repr=False)
     _geom_hash_cache: Optional[int] = field(default=None, init=False, repr=False)
+    _local_blueprint_cache: Optional[Dict[Tuple, Optional[LocalPlacementBlueprint]]] = field(
+        default=None, init=False, repr=False, compare=False,
+    )
 
 
 @dataclass(frozen=True)
@@ -140,6 +143,7 @@ def _invalidate_board_cache(board: Board) -> None:
     board._geom_sig_cache = None
     board._geom_hash_cache_nd = -1
     board._geom_hash_cache = None
+    board._local_blueprint_cache = None
 
 
 def make_empty_board(
