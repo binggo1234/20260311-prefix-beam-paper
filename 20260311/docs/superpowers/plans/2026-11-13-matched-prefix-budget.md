@@ -32,8 +32,8 @@ Files: create private `matched_prefix_probe_20261113.py`, `test_matched_prefix_p
 
 Interfaces: existing RecedingHorizonMCTS completion methods and decoder replay; existing `_SinglePrefixScanSolver` with limit12; V3 JSON serializer and existing receipt/geometry auditors. Private schema `inrp-matched-prefix-budget-v1` normalizes count/evidence fields while preserving original receipts and modes.
 
-- [ ] Write failing tests for cap12 vs cap2/no cap, actual staged modes and exact first-twelve parity; then implement minimum instrumentation. Expected: tests fail for missing cap behavior then pass with exact parity.
-- [ ] Test synthetic full worker plus saved-output audits, source/receipt corruption, initial mismatch, missing/failed runs and timeout handling. Expected: valid toy passes and all invalid variants reject or remain ineligible. Run full runtime suite unchanged.
-- [ ] Obtain one fresh read-only review; fix material findings before inputs. Commit public protocol, freeze all inputs/source/helper hashes and exact schedule.
-- [ ] Run exactly the two declared arms, independently audit all saved receipts and preserve all results; report fixed-count eligibility and actual material/efficiency outcomes without claiming prefix on/off or PUCT attribution.
+- [x] Write failing tests for cap12 vs cap2/no cap, actual staged modes and exact first-twelve parity; then implement minimum instrumentation. Expected: tests fail for missing cap behavior then pass with exact parity.
+- [x] Test synthetic full worker plus saved-output audits, source/receipt corruption, initial mismatch, missing/failed runs and timeout handling. Expected: valid toy passes and all invalid variants reject or remain ineligible. Run full runtime suite unchanged.
+- [x] Obtain one fresh read-only review; fix material findings before inputs. Commit public protocol, freeze all inputs/source/helper hashes and exact schedule.
+- [x] Run exactly the two declared arms, independently audit all saved receipts and preserve all results; report fixed-count eligibility and actual material/efficiency outcomes without claiming prefix on/off or PUCT attribution.
 - [ ] Run task-done verification, publish aggregate report to existing draft, verify remote head/body/state, archive this task's scratch ledger.
