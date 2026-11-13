@@ -4,6 +4,7 @@ This repository currently uses `20260311/` as the real project root.
 
 ## Where to look first
 
+- Current research positioning: [受限前缀的创新定位与证据门槛](20260311/docs/development/restricted-prefix-contribution-20261113.md)
 - Main project root: `20260311/`
 - Core algorithm code: `20260311/src/inrp/`
 - Main solver file: `20260311/src/inrp/mcts.py`
