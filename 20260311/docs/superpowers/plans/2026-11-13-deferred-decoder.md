@@ -36,3 +36,5 @@ Files: modify `src/inrp/mcts.py::OmnipotentDecoder.decode`; add `tests/decoder_e
 - [ ] Review this change once in fresh context; resolve material findings before data.
 - [ ] Lock code/input/dependency identities and schedules; run the declared fixed-work and fixed-time comparisons, independently audit saved outputs and preserve failures.
 - [ ] Report exactness, actual performance/coverage/material outcomes and limitations; verify and publish existing draft branch.
+
+Execution ruling: the fixed-time pair discovered a new371-panel result at evaluation12. Freeze that first saving sequence and perform exactly two supplied-sequence cold confirmations (old/new) under one60 s diagnostic cap; these are reproducibility checks, not extra search candidates, timing replicates or reruns of the budget pair. Both exactly reproduce the witness. Final saved-output audit also rebuilds the full frozen source-hash map, addressing the review's Minor runner limitation.

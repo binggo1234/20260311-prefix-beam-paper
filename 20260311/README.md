@@ -35,6 +35,7 @@ This directory is the actual project root used by the solver and experiment scri
 
 ## Development notes
 
+- [延迟构造与 2416 件 371 张见证，2026-11-13](docs/development/deferred-decoder-20261113.md)：同序列结果保持一致，固定工作量重放耗时中位降幅约12.35%，同30 s预算完成候选10→13并发现372→371张方案。
 - [30 秒全订单单件前缀扫描，2026-11-13](docs/development/single-prefix-scan-20261113.md)：按需调用的扫描接口；三个已知订单配对一胜两平，178 件达到 28 张，并报告评价覆盖和收尾成本。
 - [全订单单件前置诊断，2026-11-13](docs/development/single-prefix-landscape-20261113.md)：178 件订单遍历后找到 29→28 张见证，完成独立冷重放，并定位现有两 single 入口的覆盖缺口。
 - [当前研究定位与创新证据门槛，2026-11-13](docs/development/restricted-prefix-contribution-20261113.md)：受限前缀的节材表达能力与预算效率；明确近邻文献、现有证据及尚未成立的贡献。
