@@ -31,10 +31,10 @@
 
 Files: modify `src/inrp/mcts.py::OmnipotentDecoder.decode`; add `tests/decoder_eager_reference.py` and `tests/test_decoder_deferred.py`; update linked report and README. Private diagnostics reuse the V3 serializer and geometry auditors without modifying frozen scripts.
 
-- [ ] Freeze old decode; write and observe failing winner-only construction test, plus oracle equivalence cases.
-- [ ] Implement minimal deferred construction; run targeted and full tests.
-- [ ] Review this change once in fresh context; resolve material findings before data.
-- [ ] Lock code/input/dependency identities and schedules; run the declared fixed-work and fixed-time comparisons, independently audit saved outputs and preserve failures.
-- [ ] Report exactness, actual performance/coverage/material outcomes and limitations; verify and publish existing draft branch.
+- [x] Freeze old decode; write and observe failing winner-only construction test, plus oracle equivalence cases.
+- [x] Implement minimal deferred construction; run targeted and full tests.
+- [x] Review this change once in fresh context; resolve material findings before data.
+- [x] Lock code/input/dependency identities and schedules; run the declared fixed-work and fixed-time comparisons, independently audit saved outputs and preserve failures.
+- [x] Report exactness, actual performance/coverage/material outcomes and limitations; verify and publish existing draft branch.
 
 Execution ruling: the fixed-time pair discovered a new371-panel result at evaluation12. Freeze that first saving sequence and perform exactly two supplied-sequence cold confirmations (old/new) under one60 s diagnostic cap; these are reproducibility checks, not extra search candidates, timing replicates or reruns of the budget pair. Both exactly reproduce the witness. Final saved-output audit also rebuilds the full frozen source-hash map, addressing the review's Minor runner limitation.
