@@ -36,4 +36,4 @@ Interfaces: existing RecedingHorizonMCTS completion methods and decoder replay; 
 - [x] Test synthetic full worker plus saved-output audits, source/receipt corruption, initial mismatch, missing/failed runs and timeout handling. Expected: valid toy passes and all invalid variants reject or remain ineligible. Run full runtime suite unchanged.
 - [x] Obtain one fresh read-only review; fix material findings before inputs. Commit public protocol, freeze all inputs/source/helper hashes and exact schedule.
 - [x] Run exactly the two declared arms, independently audit all saved receipts and preserve all results; report fixed-count eligibility and actual material/efficiency outcomes without claiming prefix on/off or PUCT attribution.
-- [ ] Run task-done verification, publish aggregate report to existing draft, verify remote head/body/state, archive this task's scratch ledger.
+- [x] Run task-done verification, publish aggregate report to existing draft, verify remote head/body/state, archive this task's scratch ledger.
