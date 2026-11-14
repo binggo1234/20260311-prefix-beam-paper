@@ -35,6 +35,7 @@ This directory is the actual project root used by the solver and experiment scri
 
 ## Development notes
 
+- [近邻方法差异审查，2026-11-14](docs/development/method-difference-audit-20261114.md)：取得2021非断头多板序列方法全文；受限前缀可精确嵌入BubbleSearch决策向量框架。现有表示不足以单独证明创新，生产代码继续冻结。
 - [等12次完整评价的前缀策略对照，2026-11-13](docs/development/matched-prefix-budget-20261113.md)：739件已知订单上，当前搜索96张，简单短前缀扫描95张，后者第2次评价省板；统一强初解与入口状态，暂停继续投入当前复杂路线。不是前缀开关或PUCT消融。
 - [身份安全的几何蓝图复用，2026-11-13](docs/development/blueprint-memo-20261113.md)：固定大订单重放耗时中位降幅约17.31%；同30 s配对完成候选12→15，双方均371张、净利用率89.877%，本次没有新增省料收益。
 - [延迟构造与 2416 件 371 张见证，2026-11-13](docs/development/deferred-decoder-20261113.md)：同序列结果保持一致，固定工作量重放耗时中位降幅约12.35%，同30 s预算完成候选10→13并发现372→371张方案。
