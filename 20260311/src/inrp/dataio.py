@@ -28,6 +28,7 @@ class Part:
     dup_rank: int = 1
     is_large: bool = False
     is_strip: bool = False
+    allowed_rotations_deg: Tuple[int, ...] = (0, 90)
 
 
 def _sniff_dialect(sample_text: str) -> csv.Dialect:

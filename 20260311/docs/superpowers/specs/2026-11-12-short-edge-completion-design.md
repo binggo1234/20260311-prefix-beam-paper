@@ -1,0 +1,13 @@
+# Short-edge primary completion: bounded prefix ablation
+
+The user approved one primary-completion adjustment: replace area-descending primary completion with the already implemented nominal short-edge order, keeping long_edge and strip_bias as the other two modes. Keep common strong initialization, candidates, scoring, depth/width, staged quotas, deadlines, geometry and defaults unchanged. No new candidate heuristic or broader matrix.
+
+Register `short_edge` as an allowed deterministic oracle mode. Its key exactly matches short_edge_sequence: raw nominal short edge descending, nominal area descending, UID ascending. Do not use the EPS-clamped short edge used for safe aspect division as the ordering feature. Add an active-mode metadata receipt so filtered/misconfigured modes cannot pass the experiment unnoticed.
+
+Add opt-in `rh_mcts_prefix_short_completion_on/off`, respectively inheriting the existing common-init on/off profiles. Override only PREFIX_BEAM_ORACLE_MODES to (short_edge,long_edge,strip_bias); apply identical adaptive tiers. Existing profiles/defaults retain (baseline,long_edge,strip_bias). The paired new profiles differ only in identity and the existing search gate. Formal-budget-only/common-initialization/floor/no-off-search contracts are reused unchanged.
+
+Freeze one739-piece order, seeds1000/1001/1002, paired on/off, six runs at30 s pipeline/3 s closing/38 s parent watchdog/8 s bounded cleanup. Randomize three seed blocks and arm order with seed20261115. Freeze runtime/input/dependency hashes and schedule before outcomes. No retuning or selective reruns. Verify all initial receipts/scores against each other and the prior frozen same-order common seed; off must return that unchanged96-panel floor without search. Verify the active three modes and actual on short_edge primary evaluations; reject mode/fingerprint/incomplete/floor protocol violations. Audit every saved output; preserve failures and report all seeds/means and both material metrics.
+
+Development signal is a valid on mean panel count below96. A best seed alone is never substituted for the mean; any signal only licenses further exploration, not formal acceptance. The old formal gate is unchanged. With only these six runs the experiment estimates prefix-on/off benefit under the aligned completion family, not a concurrent causal comparison of short-edge-primary vs area-primary. Stop this implementation line's escalation if no material signal; do not add another heuristic or run a longer matrix automatically.
+
+Work in the existing isolated checkout, preserve original dirty/frozen workspaces and historical records, keep factory inputs/layouts private, and update only the existing GitHub draft after tests/review/audits. No master merge.

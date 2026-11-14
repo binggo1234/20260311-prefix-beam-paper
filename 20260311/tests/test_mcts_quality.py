@@ -1,7 +1,10 @@
 import json
 from pathlib import Path
 import sys
+import time
 from typing import List
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
@@ -16,6 +19,7 @@ from inrp.geometry import resolve_geometry_policy
 from inrp.mcts import (
     AppliedActionResult,
     LayoutSnapshot,
+    OmnipotentDecoder,
     MacroAction,
     PatternCandidate,
     PersistentBoards,
@@ -25,6 +29,7 @@ from inrp.mcts import (
     SearchNode,
     solve_with_receding_horizon_mcts,
 )
+from inrp.budget import BudgetExpired
 from inrp.packer import make_empty_board
 from inrp.preprocess import preprocess_parts
 from inrp.runner import (
@@ -35,6 +40,7 @@ from inrp.runner import (
     _effective_board_area,
     _load_cached_seed_totals,
     _solve_baseline_sa,
+    _solve_baseline_greedy,
     _variant_cfg,
     aggregate_totals,
     run_one_seed,
@@ -84,6 +90,14 @@ def _parts() -> List[Part]:
     ]
 
 
+def test_greedy_formal_replay_observes_search_deadline():
+    cfg = _cfg()
+    cfg.FORMAL_TOTAL_DEADLINE = time.perf_counter() - 1.0
+    cfg.FORMAL_CLOSING_RESERVE_S = 60.0
+    with pytest.raises(BudgetExpired):
+        _solve_baseline_greedy(_parts(), cfg, 1000)
+
+
 def _dummy_snapshot(board_count: int, sum_u_gamma: float) -> LayoutSnapshot:
     boards = PersistentBoards.empty()
     for bid in range(board_count):
@@ -114,6 +128,155 @@ def _window(sequence, *, start_idx: int = 2, base_board_count: int = 2, blockers
         score=(0.0, 0.0, 0.0, float(start_idx)),
         source="test",
     )
+
+
+def test_completion_replay_rejects_work_after_its_deadline():
+    decoder = OmnipotentDecoder({part.uid: part for part in _parts()}, _cfg())
+
+    with pytest.raises(BudgetExpired, match="completion_replay"):
+        decoder.replay_order((1,), deadline=0.0)
+
+
+def test_simulation_deadline_expiry_closes_from_existing_incumbent(monkeypatch):
+    mcts = RecedingHorizonMCTS(_parts(), _cfg(), seed=1)
+    mcts.prefix_beam_enable = True
+    sequence = tuple(part.uid for part in _parts())
+    snapshot, _ = mcts.decoder.replay_order(sequence)
+    mcts._update_global_best(sequence, snapshot)
+    root = SearchNode(
+        snapshot=LayoutSnapshot(PersistentBoards.empty(), 0.0, (0, 0), 0),
+        remaining_mask=mcts.full_remaining_mask,
+        prefix_sequence=tuple(),
+    )
+
+    def expire(*args, **kwargs):
+        del args, kwargs
+        raise BudgetExpired("completion_replay")
+
+    monkeypatch.setattr(mcts, "_evaluate_prefix_with_baseline", expire)
+    mcts._run_simulations(root, 1)
+
+    assert mcts.meta["solver_timeout_hit"] == 1.0
+    assert mcts.global_best_sequence == sequence
+
+
+def test_formal_deadline_result_reuses_complete_incumbent_snapshot(monkeypatch):
+    mcts = RecedingHorizonMCTS(_parts(), _cfg(), seed=1)
+    sequence = tuple(part.uid for part in _parts())
+    snapshot, _ = mcts.decoder.replay_order(sequence)
+    mcts._update_global_best(sequence, snapshot)
+    mcts.solve_deadline = float("inf")
+
+    def reject_redundant_replay(*args, **kwargs):
+        del args, kwargs
+        raise AssertionError("complete incumbent must not be replayed during deadline close")
+
+    monkeypatch.setattr(OmnipotentDecoder, "replay_order", reject_redundant_replay)
+    result = mcts._formal_result_from_incumbent()
+
+    assert result.sequence == sequence
+    assert result.boards == list(snapshot.boards)
+
+
+def test_formal_prefix_search_deadline_closes_from_existing_incumbent(monkeypatch):
+    cfg = _cfg()
+    mcts = RecedingHorizonMCTS(_parts(), cfg, seed=1)
+    mcts.prefix_beam_enable = True
+    mcts.formal_total_deadline = time.perf_counter() + 5.0
+    mcts.formal_closing_reserve_s = 1.0
+    sequence = tuple(part.uid for part in _parts())
+    snapshot, _ = mcts.decoder.replay_order(sequence)
+
+    def prime_incumbent():
+        mcts._update_global_best(sequence, snapshot)
+
+    def expire_during_prefix_ranking(root):
+        del root
+        raise BudgetExpired("completion_replay")
+
+    monkeypatch.setattr(mcts, "_prime_constructive_warmstarts", prime_incumbent)
+    monkeypatch.setattr(mcts, "_warm_start", lambda root: None)
+    monkeypatch.setattr(mcts, "_solve_prefix_beam", expire_during_prefix_ranking)
+
+    result = mcts.solve()
+
+    assert result.sequence == sequence
+    assert result.boards == list(snapshot.boards)
+    assert result.meta["solver_timeout_hit"] == 1.0
+
+
+def test_nonformal_prefix_search_deadline_is_not_silently_converted(monkeypatch):
+    mcts = RecedingHorizonMCTS(_parts(), _cfg(), seed=1)
+    mcts.prefix_beam_enable = True
+    monkeypatch.setattr(mcts, "_prime_constructive_warmstarts", lambda: None)
+    monkeypatch.setattr(mcts, "_warm_start", lambda root: None)
+    monkeypatch.setattr(
+        mcts,
+        "_solve_prefix_beam",
+        lambda root: (_ for _ in ()).throw(BudgetExpired("completion_replay")),
+    )
+
+    with pytest.raises(BudgetExpired, match="completion_replay"):
+        mcts.solve()
+
+
+def test_formal_warmstart_deadline_closes_from_existing_incumbent(monkeypatch):
+    mcts = RecedingHorizonMCTS(_parts(), _cfg(), seed=1)
+    mcts.prefix_beam_enable = True
+    mcts.formal_total_deadline = time.perf_counter() + 5.0
+    mcts.formal_closing_reserve_s = 1.0
+    sequence = tuple(part.uid for part in _parts())
+    snapshot, _ = mcts.decoder.replay_order(sequence)
+
+    def prime_then_expire():
+        mcts._update_global_best(sequence, snapshot)
+        raise BudgetExpired("constructive_warmstart")
+
+    monkeypatch.setattr(mcts, "_prime_constructive_warmstarts", prime_then_expire)
+    monkeypatch.setattr(mcts, "_warm_start", lambda root: None)
+
+    result = mcts.solve()
+
+    assert result.sequence == sequence
+    assert result.boards == list(snapshot.boards)
+    assert result.meta["solver_timeout_hit"] == 1.0
+
+
+def test_constructive_sequence_obeys_expired_search_deadline() -> None:
+    mcts = RecedingHorizonMCTS(_parts(), _cfg(), seed=1)
+    mcts.search_deadline = 0.0
+
+    sequence = mcts._pack_constructive_sequence("area", "blf_rand", 3, 0)
+
+    assert sequence is None
+    assert mcts.meta["solver_timeout_hit"] == 1.0
+
+
+def test_constructive_normalization_obeys_expired_deadline() -> None:
+    mcts = RecedingHorizonMCTS(_parts(), _cfg(), seed=1)
+    sequence = tuple(part.uid for part in _parts())
+
+    with pytest.raises(BudgetExpired, match="constructive_warmstart"):
+        mcts._normalize_sequence_candidate(
+            sequence,
+            deadline=0.0,
+            deadline_phase="constructive_warmstart",
+        )
+
+
+def test_constructive_cache_record_obeys_expired_deadline() -> None:
+    mcts = RecedingHorizonMCTS(_parts(), _cfg(), seed=1)
+    sequence = tuple(part.uid for part in _parts())
+    snapshot, snapshots = mcts.decoder.replay_order(sequence)
+
+    with pytest.raises(BudgetExpired, match="constructive_warmstart"):
+        mcts._record_constructive_warmstart(
+            sequence,
+            snapshot,
+            snapshots,
+            deadline=0.0,
+            deadline_phase="constructive_warmstart",
+        )
 
 
 def test_elite_archive_replaces_same_tail_signature_with_better_candidate():
@@ -631,6 +794,74 @@ def test_variant_cfg_rh_mcts_prefix_beam_enables_prefix_bundle():
     assert not bool(cfg_variant.BEAM_FOCUSED_REPAIR_ENABLE)
 
 
+def test_random_completion_variant_changes_only_completion_policy():
+    cfg = _cfg()
+    stats = _case_stats(_parts(), cfg)
+
+    deterministic = _variant_cfg(cfg, "rh_mcts_prefix_beam", stats)
+    random_control = _variant_cfg(
+        cfg,
+        "rh_mcts_prefix_beam_random_completion",
+        stats,
+    )
+
+    assert str(deterministic.PREFIX_BEAM_COMPLETION_POLICY) == "deterministic"
+    assert str(random_control.PREFIX_BEAM_COMPLETION_POLICY) == "random"
+    assert int(random_control.PREFIX_BEAM_COMPLETION_SAMPLES) == len(
+        tuple(deterministic.PREFIX_BEAM_ORACLE_MODES)
+    )
+    for name in (
+        "PREFIX_BEAM_DEPTH",
+        "PREFIX_BEAM_WIDTH",
+        "PREFIX_BEAM_BRANCH_TOPK",
+        "PREFIX_BEAM_POST_TOPK",
+        "PREFIX_BEAM_USE_MACRO",
+        "PREFIX_BEAM_LIGHT_REPAIR_ENABLE",
+        "PREFIX_BEAM_LIGHT_REPAIR_TOPK",
+        "MACRO_ACTION_ENABLE",
+        "SOLVER_TIME_LIMIT_S",
+    ):
+        assert getattr(random_control, name) == getattr(deterministic, name)
+
+
+def test_random_completion_order_is_state_seeded_and_reproducible():
+    cfg = _cfg()
+    cfg.PREFIX_BEAM_ENABLE = True
+    cfg.PREFIX_BEAM_COMPLETION_POLICY = "random"
+    cfg.PREFIX_BEAM_COMPLETION_SAMPLES = 3
+    prefix = (1,)
+
+    first = RecedingHorizonMCTS(_parts(), cfg, seed=21)
+    first_snapshot, _ = first.decoder.replay_order(prefix)
+    first_mask = first.full_remaining_mask & ~int(first.part_bit[1])
+    order_1 = first._random_completion_order(
+        first_snapshot,
+        first_mask,
+        prefix_depth=1,
+        sample_index=0,
+    )
+    order_1_repeat = first._random_completion_order(
+        first_snapshot,
+        first_mask,
+        prefix_depth=1,
+        sample_index=0,
+    )
+
+    second = RecedingHorizonMCTS(_parts(), cfg, seed=22)
+    second_snapshot, _ = second.decoder.replay_order(prefix)
+    second_mask = second.full_remaining_mask & ~int(second.part_bit[1])
+    order_2 = second._random_completion_order(
+        second_snapshot,
+        second_mask,
+        prefix_depth=1,
+        sample_index=0,
+    )
+
+    assert order_1 == order_1_repeat
+    assert order_1 != order_2
+    assert sorted(order_1) == sorted(order_2)
+
+
 def test_paper_experiment_defaults_point_ours_main_to_prefix_beam():
     assert PAPER_MAIN_VARIANT == "rh_mcts_prefix_beam"
     assert EXTERNAL_VARIANTS[-1] == ("rh_mcts_prefix_beam", "OursMain")
@@ -830,8 +1061,8 @@ def test_prefix_oracle_chooses_best_mode_and_caches_selected_mode():
         board_count = len(snapshot.boards.materialize())
         return (-float(board_count), float(snapshot.sum_u_gamma), 0.0, 0.0, 0.0)
 
-    def _fake_replay(order, prefix_snapshot=None):
-        del prefix_snapshot
+    def _fake_replay(order, prefix_snapshot=None, **kwargs):
+        del prefix_snapshot, kwargs
         order_t = tuple(int(pid) for pid in order)
         if order_t and order_t[0] == 6:
             return _dummy_snapshot(2, 0.9), tuple()

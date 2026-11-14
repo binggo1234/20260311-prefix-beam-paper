@@ -15,6 +15,8 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 from .dataio import read_sample_parts
 from .geometry import effective_safe_gap, effective_trim, resolve_geometry_policy
+from .ordering import baseline_sequence, short_edge_sequence
+from .evaluation_baselines import solve_evaluation_baseline
 from .mcts import OmnipotentDecoder, RecedingHorizonMCTS, SearchResult, solve_with_receding_horizon_mcts
 from .packer import board_used_area
 from .preprocess import preprocess_parts
@@ -309,11 +311,31 @@ RH_MCTS_PREFIX_BEAM_OVERRIDES: Dict[str, Any] = {
     "POST_REPAIR_ALNS_ENABLE": False,
 }
 
+RH_MCTS_PREFIX_BEAM_RANDOM_COMPLETION_OVERRIDES: Dict[str, Any] = {
+    "SOLVER_ROLE": "prefix_beam_random_completion_ablation",
+    "SOLVER_BUNDLE": "prefix_beam_random_completion_control",
+    "PREFIX_BEAM_COMPLETION_POLICY": "random",
+    "PREFIX_BEAM_COMPLETION_SAMPLES": 3,
+}
+
 RH_MCTS_PROFILE_BASES: Dict[str, str] = {
     "rh_mcts": "rh_mcts_ref",
     "rh_mcts_main": "rh_mcts_ref",
     "rh_mcts_beam": "rh_mcts_main",
     "rh_mcts_prefix_beam": "rh_mcts_main",
+    "rh_mcts_prefix_beam_random_completion": "rh_mcts_prefix_beam",
+    "rh_mcts_prefix_beam_complement": "rh_mcts_prefix_beam",
+    "rh_mcts_prefix_beam_staged": "rh_mcts_prefix_beam",
+    "rh_mcts_prefix_beam_staged_type_fair": "rh_mcts_prefix_beam_staged",
+    "rh_mcts_prefix_beam_staged_witness": "rh_mcts_prefix_beam_staged",
+    "rh_mcts_prefix_common_init_on": "rh_mcts_prefix_beam_staged",
+    "rh_mcts_prefix_common_init_off": "rh_mcts_prefix_beam_staged",
+    "rh_mcts_prefix_short_completion_on": "rh_mcts_prefix_common_init_on",
+    "rh_mcts_prefix_short_completion_off": "rh_mcts_prefix_common_init_off",
+    "rh_mcts_prefix_short_receipt": "rh_mcts_prefix_short_completion_on",
+    "baseline_order_multistart": "rh_mcts_prefix_beam_staged",
+    "baseline_sequence_sa_budgeted": "rh_mcts_prefix_beam_staged",
+    "baseline_short_edge": "rh_mcts_prefix_beam_staged",
     "rh_mcts_full": "rh_mcts_main",
     "ours_full": "rh_mcts_full",
     "ours_base": "rh_mcts_main",
@@ -322,6 +344,9 @@ RH_MCTS_PROFILE_BASES: Dict[str, str] = {
 
 RH_MCTS_PROFILE_OVERRIDES: Dict[str, Dict[str, Any]] = {
     "baseline_greedy": {"SOLVER_KIND": "baseline_greedy"},
+    "baseline_short_edge": {"SOLVER_KIND": "baseline_short_edge"},
+    "baseline_order_multistart": {"SOLVER_KIND": "baseline_order_multistart"},
+    "baseline_sequence_sa_budgeted": {"SOLVER_KIND": "baseline_sequence_sa_budgeted"},
     "baseline_sa": {
         "SOLVER_KIND": "baseline_sa",
         "MACRO_ACTION_ENABLE": False,
@@ -338,6 +363,44 @@ RH_MCTS_PROFILE_OVERRIDES: Dict[str, Dict[str, Any]] = {
     "rh_mcts_main": RH_MCTS_MAIN_OVERRIDES,
     "rh_mcts_beam": RH_MCTS_BEAM_OVERRIDES,
     "rh_mcts_prefix_beam": RH_MCTS_PREFIX_BEAM_OVERRIDES,
+    "rh_mcts_prefix_beam_random_completion": RH_MCTS_PREFIX_BEAM_RANDOM_COMPLETION_OVERRIDES,
+    "rh_mcts_prefix_beam_complement": {
+        "SOLVER_ROLE": "prefix_beam_complement_development",
+        "SOLVER_BUNDLE": "prefix_beam_complement",
+        "MACRO_COMPLEMENT_ENABLE": True,
+    },
+    "rh_mcts_prefix_beam_staged": {
+        "SOLVER_ROLE": "prefix_beam_staged_development",
+        "SOLVER_BUNDLE": "prefix_beam_staged_completion",
+        "PREFIX_BEAM_STAGED_ENABLE": True,
+    },
+    "rh_mcts_prefix_common_init_on": {
+        "PREFIX_COMMON_INIT_ABLATION": True,
+        "PREFIX_ABLATION_SEARCH_ENABLE": True,
+    },
+    "rh_mcts_prefix_common_init_off": {
+        "PREFIX_COMMON_INIT_ABLATION": True,
+        "PREFIX_ABLATION_SEARCH_ENABLE": False,
+    },
+    "rh_mcts_prefix_short_completion_on": {
+        "PREFIX_BEAM_ORACLE_MODES": ("short_edge", "long_edge", "strip_bias"),
+    },
+    "rh_mcts_prefix_short_completion_off": {
+        "PREFIX_BEAM_ORACLE_MODES": ("short_edge", "long_edge", "strip_bias"),
+    },
+    "rh_mcts_prefix_short_receipt": {
+        "PREFIX_FIRST_SAVING_RECEIPT_ENABLE": True,
+    },
+    "rh_mcts_prefix_beam_staged_type_fair": {
+        "SOLVER_ROLE": "prefix_beam_type_fair_development",
+        "SOLVER_BUNDLE": "prefix_beam_staged_type_fair",
+        "PREFIX_BEAM_TYPE_FAIR_EXPANSION": True,
+    },
+    "rh_mcts_prefix_beam_staged_witness": {
+        "SOLVER_ROLE": "prefix_beam_witness_development",
+        "SOLVER_BUNDLE": "prefix_beam_staged_witness",
+        "PREFIX_BEAM_WITNESS_ADVANCE": True,
+    },
     "rh_mcts_full": RH_MCTS_FULL_OVERRIDES,
     "ours_full": {},
     "ours_base": {
@@ -426,9 +489,22 @@ RH_MCTS_MAIN_ADAPTIVE_PROFILES: Tuple[Dict[str, Any], ...] = (
 )
 
 MCTS_MAIN_VARIANTS = {
+    "rh_mcts_prefix_short_receipt",
+    "rh_mcts_prefix_short_completion_on",
+    "rh_mcts_prefix_short_completion_off",
+    "rh_mcts_prefix_common_init_on",
+    "rh_mcts_prefix_common_init_off",
+    "baseline_short_edge",
+    "baseline_order_multistart",
+    "baseline_sequence_sa_budgeted",
     "rh_mcts_main",
     "rh_mcts_beam",
     "rh_mcts_prefix_beam",
+    "rh_mcts_prefix_beam_random_completion",
+    "rh_mcts_prefix_beam_complement",
+    "rh_mcts_prefix_beam_staged",
+    "rh_mcts_prefix_beam_staged_type_fair",
+    "rh_mcts_prefix_beam_staged_witness",
     "rh_mcts_full",
     "ours_full",
     "ours_base",
@@ -913,32 +989,32 @@ def _solve_rh_mcts(parts, cfg, seed: int) -> SearchResult:
 
 
 def _baseline_sequence(parts: Sequence) -> Tuple[int, ...]:
-    ranked = sorted(
-        parts,
-        key=lambda part: (
-            float(part.w0) * float(part.h0),
-            max(float(part.w0), float(part.h0)) / max(1e-9, min(float(part.w0), float(part.h0))),
-            float(max(part.w0, part.h0)),
-            -int(part.uid),
-        ),
-        reverse=True,
-    )
-    return tuple(int(part.uid) for part in ranked)
+    return baseline_sequence(parts)
 
 
 def _solve_baseline_greedy(parts, cfg, seed: int) -> SearchResult:
     del seed
     decoder = OmnipotentDecoder({int(part.uid): part for part in parts}, cfg)
-    sequence = _baseline_sequence(parts)
-    snapshot, _ = decoder.replay_order(sequence)
+    short_edge = str(getattr(cfg, "SOLVER_KIND", "")) == "baseline_short_edge"
+    solver_kind = "baseline_short_edge" if short_edge else "baseline_greedy"
+    sequence = short_edge_sequence(parts) if short_edge else _baseline_sequence(parts)
+    formal_deadline = float(getattr(cfg, "FORMAL_TOTAL_DEADLINE", math.inf))
+    deadline = (
+        formal_deadline - float(getattr(cfg, "FORMAL_CLOSING_RESERVE_S", 0.0))
+        if math.isfinite(formal_deadline)
+        else math.inf
+    )
+    snapshot, _ = decoder.replay_order(
+        sequence, deadline=deadline, deadline_phase=f"{solver_kind}_replay"
+    )
     return SearchResult(
         boards=list(snapshot.boards),
         sequence=sequence,
         score_global=tuple(),
         scalar_reward=0.0,
         meta={
-            "solver_kind": "baseline_greedy",
-            "baseline_order": "area_aspect_desc",
+            "solver_kind": solver_kind,
+            "baseline_order": "short_edge_desc" if short_edge else "area_aspect_desc",
             "decode_cache_hits": float(decoder.decode_hits),
             "decode_cache_misses": float(decoder.decode_misses),
             "decode_cache_entries": float(len(decoder.decode_cache)),
@@ -1056,10 +1132,12 @@ def run_one_seed(parts, cfg, seed: int, out_case_dir: Path, variant: str) -> Dic
 
     t0 = time.perf_counter()
     solver_kind = str(getattr(cfg, "SOLVER_KIND", "rh_mcts"))
-    if solver_kind == "baseline_greedy":
+    if solver_kind in {"baseline_greedy", "baseline_short_edge"}:
         solver_result = _solve_baseline_greedy(parts, cfg, seed)
     elif solver_kind == "baseline_sa":
         solver_result = _solve_baseline_sa(parts, cfg, seed)
+    elif solver_kind in {"baseline_order_multistart", "baseline_sequence_sa_budgeted"}:
+        solver_result = solve_evaluation_baseline(parts, cfg, seed)
     else:
         solver_result = _solve_rh_mcts(parts, cfg, seed)
     boards, solver_meta, sequence = _solver_payload(solver_result)
