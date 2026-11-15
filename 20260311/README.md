@@ -35,6 +35,7 @@ This directory is the actual project root used by the solver and experiment scri
 
 ## Development notes
 
+- [外部CLASS算例筛查，2026-11-15](docs/development/external-sequence-screen-20261115.md)：10个项目新公开实例、30次有效运行、450份布局审计；简单前缀相对每例最强参照0胜10平0负，未通过预定继续筛查门槛。现有27份工业任务均已历史暴露，不能再称未见集。
 - [同解码器序列邻域实测结果，2026-11-15](docs/development/sequence-neighborhood-results-20261115.md)：已知739件订单、每臂12次新序列评价，简单单件前缀95张，一般插入及Kendall穷举访问均96张；45份布局审计通过。保留简单强基线，尚未证明创新或独立订单优势。
 - [执行前冻结的序列邻域对照协议v1，2026-11-15](docs/development/sequence-neighborhood-protocol-20261115.md)：三个参照的候选顺序、统一去重及预算规则；执行状态见上述结果报告。
 - [近邻方法差异审查，2026-11-14](docs/development/method-difference-audit-20261114.md)：取得2021非断头多板序列方法全文；受限前缀可精确嵌入BubbleSearch决策向量框架。现有表示不足以单独证明创新，生产代码继续冻结。
