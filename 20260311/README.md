@@ -35,7 +35,8 @@ This directory is the actual project root used by the solver and experiment scri
 
 ## Development notes
 
-- [同解码器序列邻域对照协议v1，2026-11-15](docs/development/sequence-neighborhood-protocol-20261115.md)：明确定义单件前缀、一般插入和Kendall穷举参照，统一去重、12次新序列评价及30秒上限；仅完成协议，未实现或运行新矩阵。
+- [同解码器序列邻域实测结果，2026-11-15](docs/development/sequence-neighborhood-results-20261115.md)：已知739件订单、每臂12次新序列评价，简单单件前缀95张，一般插入及Kendall穷举访问均96张；45份布局审计通过。保留简单强基线，尚未证明创新或独立订单优势。
+- [执行前冻结的序列邻域对照协议v1，2026-11-15](docs/development/sequence-neighborhood-protocol-20261115.md)：三个参照的候选顺序、统一去重及预算规则；执行状态见上述结果报告。
 - [近邻方法差异审查，2026-11-14](docs/development/method-difference-audit-20261114.md)：取得2021非断头多板序列方法全文；受限前缀可精确嵌入BubbleSearch决策向量框架。现有表示不足以单独证明创新，生产代码继续冻结。
 - [等12次完整评价的前缀策略对照，2026-11-13](docs/development/matched-prefix-budget-20261113.md)：739件已知订单上，当前搜索96张，简单短前缀扫描95张，后者第2次评价省板；统一强初解与入口状态，暂停继续投入当前复杂路线。不是前缀开关或PUCT消融。
 - [身份安全的几何蓝图复用，2026-11-13](docs/development/blueprint-memo-20261113.md)：固定大订单重放耗时中位降幅约17.31%；同30 s配对完成候选12→15，双方均371张、净利用率89.877%，本次没有新增省料收益。
