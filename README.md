@@ -4,7 +4,8 @@ This repository currently uses `20260311/` as the real project root.
 
 ## Where to look first
 
-- Latest coverage diagnostic: [完整K=1可达性诊断，2026-11-16](20260311/docs/development/k1-reachability-20261116.md)
+- Latest expression diagnostic: [K=2表达增量诊断，2026-11-16](20260311/docs/development/k2-reachability-20261116.md)
+- Complete single-prefix coverage: [完整K=1可达性诊断，2026-11-16](20260311/docs/development/k1-reachability-20261116.md)
 - External screen: [CLASS公开算例筛查，2026-11-15](20260311/docs/development/external-sequence-screen-20261115.md)
 - Known-order controls: [同解码器序列邻域对照结果，2026-11-15](20260311/docs/development/sequence-neighborhood-results-20261115.md)
 - Current research positioning: [受限前缀的创新定位与证据门槛](20260311/docs/development/restricted-prefix-contribution-20261113.md)

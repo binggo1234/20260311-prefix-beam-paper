@@ -35,6 +35,7 @@ This directory is the actual project root used by the solver and experiment scri
 
 ## Development notes
 
+- [K=2表达增量诊断，2026-11-16](docs/development/k2-reachability-20261116.md)：CLASS07由完整K=1的28张降为27张，1例有效正例；5例退出失败，不作阴性结论。47,036份保存布局审计通过；修正跨进程绝对时钟误比，原记录保留。
 - [完整K=1可达性诊断，2026-11-16](docs/development/k1-reachability-20261116.md)：7例各100候选全覆盖，693次新序列重放、714份布局审计；CLASS04在第29次评价从4张降至可证明最优的3张，其余6例无单件省板见证。未新增启发式。
 - [外部CLASS算例筛查，2026-11-15](docs/development/external-sequence-screen-20261115.md)：10个项目新公开实例、30次有效运行、450份布局审计；简单前缀相对每例最强参照0胜10平0负，未通过预定继续筛查门槛。现有27份工业任务均已历史暴露，不能再称未见集。
 - [同解码器序列邻域实测结果，2026-11-15](docs/development/sequence-neighborhood-results-20261115.md)：已知739件订单、每臂12次新序列评价，简单单件前缀95张，一般插入及Kendall穷举访问均96张；45份布局审计通过。保留简单强基线，尚未证明创新或独立订单优势。
