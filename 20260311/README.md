@@ -35,6 +35,7 @@ This directory is the actual project root used by the solver and experiment scri
 
 ## Development notes
 
+- [三篇近邻的机制筛选，2026-11-18](docs/development/near-neighbor-mechanism-20261118.md)：取得FAEO作者接收稿并核对续算机制；不同单件前置候选的共同序列开头为零，不直接移植其存档查找。Pilot与2026预见剪枝仍缺完整方法正文；无新排样实验。
 - [跨行业排样文献研判，2026-11-17](docs/development/cross-industry-literature-20261117.md)：扩展至玻璃、船舶钣金、服装皮革、物流及芯片/PCB；16项分层条目、12个DOI核对、7个仓库快照。区分目标可行性、评价精度、布局修正和几何学习；本轮不编码新机制、不运行排样。
 - [受限前缀章节取舍与证据边界，2026-11-17](docs/development/restricted-prefix-chapter-disposition-20261117.md)：固定强初解＋简单扫描，停止当前复杂路线追加；本地形成章稿及创新证据表，分开报告材料潜力、预算效率和工程优化。独立算法创新及新工业订单有效性尚未成立；默认求解器未改。
 - [K2生命周期修复及同预算复核，2026-11-17](docs/development/k2-lifecycle-repair-20261117.md)：消除记录钩子的引用环；含CLASS05单列中断补做，原5例均在120秒内正常退出，旧记录保留。CLASS03完整9900候选无省板见证，其余4例时间删失；72项相关测试通过。
