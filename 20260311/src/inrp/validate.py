@@ -58,6 +58,7 @@ def validate_solution(
     touch_tol: float = 1e-6,
 ) -> None:
     input_uids = [p.uid for p in parts]
+    parts_by_uid = {int(part.uid): part for part in parts}
     placed_uids = [pp.uid for board in boards for pp in board.placed]
 
     if len(placed_uids) != len(input_uids) or len(set(placed_uids)) != len(set(input_uids)):
@@ -72,6 +73,13 @@ def validate_solution(
     for board in boards:
         placed = board.placed
         for pp in placed:
+            part = parts_by_uid[int(pp.uid)]
+            allowed = tuple(getattr(part, "allowed_rotations_deg", (0, 90)))
+            rotation_deg = 90 if bool(pp.rotated) else 0
+            if rotation_deg not in allowed:
+                raise RuntimeError(
+                    f"Placement rotation is not permitted: board={board.bid} uid={pp.uid} rotation={rotation_deg}"
+                )
             if not _inside(pp.rect, W, H, trim=trim):
                 raise RuntimeError(
                     f"Part out of board: board={board.bid} uid={pp.uid} rect="

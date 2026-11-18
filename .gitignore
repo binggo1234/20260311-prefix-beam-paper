@@ -28,4 +28,4 @@ Thumbs.db
 20260311/outputs/paper_final/**/*status.csv
 
 # Untracked duplicate top-level source mirror
-src/
+/src/
