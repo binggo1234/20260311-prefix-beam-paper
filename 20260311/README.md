@@ -35,6 +35,7 @@ This directory is the actual project root used by the solver and experiment scri
 
 ## Development notes
 
+- [目标板数可行性机制核查，2026-11-26](docs/development/target-feasibility-probe-20261126.md)：普通剩余面积界不区分前缀；181条保存序列的封闭板界相对开板上限额外提前量为0，停止该候选。11项原型检查、440项生产回归通过；无工厂新搜索、无新增利用率结果。
 - [完整几何序列去重，2026-11-26](docs/development/exact-geometry-dedup-20261126.md)：默认关闭的精确候选去重；440项测试通过，三组开发配对有效。固定工作量178件流水线耗时约降49.89%、2416件约降6.83%；同30秒不同几何覆盖12→13，双方仍371张，无新增材料收益。用户转达的工厂口径已确认：不考虑纹理、修边5毫米、刀径6毫米，与现有实验设置一致；此前纹理和修边缺口判断已撤回。
 - [三篇近邻的机制筛选，2026-11-18](docs/development/near-neighbor-mechanism-20261118.md)：取得FAEO作者接收稿并核对续算机制；不同单件前置候选的共同序列开头为零，不直接移植其存档查找。Pilot与2026预见剪枝仍缺完整方法正文；无新排样实验。
 - [跨行业排样文献研判，2026-11-17](docs/development/cross-industry-literature-20261117.md)：扩展至玻璃、船舶钣金、服装皮革、物流及芯片/PCB；16项分层条目、12个DOI核对、7个仓库快照。区分目标可行性、评价精度、布局修正和几何学习；本轮不编码新机制、不运行排样。
