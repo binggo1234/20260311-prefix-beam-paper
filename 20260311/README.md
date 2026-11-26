@@ -35,6 +35,7 @@ This directory is the actual project root used by the solver and experiment scri
 
 ## Development notes
 
+- [CLASS07前缀联合效应，2026-11-26](docs/development/class07-prefix-interaction-20261126.md)：五条给定序列冷重放，两个单件均28张、正反两件前缀均27张；新定位同面积余料对69×15零件接纳能力的差异。用于研究联合选择及余件—余料适配，尚非新方法、工业增益或泛化证据。
 - [目标板数可行性机制核查，2026-11-26](docs/development/target-feasibility-probe-20261126.md)：普通剩余面积界不区分前缀；181条保存序列的封闭板界相对开板上限额外提前量为0，停止该候选。11项原型检查、440项生产回归通过；无工厂新搜索、无新增利用率结果。
 - [完整几何序列去重，2026-11-26](docs/development/exact-geometry-dedup-20261126.md)：默认关闭的精确候选去重；440项测试通过，三组开发配对有效。固定工作量178件流水线耗时约降49.89%、2416件约降6.83%；同30秒不同几何覆盖12→13，双方仍371张，无新增材料收益。用户转达的工厂口径已确认：不考虑纹理、修边5毫米、刀径6毫米，与现有实验设置一致；此前纹理和修边缺口判断已撤回。
 - [三篇近邻的机制筛选，2026-11-18](docs/development/near-neighbor-mechanism-20261118.md)：取得FAEO作者接收稿并核对续算机制；不同单件前置候选的共同序列开头为零，不直接移植其存档查找。Pilot与2026预见剪枝仍缺完整方法正文；无新排样实验。
