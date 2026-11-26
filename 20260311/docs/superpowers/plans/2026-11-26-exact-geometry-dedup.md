@@ -31,3 +31,7 @@ At equal complete geometry words, deterministic local placement sees the same fr
 
 - [ ] Preserve all prior outputs and the Word master. Summarize concrete implementation, correctness, timing and board count; no sum of old and new speedups.
 - [ ] If implementation and checks pass, update the already authorized research branch/draft only, with aggregate development evidence; no master merge or private industrial data upload.
+
+## Execution status, 2026-11-26
+
+Tasks 1 and 2 completed: 440 production tests passed, three existing optional integrations skipped; seven private protocol checks passed. All six frozen runs and three paired comparisons were valid, with saved-output re-audit. Fixed-time board count did not improve. See the [development result](../../development/exact-geometry-dedup-20261126.md) for complete counts, timing and limitations. The checkboxes above preserve the pre-execution protocol.
