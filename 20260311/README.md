@@ -35,6 +35,7 @@ This directory is the actual project root used by the solver and experiment scri
 
 ## Development notes
 
+- [工厂尺寸角色核查，2026-11-26](docs/development/factory-input-dimension-contract-20261126.md)：原81次实验保留为Fleng/Fwidth名义模型对照。9份可解析XML的17147件轴对齐矩形，其CutLength/CutWidth均对应RawLength/RawWidth，仅1403件也对应Fleng/Fwidth。需显式区分尺寸角色及边界语义，不能自动声称实际下料制造验证；5/6毫米值、默认算法及主稿未改，未产生新算法或省板成果。
 - [全部27个工厂任务直接对照，2026-11-26](docs/development/factory-ash-reference-results-20261126.md)：81次30秒运行及10068份布局记录核验通过。共同初解5381张，单件5365、两件5363、ASH5364；两件相对强单件净少2张、整体净利用率增加0.033735个百分点。ASH仅单种子，无稳定优势或新创新结论；2416件本轮未覆盖旧371张序列，旧见证复核仍有效。
 - [同解码器ASH序列策略直接对照，2026-11-26](docs/development/ash-prefix-reference-results-20261126.md)：30次冻结运行全部有效；1000评价组CLASS07的PAIR和ASH三种子均27张，5秒组均28张；CLASS04中ASH第1–2次新评价省板，单件扫描第29次。466项回归通过、4项私有计时回归通过；无新工厂结果，不成立前缀独有评价效率或新创新。
 - [余件—旧板面积流检验，2026-11-26](docs/development/residual-area-flow-probe-20261126.md)：12个保存状态诊断；五个两件状态的下界全部23.5954，未通过预定早期区分检验，停止该评分。9项原型测试及独立四割验证通过，无新工业搜索或材料收益；下一步仅补齐同解码器ASH序列策略参照，尚未实施。
