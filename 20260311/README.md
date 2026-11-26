@@ -35,7 +35,7 @@ This directory is the actual project root used by the solver and experiment scri
 
 ## Development notes
 
-- [完整几何序列去重，2026-11-26](docs/development/exact-geometry-dedup-20261126.md)：默认关闭的精确候选去重；440项测试通过，三组开发配对有效。固定工作量178件流水线耗时约降49.89%、2416件约降6.83%；同30秒不同几何覆盖12→13，双方仍371张，无新增材料收益。
+- [完整几何序列去重，2026-11-26](docs/development/exact-geometry-dedup-20261126.md)：默认关闭的精确候选去重；440项测试通过，三组模型内开发配对有效。固定工作量178件流水线耗时约降49.89%、2416件约降6.83%；同30秒不同几何覆盖12→13，双方仍371张。已补充原始数据约束更正：当前CSV入口未落实`Graining`，修变量口径待核清，不能将这些值直接认定为满足原始制造约束的生产结果。
 - [三篇近邻的机制筛选，2026-11-18](docs/development/near-neighbor-mechanism-20261118.md)：取得FAEO作者接收稿并核对续算机制；不同单件前置候选的共同序列开头为零，不直接移植其存档查找。Pilot与2026预见剪枝仍缺完整方法正文；无新排样实验。
 - [跨行业排样文献研判，2026-11-17](docs/development/cross-industry-literature-20261117.md)：扩展至玻璃、船舶钣金、服装皮革、物流及芯片/PCB；16项分层条目、12个DOI核对、7个仓库快照。区分目标可行性、评价精度、布局修正和几何学习；本轮不编码新机制、不运行排样。
 - [受限前缀章节取舍与证据边界，2026-11-17](docs/development/restricted-prefix-chapter-disposition-20261117.md)：固定强初解＋简单扫描，停止当前复杂路线追加；本地形成章稿及创新证据表，分开报告材料潜力、预算效率和工程优化。独立算法创新及新工业订单有效性尚未成立；默认求解器未改。
