@@ -13,10 +13,20 @@ from .ordering import short_edge_sequence
 from .validate import validate_solution
 
 
+def _geometry_sequence_key(sequence, parts_by_id):
+    """Exact directed geometry word within one fixed decoder environment."""
+    return tuple((float(parts_by_id[uid].w), float(parts_by_id[uid].h),
+                  float(parts_by_id[uid].w0), float(parts_by_id[uid].h0),
+                  tuple(getattr(parts_by_id[uid], "allowed_rotations_deg", (0, 90))))
+                 for uid in sequence)
+
+
 class _SinglePrefixScanSolver(RecedingHorizonMCTS):
-    def __init__(self, parts, cfg, seed, limit):
+    def __init__(self, parts, cfg, seed, limit, deduplicate_geometry=False):
         super().__init__(parts, cfg, seed)
         self.scan_limit = limit
+        self.deduplicate_geometry = deduplicate_geometry
+        self.geometry_skips = []
         self.initial_starts = self.initial_completed = 0
         self.completion_starts = self.completion_completed = 0
         self.initial_capture = self.entry_state = None
@@ -52,9 +62,14 @@ class _SinglePrefixScanSolver(RecedingHorizonMCTS):
                          for name in ("micro_hits", "micro_misses", "decode_hits", "decode_misses")},
         }
         # Exact existing early _scout_actions ordering, before its pool cap and
-        # tail sampling. Retain every UID, including equal-shaped identities.
+        # tail sampling. Retain the full UID inventory in the candidate order.
         self.candidate_order = sorted(self.part_ids, key=lambda uid: (
             self._part_order_bonus(uid, stage="early"), self.static_action_score[uid], uid), reverse=True)
+        representatives = {}
+        # Reuse immutable part tokens across words instead of allocating an
+        # inner geometry tuple for every position of every candidate.
+        geometry = {uid: _geometry_sequence_key((uid,), self.parts_by_id)[0]
+                    for uid in self.part_ids} if self.deduplicate_geometry else None
         self.scan_stop_reason = "candidate_exhausted"
         for uid in self.candidate_order:
             if self.scan_limit is not None and self.completion_starts >= self.scan_limit:
@@ -64,6 +79,11 @@ class _SinglePrefixScanSolver(RecedingHorizonMCTS):
                 self.scan_stop_reason = "search_deadline"
                 break
             sequence = (uid,) + tuple(item for item in self.short_edge_order if item != uid)
+            if geometry is not None:
+                key = tuple(geometry[item] for item in sequence)
+                if key in representatives:
+                    self.geometry_skips.append({"uid": uid, "representative_uid": representatives[key]})
+                    continue
             self.completion_starts += 1
             self.meta["oracle_completion_mode_evals"] += 1.0
             self.meta["oracle_completion_mode_eval_short_edge"] = float(
@@ -86,6 +106,8 @@ class _SinglePrefixScanSolver(RecedingHorizonMCTS):
                 raise
             else:
                 self.completion_completed += 1
+                if geometry is not None:
+                    representatives[key] = uid
                 self.meta["oracle_completion_mode_completed"] += 1.0
                 row.update(status="completed", capture=(sequence, snapshot))
                 self._update_global_best(sequence, snapshot, source="single_prefix_scan", record_archive=False)
@@ -121,6 +143,8 @@ class _SinglePrefixScanSolver(RecedingHorizonMCTS):
                         "stop_reason": reason, "entry_state": self.entry_state, "initial_receipt": None,
                         "final_receipt": self._capture((tuple(result.sequence), self.global_best_snapshot)),
                         "evaluations": [], "export_complete": False}
+            if self.deduplicate_geometry:
+                evidence.update(geometry_deduplication=True, geometry_skips=list(self.geometry_skips))
             if self.initial_capture is not None:
                 evidence["initial_receipt"] = self._capture(self.initial_capture)
             for record in self.evaluations:
@@ -143,10 +167,16 @@ class _SinglePrefixScanSolver(RecedingHorizonMCTS):
 
 
 def solve_single_prefix_scan_handoff(request: PackingRequest, budget: TotalBudget,
-                                     *, max_evaluations=None) -> PackingHandoff:
-    """Scan the uncapped existing entry order under one absolute budget."""
+                                     *, max_evaluations=None, deduplicate_geometry=False) -> PackingHandoff:
+    """Scan the existing entry order, optionally skipping exact geometry words.
+
+    Deduplication retains the first real UID representative and never reuses
+    identity-bearing snapshots across candidates. The default is unchanged.
+    """
     if max_evaluations is not None and (type(max_evaluations) is not int or max_evaluations < 0):
         raise ValueError("max_evaluations must be a nonnegative integer or None")
+    if type(deduplicate_geometry) is not bool:
+        raise ValueError("deduplicate_geometry must be a boolean")
     if request.solver_variant != PROFILE:
         raise ValueError("single-prefix scan requires the short-completion-on profile")
     budget.require_open("single_prefix_scan_request")
@@ -158,7 +188,8 @@ def solve_single_prefix_scan_handoff(request: PackingRequest, budget: TotalBudge
         raise ValueError("unsupported configuration for the single-prefix scan")
     cfg.FORMAL_TOTAL_DEADLINE = budget.deadline
     cfg.FORMAL_CLOSING_RESERVE_S = budget.closing_reserve_s
-    result = _SinglePrefixScanSolver(processed, cfg, int(request.seed), max_evaluations).solve()
+    result = _SinglePrefixScanSolver(processed, cfg, int(request.seed), max_evaluations,
+                                    deduplicate_geometry=deduplicate_geometry).solve()
     budget.require_open("single_prefix_scan_validation")
     validate_solution(processed, result.boards, cfg.BOARD_W, cfg.BOARD_H,
                       trim=cfg.TRIM, safe_gap=0.0, touch_tol=cfg.TOUCH_TOL)
