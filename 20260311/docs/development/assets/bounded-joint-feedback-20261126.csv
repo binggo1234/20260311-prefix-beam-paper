@@ -1,0 +1,10 @@
+strategy,seed,reached_target,initial_panels,target,best_panels,evaluation_at_target,evaluations_observed,single_probes,pair_evaluations,feedback_reuses,first_pair_evaluation,single_probes_before_first_pair,max_active_window,max_single_candidate_scan,parent_lifetime_s,first_target_prefix
+DIRECT_RANDOM,1000,True,28,27,27,131,131,0,129,0,3,0,0,0,2.732764833,"[47, 26]"
+STREAM_RANDOM,1000,True,28,27,27,95,95,32,61,0,5,2,16,240,1.7482945,"[75, 26]"
+STREAM_OVERLAP,1000,True,28,27,27,9,9,3,4,0,5,2,3,6,0.4164327080000003,"[100, 86]"
+STREAM_OVERLAP,1001,False,28,27,28,,256,86,168,0,5,2,16,240,4.352574959,
+DIRECT_RANDOM,1001,True,28,27,27,31,31,0,29,0,3,0,0,0,0.7621604170000005,"[90, 87]"
+STREAM_RANDOM,1001,False,28,27,28,,256,86,168,0,5,2,16,240,4.2523676250000015,
+STREAM_RANDOM,1002,False,28,27,28,,256,86,168,0,5,2,16,240,4.202898834000001,
+STREAM_OVERLAP,1002,True,28,27,27,240,240,80,158,0,5,2,16,240,3.982804957999999,"[30, 87]"
+DIRECT_RANDOM,1002,True,28,27,27,31,31,0,29,0,3,0,0,0,0.7661994579999991,"[87, 80]"
