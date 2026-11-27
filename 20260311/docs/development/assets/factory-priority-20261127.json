@@ -1,0 +1,132 @@
+{
+  "date": "2026-11-27",
+  "scope": "exposed factory development diagnostics; no new heuristic or industrial gain claim",
+  "baseline_recheck": {
+    "source_tasks": 27,
+    "source_parts": 39267,
+    "source_model": "Fleng/Fwidth as data/Readme.md specifies",
+    "factory_parameters": {
+      "board": [
+        2440,
+        1220
+      ],
+      "trim": 5,
+      "cutter": 6,
+      "rotation": [
+        0,
+        90
+      ],
+      "grain": false
+    },
+    "aggregate": {
+      "initial_boards": {
+        "boards": 5381,
+        "net_utilization_pct": "90.19022809035604137523703720"
+      },
+      "SINGLE": {
+        "boards": 5365,
+        "net_utilization_pct": "90.45920174356120384718555399"
+      },
+      "PAIR": {
+        "boards": 5363,
+        "net_utilization_pct": "90.49293629576838684321284676"
+      },
+      "ASH": {
+        "boards": 5364,
+        "net_utilization_pct": "90.47606587513159184193708001"
+      }
+    },
+    "all_source_hashes_match": true,
+    "all_81_utilization_rows_match_decimal_recalculation": true
+  },
+  "single_fixed_short_edge": {
+    "task": "F15",
+    "parts": 624,
+    "family": "one_UID_front_plus_fixed_short_edge_completion",
+    "uid_prefixes_covered": 624,
+    "new_complete_candidates": 623,
+    "verified_duplicates": 1,
+    "geometry_audits": 626,
+    "old_30s_complete_receipts_matched": 220,
+    "initial_and_cache_match_old_30s": true,
+    "all_frozen_files_unchanged": 2085,
+    "initial_panels": 86,
+    "best_panels": 86,
+    "proposal_board_histogram": {
+      "86": 201,
+      "87": 423
+    },
+    "first_85_or_better": null,
+    "elapsed_s": 70.563672083,
+    "full_fixed_K1_family_covered": true,
+    "audit_decoder_attempts": []
+  },
+  "direct_random_pair_fixed_short_edge": {
+    "task": "F15",
+    "parts": 624,
+    "policy": "frozen_direct_random_ordered_pairs_seed1000",
+    "sampled_pair_proposals": 623,
+    "candidate_starts": 623,
+    "candidate_completed": 623,
+    "interrupted_replays": 0,
+    "verified_duplicates": 0,
+    "geometry_audits": 626,
+    "initial_and_cache_match_full_K1": true,
+    "all_frozen_files_unchanged": 2089,
+    "initial_panels": 86,
+    "best_panels": 86,
+    "completed_proposal_board_histogram": {
+      "86": 331,
+      "87": 291,
+      "88": 1
+    },
+    "first_85_or_better": null,
+    "elapsed_s": 99.69211312499999,
+    "stop_reason": "evaluation_quota",
+    "full_K2_family_covered": false,
+    "family_size": 388752,
+    "audit_decoder_attempts": [],
+    "attained_below_complete_K1_minimum": false
+  },
+  "ash85_anchor": {
+    "task": "F15",
+    "first_saved_ASH85_proposal": 6,
+    "initializer_comparison": [
+      {
+        "initializer": "Greedy",
+        "boards": 86,
+        "is_selected_ASH_base": true,
+        "exact_target_sequence_minimum_prefix_length": 610,
+        "shared_sequence_prefix_length": 8
+      },
+      {
+        "initializer": "short_edge",
+        "boards": 87,
+        "is_selected_ASH_base": false,
+        "exact_target_sequence_minimum_prefix_length": 610,
+        "shared_sequence_prefix_length": 1
+      }
+    ],
+    "scope": "sequence identity only; does not prove no alternative short prefix yields85",
+    "new_decoder_calls": 0
+  },
+  "new_factory_runs": 2,
+  "greedy_completion_control_executed": false,
+  "public_auxiliary": {
+    "case": "cl_06_100_02",
+    "cp_sat_status": "UNKNOWN",
+    "solver_limit_s": 60,
+    "solver_wall_s": 60.015125,
+    "certified_interval": [
+      3,
+      4
+    ],
+    "new_public_solver_runs": 1
+  },
+  "tests": {
+    "repository_passed": 491,
+    "repository_skipped": 3,
+    "private_factory_adapter_passed": 4,
+    "skip_reason": "optional pinned integration: CutEval repository is not clean"
+  }
+}

@@ -1,0 +1,437 @@
+{
+  "date": "2026-11-27",
+  "cases": 27,
+  "parts": 39267,
+  "runs": 54,
+  "single_seed": 1000,
+  "scope": "exposed full factory cohort, matched caps; realized evaluation counts may differ",
+  "gross_stock_mm": [
+    2440,
+    1220
+  ],
+  "nominal_area_mm2": "14446815761.40",
+  "totals": {
+    "initial_boards": 5381,
+    "initial_utilization_pct": "90.19022809035604137523703720",
+    "H": {
+      "boards": 5365,
+      "pooled_net_utilization_pct": "90.45920174356120384718555399",
+      "candidate_starts": 2290,
+      "candidate_completed": 2267,
+      "interrupted_replays": 23,
+      "total_completed": 2321,
+      "improved_tasks_vs_initial": 14,
+      "stop_reasons": {
+        "search_deadline": 23,
+        "candidate_exhausted": 3,
+        "evaluation_quota": 1
+      }
+    },
+    "INITIAL": {
+      "boards": 5362,
+      "pooled_net_utilization_pct": "90.50981300899027576280315128",
+      "candidate_starts": 2272,
+      "candidate_completed": 2249,
+      "interrupted_replays": 23,
+      "total_completed": 2303,
+      "improved_tasks_vs_initial": 17,
+      "stop_reasons": {
+        "search_deadline": 23,
+        "candidate_exhausted": 3,
+        "evaluation_quota": 1
+      }
+    },
+    "net_boards_saved_by_INITIAL_vs_H": 3,
+    "utilization_gain_percentage_points": "0.05061126542907191561759729",
+    "paired_wins_ties_losses": {
+      "wins": 3,
+      "ties": 24,
+      "losses": 0
+    },
+    "anchor_changed_tasks": 3,
+    "same_anchor_control_non_ties": []
+  },
+  "checkpoints": {
+    "12": {
+      "common_tasks": 22,
+      "task_ids": [
+        "F03",
+        "F04",
+        "F06",
+        "F07",
+        "F08",
+        "F09",
+        "F10",
+        "F11",
+        "F12",
+        "F13",
+        "F14",
+        "F15",
+        "F16",
+        "F17",
+        "F18",
+        "F19",
+        "F20",
+        "F21",
+        "F22",
+        "F24",
+        "F25",
+        "F26"
+      ],
+      "H_boards": 3912,
+      "INITIAL_boards": 3910,
+      "INITIAL_minus_H": -2,
+      "wins": 2,
+      "ties": 20,
+      "losses": 0,
+      "coverage_status": {
+        "H": {
+          "time_censored": 4,
+          "available": 22,
+          "evaluation_capped": 1
+        },
+        "INITIAL": {
+          "time_censored": 4,
+          "available": 22,
+          "evaluation_capped": 1
+        }
+      },
+      "cases": [
+        {
+          "task": "F03",
+          "H_boards": 176,
+          "INITIAL_boards": 176
+        },
+        {
+          "task": "F04",
+          "H_boards": 222,
+          "INITIAL_boards": 221
+        },
+        {
+          "task": "F06",
+          "H_boards": 307,
+          "INITIAL_boards": 307
+        },
+        {
+          "task": "F07",
+          "H_boards": 243,
+          "INITIAL_boards": 243
+        },
+        {
+          "task": "F08",
+          "H_boards": 201,
+          "INITIAL_boards": 201
+        },
+        {
+          "task": "F09",
+          "H_boards": 177,
+          "INITIAL_boards": 177
+        },
+        {
+          "task": "F10",
+          "H_boards": 152,
+          "INITIAL_boards": 152
+        },
+        {
+          "task": "F11",
+          "H_boards": 238,
+          "INITIAL_boards": 238
+        },
+        {
+          "task": "F12",
+          "H_boards": 362,
+          "INITIAL_boards": 362
+        },
+        {
+          "task": "F13",
+          "H_boards": 98,
+          "INITIAL_boards": 98
+        },
+        {
+          "task": "F14",
+          "H_boards": 153,
+          "INITIAL_boards": 153
+        },
+        {
+          "task": "F15",
+          "H_boards": 86,
+          "INITIAL_boards": 86
+        },
+        {
+          "task": "F16",
+          "H_boards": 78,
+          "INITIAL_boards": 78
+        },
+        {
+          "task": "F17",
+          "H_boards": 276,
+          "INITIAL_boards": 276
+        },
+        {
+          "task": "F18",
+          "H_boards": 299,
+          "INITIAL_boards": 298
+        },
+        {
+          "task": "F19",
+          "H_boards": 33,
+          "INITIAL_boards": 33
+        },
+        {
+          "task": "F20",
+          "H_boards": 29,
+          "INITIAL_boards": 29
+        },
+        {
+          "task": "F21",
+          "H_boards": 50,
+          "INITIAL_boards": 50
+        },
+        {
+          "task": "F22",
+          "H_boards": 105,
+          "INITIAL_boards": 105
+        },
+        {
+          "task": "F24",
+          "H_boards": 95,
+          "INITIAL_boards": 95
+        },
+        {
+          "task": "F25",
+          "H_boards": 372,
+          "INITIAL_boards": 372
+        },
+        {
+          "task": "F26",
+          "H_boards": 160,
+          "INITIAL_boards": 160
+        }
+      ]
+    },
+    "32": {
+      "common_tasks": 15,
+      "task_ids": [
+        "F03",
+        "F08",
+        "F09",
+        "F10",
+        "F11",
+        "F13",
+        "F14",
+        "F15",
+        "F16",
+        "F19",
+        "F20",
+        "F21",
+        "F22",
+        "F24",
+        "F26"
+      ],
+      "H_boards": 1830,
+      "INITIAL_boards": 1830,
+      "INITIAL_minus_H": 0,
+      "wins": 0,
+      "ties": 15,
+      "losses": 0,
+      "coverage_status": {
+        "H": {
+          "time_censored": 10,
+          "available": 16,
+          "evaluation_capped": 1
+        },
+        "INITIAL": {
+          "time_censored": 11,
+          "available": 15,
+          "evaluation_capped": 1
+        }
+      },
+      "cases": [
+        {
+          "task": "F03",
+          "H_boards": 176,
+          "INITIAL_boards": 176
+        },
+        {
+          "task": "F08",
+          "H_boards": 201,
+          "INITIAL_boards": 201
+        },
+        {
+          "task": "F09",
+          "H_boards": 176,
+          "INITIAL_boards": 176
+        },
+        {
+          "task": "F10",
+          "H_boards": 152,
+          "INITIAL_boards": 152
+        },
+        {
+          "task": "F11",
+          "H_boards": 238,
+          "INITIAL_boards": 238
+        },
+        {
+          "task": "F13",
+          "H_boards": 98,
+          "INITIAL_boards": 98
+        },
+        {
+          "task": "F14",
+          "H_boards": 153,
+          "INITIAL_boards": 153
+        },
+        {
+          "task": "F15",
+          "H_boards": 86,
+          "INITIAL_boards": 86
+        },
+        {
+          "task": "F16",
+          "H_boards": 78,
+          "INITIAL_boards": 78
+        },
+        {
+          "task": "F19",
+          "H_boards": 33,
+          "INITIAL_boards": 33
+        },
+        {
+          "task": "F20",
+          "H_boards": 29,
+          "INITIAL_boards": 29
+        },
+        {
+          "task": "F21",
+          "H_boards": 50,
+          "INITIAL_boards": 50
+        },
+        {
+          "task": "F22",
+          "H_boards": 105,
+          "INITIAL_boards": 105
+        },
+        {
+          "task": "F24",
+          "H_boards": 95,
+          "INITIAL_boards": 95
+        },
+        {
+          "task": "F26",
+          "H_boards": 160,
+          "INITIAL_boards": 160
+        }
+      ]
+    },
+    "64": {
+      "common_tasks": 13,
+      "task_ids": [
+        "F03",
+        "F09",
+        "F10",
+        "F13",
+        "F14",
+        "F15",
+        "F16",
+        "F19",
+        "F20",
+        "F21",
+        "F22",
+        "F24",
+        "F26"
+      ],
+      "H_boards": 1390,
+      "INITIAL_boards": 1389,
+      "INITIAL_minus_H": -1,
+      "wins": 1,
+      "ties": 12,
+      "losses": 0,
+      "coverage_status": {
+        "H": {
+          "time_censored": 13,
+          "available": 13,
+          "evaluation_capped": 1
+        },
+        "INITIAL": {
+          "time_censored": 13,
+          "available": 13,
+          "evaluation_capped": 1
+        }
+      },
+      "cases": [
+        {
+          "task": "F03",
+          "H_boards": 175,
+          "INITIAL_boards": 175
+        },
+        {
+          "task": "F09",
+          "H_boards": 176,
+          "INITIAL_boards": 176
+        },
+        {
+          "task": "F10",
+          "H_boards": 152,
+          "INITIAL_boards": 152
+        },
+        {
+          "task": "F13",
+          "H_boards": 98,
+          "INITIAL_boards": 98
+        },
+        {
+          "task": "F14",
+          "H_boards": 153,
+          "INITIAL_boards": 153
+        },
+        {
+          "task": "F15",
+          "H_boards": 86,
+          "INITIAL_boards": 85
+        },
+        {
+          "task": "F16",
+          "H_boards": 78,
+          "INITIAL_boards": 78
+        },
+        {
+          "task": "F19",
+          "H_boards": 33,
+          "INITIAL_boards": 33
+        },
+        {
+          "task": "F20",
+          "H_boards": 29,
+          "INITIAL_boards": 29
+        },
+        {
+          "task": "F21",
+          "H_boards": 50,
+          "INITIAL_boards": 50
+        },
+        {
+          "task": "F22",
+          "H_boards": 105,
+          "INITIAL_boards": 105
+        },
+        {
+          "task": "F24",
+          "H_boards": 95,
+          "INITIAL_boards": 95
+        },
+        {
+          "task": "F26",
+          "H_boards": 160,
+          "INITIAL_boards": 160
+        }
+      ]
+    }
+  },
+  "geometry_records_audited": 4678,
+  "common_full_sequence_receipts_matched": 2047,
+  "source_and_dependency_files_unchanged": 2139,
+  "production_changed": false,
+  "main_word_changed": false,
+  "new_mechanism_claim": false
+}

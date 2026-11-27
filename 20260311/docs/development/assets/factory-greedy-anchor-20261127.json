@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-27",
+  "scope": "single exposed factory development order; standard anchor-only control",
+  "verification": {
+    "task": "F15",
+    "parts": 624,
+    "control": "fixed_selected_Greedy_initial_anchor_K1",
+    "initial_boards": [
+      86,
+      87
+    ],
+    "selected_initial": "Greedy",
+    "common_initial_and_cache_match": true,
+    "same_uid_visit_order": true,
+    "uid_prefixes_covered": 624,
+    "candidate_starts": 623,
+    "candidate_completed": 623,
+    "verified_duplicates": 1,
+    "interrupted_replays": 0,
+    "full_family_covered": true,
+    "best_panels": 85,
+    "proposal_board_histogram": {
+      "85": 7,
+      "86": 396,
+      "87": 221
+    },
+    "first_85_or_better": {
+      "proposal": 46,
+      "candidate_evaluation": 45,
+      "total_evaluation": 47,
+      "panels": 85,
+      "elapsed_complete_s": 6.6217690419999995
+    },
+    "stop_reason": "candidate_exhausted",
+    "elapsed_s": 74.35356904199999,
+    "paired_UID_board_difference_Greedy_minus_H": {
+      "-2": 4,
+      "-1": 273,
+      "0": 275,
+      "1": 72
+    },
+    "identical_sequence_receipts_matched": 1,
+    "geometry_audits": 626,
+    "all_frozen_files_unchanged": 2099,
+    "audit_decoder_attempts": [],
+    "new_factory_runs": 1,
+    "new_mechanism_or_global_optimality_claim": false
+  },
+  "net_utilization": {
+    "source": "same Fleng/Fwidth nominal part area, excluding kerf",
+    "old_fixed_H_K1_pct": "89.53385885733392498890645800",
+    "fixed_Greedy_K1_pct": "90.58719837330255940054065163",
+    "increase_percentage_points": "1.05333951596863441163419363"
+  },
+  "inputs": {
+    "stock": [
+      2440,
+      1220
+    ],
+    "trim_mm": 5,
+    "cutter_mm": 6,
+    "grain": false,
+    "rotation_deg": [
+      0,
+      90
+    ],
+    "source_field_role": "Fleng/Fwidth"
+  },
+  "budget": {
+    "total_s": 120,
+    "closing_reserve_s": 5,
+    "parent_watchdog_s": 125,
+    "max_full_starts": 626,
+    "proposal_limit": 625,
+    "repeat_or_retune": false
+  },
+  "historical_ASH_best": 85,
+  "new_best_factory_board_count_record": false,
+  "production_default_changed": false,
+  "all_27_matched_validation_executed": false,
+  "validation": {
+    "repository_passed": 496,
+    "repository_skipped": 3,
+    "skip_reason": "optional pinned integration: CutEval repository is not clean",
+    "archived_stream_checks": 5,
+    "existing_reference_checks": 14,
+    "private_factory_adapter_checks": 4,
+    "archived_checks_included_in_repository_count": true,
+    "critical_or_important_review_findings": 0
+  }
+}

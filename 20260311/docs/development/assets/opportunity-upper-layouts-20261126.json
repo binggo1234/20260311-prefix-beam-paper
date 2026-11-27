@@ -1,0 +1,8125 @@
+{
+  "scope": "generated layouts from saved public benchmark runs; no new packing",
+  "cases": [
+    {
+      "case_id": "cl_01_100_02",
+      "stock": [
+        10,
+        10
+      ],
+      "panels": 31,
+      "sequence": [
+        51,
+        4,
+        25,
+        89,
+        98,
+        1,
+        26,
+        35,
+        39,
+        5,
+        48,
+        78,
+        80,
+        88,
+        14,
+        52,
+        49,
+        8,
+        65,
+        19,
+        76,
+        99,
+        44,
+        47,
+        21,
+        61,
+        94,
+        13,
+        10,
+        24,
+        29,
+        2,
+        79,
+        28,
+        30,
+        53,
+        92,
+        96,
+        37,
+        42,
+        83,
+        84,
+        43,
+        68,
+        97,
+        22,
+        69,
+        11,
+        85,
+        95,
+        16,
+        36,
+        81,
+        70,
+        75,
+        90,
+        20,
+        46,
+        54,
+        72,
+        93,
+        100,
+        59,
+        32,
+        34,
+        55,
+        67,
+        9,
+        23,
+        15,
+        38,
+        50,
+        64,
+        7,
+        31,
+        62,
+        87,
+        91,
+        74,
+        18,
+        3,
+        17,
+        58,
+        6,
+        66,
+        73,
+        45,
+        63,
+        71,
+        33,
+        77,
+        40,
+        41,
+        27,
+        12,
+        57,
+        60,
+        82,
+        86,
+        56
+      ],
+      "placements": [
+        {
+          "uid": 51,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 21,
+          "board_id": 1,
+          "x": 5.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 28,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 5.0,
+          "rotated": false
+        },
+        {
+          "uid": 4,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 25,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 63,
+          "board_id": 3,
+          "x": 9.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 56,
+          "board_id": 3,
+          "x": 9.0,
+          "y": 9.0,
+          "rotated": false
+        },
+        {
+          "uid": 89,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 45,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 9.0,
+          "rotated": false
+        },
+        {
+          "uid": 98,
+          "board_id": 5,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 71,
+          "board_id": 5,
+          "x": 0.0,
+          "y": 9.0,
+          "rotated": false
+        },
+        {
+          "uid": 77,
+          "board_id": 5,
+          "x": 9.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 60,
+          "board_id": 5,
+          "x": 9.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 1,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 32,
+          "board_id": 6,
+          "x": 8.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 26,
+          "board_id": 7,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 67,
+          "board_id": 7,
+          "x": 8.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 35,
+          "board_id": 8,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 34,
+          "board_id": 8,
+          "x": 0.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 39,
+          "board_id": 9,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 9,
+          "board_id": 9,
+          "x": 8.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 12,
+          "board_id": 9,
+          "x": 8.0,
+          "y": 9.0,
+          "rotated": false
+        },
+        {
+          "uid": 5,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 15,
+          "board_id": 10,
+          "x": 8.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 38,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 6,
+          "board_id": 10,
+          "x": 8.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 48,
+          "board_id": 11,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 22,
+          "board_id": 11,
+          "x": 7.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 78,
+          "board_id": 12,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 85,
+          "board_id": 12,
+          "x": 0.0,
+          "y": 7.0,
+          "rotated": false
+        },
+        {
+          "uid": 80,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 69,
+          "board_id": 13,
+          "x": 7.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 88,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 11,
+          "board_id": 14,
+          "x": 7.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 86,
+          "board_id": 14,
+          "x": 7.0,
+          "y": 9.0,
+          "rotated": false
+        },
+        {
+          "uid": 14,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 36,
+          "board_id": 15,
+          "x": 7.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 55,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 52,
+          "board_id": 16,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 95,
+          "board_id": 16,
+          "x": 0.0,
+          "y": 7.0,
+          "rotated": false
+        },
+        {
+          "uid": 31,
+          "board_id": 16,
+          "x": 8.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 49,
+          "board_id": 17,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 81,
+          "board_id": 17,
+          "x": 7.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 70,
+          "board_id": 17,
+          "x": 0.0,
+          "y": 7.0,
+          "rotated": false
+        },
+        {
+          "uid": 3,
+          "board_id": 17,
+          "x": 7.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 8,
+          "board_id": 18,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 53,
+          "board_id": 18,
+          "x": 0.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 65,
+          "board_id": 19,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 92,
+          "board_id": 19,
+          "x": 0.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 19,
+          "board_id": 20,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 96,
+          "board_id": 20,
+          "x": 0.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 7,
+          "board_id": 20,
+          "x": 8.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 76,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 37,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 23,
+          "board_id": 21,
+          "x": 8.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 57,
+          "board_id": 21,
+          "x": 8.0,
+          "y": 9.0,
+          "rotated": false
+        },
+        {
+          "uid": 99,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 30,
+          "board_id": 22,
+          "x": 6.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 62,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 44,
+          "board_id": 23,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 84,
+          "board_id": 23,
+          "x": 0.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 16,
+          "board_id": 23,
+          "x": 7.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 66,
+          "board_id": 23,
+          "x": 7.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 82,
+          "board_id": 23,
+          "x": 9.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 47,
+          "board_id": 24,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 75,
+          "board_id": 24,
+          "x": 0.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 54,
+          "board_id": 24,
+          "x": 7.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 93,
+          "board_id": 24,
+          "x": 7.0,
+          "y": 5.0,
+          "rotated": false
+        },
+        {
+          "uid": 40,
+          "board_id": 24,
+          "x": 0.0,
+          "y": 9.0,
+          "rotated": false
+        },
+        {
+          "uid": 61,
+          "board_id": 25,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 94,
+          "board_id": 25,
+          "x": 5.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 13,
+          "board_id": 26,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 24,
+          "board_id": 26,
+          "x": 0.0,
+          "y": 5.0,
+          "rotated": false
+        },
+        {
+          "uid": 17,
+          "board_id": 26,
+          "x": 8.0,
+          "y": 5.0,
+          "rotated": false
+        },
+        {
+          "uid": 73,
+          "board_id": 26,
+          "x": 8.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 27,
+          "board_id": 26,
+          "x": 9.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 10,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 29,
+          "board_id": 27,
+          "x": 5.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 72,
+          "board_id": 27,
+          "x": 5.0,
+          "y": 7.0,
+          "rotated": false
+        },
+        {
+          "uid": 74,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 2,
+          "board_id": 28,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 42,
+          "board_id": 28,
+          "x": 6.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 43,
+          "board_id": 28,
+          "x": 0.0,
+          "y": 5.0,
+          "rotated": false
+        },
+        {
+          "uid": 18,
+          "board_id": 28,
+          "x": 6.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 79,
+          "board_id": 29,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 83,
+          "board_id": 29,
+          "x": 5.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 97,
+          "board_id": 29,
+          "x": 0.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 68,
+          "board_id": 30,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 90,
+          "board_id": 30,
+          "x": 0.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 20,
+          "board_id": 30,
+          "x": 4.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 46,
+          "board_id": 30,
+          "x": 4.0,
+          "y": 3.0,
+          "rotated": false
+        },
+        {
+          "uid": 59,
+          "board_id": 30,
+          "x": 7.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 41,
+          "board_id": 30,
+          "x": 0.0,
+          "y": 9.0,
+          "rotated": false
+        },
+        {
+          "uid": 100,
+          "board_id": 31,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 50,
+          "board_id": 31,
+          "x": 0.0,
+          "y": 3.0,
+          "rotated": false
+        },
+        {
+          "uid": 64,
+          "board_id": 31,
+          "x": 0.0,
+          "y": 5.0,
+          "rotated": false
+        },
+        {
+          "uid": 87,
+          "board_id": 31,
+          "x": 8.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 91,
+          "board_id": 31,
+          "x": 0.0,
+          "y": 7.0,
+          "rotated": false
+        },
+        {
+          "uid": 58,
+          "board_id": 31,
+          "x": 8.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 33,
+          "board_id": 31,
+          "x": 0.0,
+          "y": 9.0,
+          "rotated": false
+        }
+      ]
+    },
+    {
+      "case_id": "cl_02_100_02",
+      "stock": [
+        30,
+        30
+      ],
+      "panels": 4,
+      "sequence": [
+        4,
+        25,
+        89,
+        98,
+        1,
+        26,
+        35,
+        39,
+        48,
+        78,
+        80,
+        88,
+        5,
+        8,
+        65,
+        14,
+        52,
+        21,
+        61,
+        94,
+        49,
+        19,
+        76,
+        99,
+        13,
+        44,
+        47,
+        30,
+        10,
+        24,
+        53,
+        92,
+        96,
+        29,
+        37,
+        42,
+        83,
+        22,
+        69,
+        2,
+        79,
+        84,
+        11,
+        85,
+        95,
+        28,
+        51,
+        16,
+        36,
+        81,
+        43,
+        68,
+        70,
+        75,
+        90,
+        32,
+        34,
+        55,
+        67,
+        97,
+        9,
+        23,
+        20,
+        46,
+        15,
+        38,
+        50,
+        64,
+        54,
+        72,
+        93,
+        100,
+        7,
+        31,
+        62,
+        87,
+        91,
+        59,
+        45,
+        74,
+        63,
+        71,
+        33,
+        77,
+        18,
+        40,
+        41,
+        3,
+        17,
+        58,
+        27,
+        6,
+        66,
+        73,
+        12,
+        57,
+        60,
+        82,
+        86,
+        56
+      ],
+      "placements": [
+        {
+          "uid": 4,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 25,
+          "board_id": 1,
+          "x": 10.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 89,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 98,
+          "board_id": 1,
+          "x": 10.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 1,
+          "board_id": 1,
+          "x": 19.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 26,
+          "board_id": 1,
+          "x": 19.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 35,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 19.0,
+          "rotated": false
+        },
+        {
+          "uid": 39,
+          "board_id": 1,
+          "x": 10.0,
+          "y": 19.0,
+          "rotated": false
+        },
+        {
+          "uid": 48,
+          "board_id": 1,
+          "x": 18.0,
+          "y": 20.0,
+          "rotated": false
+        },
+        {
+          "uid": 21,
+          "board_id": 1,
+          "x": 25.0,
+          "y": 20.0,
+          "rotated": false
+        },
+        {
+          "uid": 22,
+          "board_id": 1,
+          "x": 27.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 69,
+          "board_id": 1,
+          "x": 27.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 85,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 27.0,
+          "rotated": false
+        },
+        {
+          "uid": 71,
+          "board_id": 1,
+          "x": 9.0,
+          "y": 29.0,
+          "rotated": false
+        },
+        {
+          "uid": 60,
+          "board_id": 1,
+          "x": 9.0,
+          "y": 27.0,
+          "rotated": false
+        },
+        {
+          "uid": 56,
+          "board_id": 1,
+          "x": 18.0,
+          "y": 19.0,
+          "rotated": false
+        },
+        {
+          "uid": 78,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 80,
+          "board_id": 2,
+          "x": 10.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 88,
+          "board_id": 2,
+          "x": 17.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 5,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 7.0,
+          "rotated": false
+        },
+        {
+          "uid": 8,
+          "board_id": 2,
+          "x": 8.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 65,
+          "board_id": 2,
+          "x": 18.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 14,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 15.0,
+          "rotated": false
+        },
+        {
+          "uid": 52,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 23.0,
+          "rotated": false
+        },
+        {
+          "uid": 61,
+          "board_id": 2,
+          "x": 8.0,
+          "y": 16.0,
+          "rotated": false
+        },
+        {
+          "uid": 94,
+          "board_id": 2,
+          "x": 13.0,
+          "y": 16.0,
+          "rotated": false
+        },
+        {
+          "uid": 49,
+          "board_id": 2,
+          "x": 18.0,
+          "y": 16.0,
+          "rotated": false
+        },
+        {
+          "uid": 19,
+          "board_id": 2,
+          "x": 18.0,
+          "y": 23.0,
+          "rotated": false
+        },
+        {
+          "uid": 99,
+          "board_id": 2,
+          "x": 24.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 30,
+          "board_id": 2,
+          "x": 26.0,
+          "y": 16.0,
+          "rotated": false
+        },
+        {
+          "uid": 53,
+          "board_id": 2,
+          "x": 8.0,
+          "y": 26.0,
+          "rotated": false
+        },
+        {
+          "uid": 15,
+          "board_id": 2,
+          "x": 28.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 59,
+          "board_id": 2,
+          "x": 26.0,
+          "y": 26.0,
+          "rotated": false
+        },
+        {
+          "uid": 33,
+          "board_id": 2,
+          "x": 17.0,
+          "y": 29.0,
+          "rotated": false
+        },
+        {
+          "uid": 77,
+          "board_id": 2,
+          "x": 7.0,
+          "y": 15.0,
+          "rotated": false
+        },
+        {
+          "uid": 18,
+          "board_id": 2,
+          "x": 24.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 17,
+          "board_id": 2,
+          "x": 8.0,
+          "y": 7.0,
+          "rotated": false
+        },
+        {
+          "uid": 27,
+          "board_id": 2,
+          "x": 25.0,
+          "y": 16.0,
+          "rotated": false
+        },
+        {
+          "uid": 82,
+          "board_id": 2,
+          "x": 25.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 76,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 13,
+          "board_id": 3,
+          "x": 8.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 44,
+          "board_id": 3,
+          "x": 17.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 47,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 10,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 12.0,
+          "rotated": false
+        },
+        {
+          "uid": 24,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 20.0,
+          "rotated": false
+        },
+        {
+          "uid": 92,
+          "board_id": 3,
+          "x": 8.0,
+          "y": 5.0,
+          "rotated": false
+        },
+        {
+          "uid": 96,
+          "board_id": 3,
+          "x": 8.0,
+          "y": 9.0,
+          "rotated": false
+        },
+        {
+          "uid": 29,
+          "board_id": 3,
+          "x": 17.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 37,
+          "board_id": 3,
+          "x": 22.0,
+          "y": 6.0,
+          "rotated": false
+        },
+        {
+          "uid": 42,
+          "board_id": 3,
+          "x": 8.0,
+          "y": 13.0,
+          "rotated": false
+        },
+        {
+          "uid": 83,
+          "board_id": 3,
+          "x": 12.0,
+          "y": 13.0,
+          "rotated": false
+        },
+        {
+          "uid": 2,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 25.0,
+          "rotated": false
+        },
+        {
+          "uid": 79,
+          "board_id": 3,
+          "x": 24.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 84,
+          "board_id": 3,
+          "x": 8.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 11,
+          "board_id": 3,
+          "x": 15.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 95,
+          "board_id": 3,
+          "x": 6.0,
+          "y": 25.0,
+          "rotated": false
+        },
+        {
+          "uid": 28,
+          "board_id": 3,
+          "x": 16.0,
+          "y": 13.0,
+          "rotated": false
+        },
+        {
+          "uid": 51,
+          "board_id": 3,
+          "x": 21.0,
+          "y": 13.0,
+          "rotated": false
+        },
+        {
+          "uid": 16,
+          "board_id": 3,
+          "x": 5.0,
+          "y": 12.0,
+          "rotated": false
+        },
+        {
+          "uid": 36,
+          "board_id": 3,
+          "x": 26.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 81,
+          "board_id": 3,
+          "x": 18.0,
+          "y": 18.0,
+          "rotated": false
+        },
+        {
+          "uid": 43,
+          "board_id": 3,
+          "x": 18.0,
+          "y": 26.0,
+          "rotated": false
+        },
+        {
+          "uid": 68,
+          "board_id": 3,
+          "x": 21.0,
+          "y": 18.0,
+          "rotated": false
+        },
+        {
+          "uid": 32,
+          "board_id": 3,
+          "x": 25.0,
+          "y": 18.0,
+          "rotated": false
+        },
+        {
+          "uid": 67,
+          "board_id": 3,
+          "x": 27.0,
+          "y": 18.0,
+          "rotated": false
+        },
+        {
+          "uid": 38,
+          "board_id": 3,
+          "x": 6.0,
+          "y": 28.0,
+          "rotated": false
+        },
+        {
+          "uid": 62,
+          "board_id": 3,
+          "x": 24.0,
+          "y": 28.0,
+          "rotated": false
+        },
+        {
+          "uid": 63,
+          "board_id": 3,
+          "x": 29.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 3,
+          "board_id": 3,
+          "x": 21.0,
+          "y": 24.0,
+          "rotated": false
+        },
+        {
+          "uid": 58,
+          "board_id": 3,
+          "x": 16.0,
+          "y": 18.0,
+          "rotated": false
+        },
+        {
+          "uid": 6,
+          "board_id": 3,
+          "x": 22.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 66,
+          "board_id": 3,
+          "x": 24.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 12,
+          "board_id": 3,
+          "x": 22.0,
+          "y": 12.0,
+          "rotated": false
+        },
+        {
+          "uid": 57,
+          "board_id": 3,
+          "x": 24.0,
+          "y": 12.0,
+          "rotated": false
+        },
+        {
+          "uid": 70,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 75,
+          "board_id": 4,
+          "x": 7.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 90,
+          "board_id": 4,
+          "x": 14.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 34,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 3.0,
+          "rotated": false
+        },
+        {
+          "uid": 55,
+          "board_id": 4,
+          "x": 10.0,
+          "y": 3.0,
+          "rotated": false
+        },
+        {
+          "uid": 97,
+          "board_id": 4,
+          "x": 20.0,
+          "y": 3.0,
+          "rotated": false
+        },
+        {
+          "uid": 9,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 5.0,
+          "rotated": false
+        },
+        {
+          "uid": 23,
+          "board_id": 4,
+          "x": 2.0,
+          "y": 5.0,
+          "rotated": false
+        },
+        {
+          "uid": 20,
+          "board_id": 4,
+          "x": 21.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 46,
+          "board_id": 4,
+          "x": 4.0,
+          "y": 5.0,
+          "rotated": false
+        },
+        {
+          "uid": 50,
+          "board_id": 4,
+          "x": 10.0,
+          "y": 5.0,
+          "rotated": false
+        },
+        {
+          "uid": 64,
+          "board_id": 4,
+          "x": 10.0,
+          "y": 7.0,
+          "rotated": false
+        },
+        {
+          "uid": 54,
+          "board_id": 4,
+          "x": 27.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 72,
+          "board_id": 4,
+          "x": 25.0,
+          "y": 5.0,
+          "rotated": false
+        },
+        {
+          "uid": 93,
+          "board_id": 4,
+          "x": 4.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 100,
+          "board_id": 4,
+          "x": 18.0,
+          "y": 7.0,
+          "rotated": false
+        },
+        {
+          "uid": 7,
+          "board_id": 4,
+          "x": 23.0,
+          "y": 7.0,
+          "rotated": false
+        },
+        {
+          "uid": 31,
+          "board_id": 4,
+          "x": 25.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 87,
+          "board_id": 4,
+          "x": 27.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 91,
+          "board_id": 4,
+          "x": 7.0,
+          "y": 9.0,
+          "rotated": false
+        },
+        {
+          "uid": 45,
+          "board_id": 4,
+          "x": 13.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 74,
+          "board_id": 4,
+          "x": 7.0,
+          "y": 11.0,
+          "rotated": false
+        },
+        {
+          "uid": 40,
+          "board_id": 4,
+          "x": 4.0,
+          "y": 13.0,
+          "rotated": false
+        },
+        {
+          "uid": 41,
+          "board_id": 4,
+          "x": 12.0,
+          "y": 11.0,
+          "rotated": false
+        },
+        {
+          "uid": 73,
+          "board_id": 4,
+          "x": 25.0,
+          "y": 3.0,
+          "rotated": false
+        },
+        {
+          "uid": 86,
+          "board_id": 4,
+          "x": 7.0,
+          "y": 8.0,
+          "rotated": false
+        }
+      ]
+    },
+    {
+      "case_id": "cl_03_100_02",
+      "stock": [
+        40,
+        40
+      ],
+      "panels": 23,
+      "sequence": [
+        100,
+        4,
+        89,
+        25,
+        98,
+        26,
+        1,
+        39,
+        35,
+        5,
+        48,
+        78,
+        80,
+        88,
+        14,
+        52,
+        49,
+        65,
+        76,
+        19,
+        47,
+        99,
+        8,
+        44,
+        2,
+        21,
+        94,
+        13,
+        10,
+        61,
+        28,
+        51,
+        24,
+        29,
+        79,
+        83,
+        43,
+        68,
+        30,
+        53,
+        42,
+        96,
+        37,
+        84,
+        97,
+        11,
+        92,
+        72,
+        85,
+        95,
+        81,
+        54,
+        59,
+        22,
+        69,
+        16,
+        36,
+        70,
+        20,
+        46,
+        75,
+        90,
+        93,
+        55,
+        67,
+        15,
+        50,
+        7,
+        62,
+        31,
+        91,
+        6,
+        34,
+        32,
+        23,
+        64,
+        58,
+        9,
+        38,
+        87,
+        74,
+        73,
+        3,
+        18,
+        17,
+        66,
+        82,
+        45,
+        63,
+        71,
+        33,
+        40,
+        60,
+        41,
+        57,
+        12,
+        56,
+        77,
+        27,
+        86
+      ],
+      "placements": [
+        {
+          "uid": 100,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 89,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 9.0,
+          "rotated": false
+        },
+        {
+          "uid": 20,
+          "board_id": 1,
+          "x": 18.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 9,
+          "board_id": 1,
+          "x": 35.0,
+          "y": 9.0,
+          "rotated": false
+        },
+        {
+          "uid": 12,
+          "board_id": 1,
+          "x": 35.0,
+          "y": 38.0,
+          "rotated": false
+        },
+        {
+          "uid": 4,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 32,
+          "board_id": 2,
+          "x": 34.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 45,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 35.0,
+          "rotated": false
+        },
+        {
+          "uid": 41,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 38.0,
+          "rotated": false
+        },
+        {
+          "uid": 25,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 69,
+          "board_id": 3,
+          "x": 30.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 50,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 74,
+          "board_id": 3,
+          "x": 25.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 77,
+          "board_id": 3,
+          "x": 39.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 98,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 92,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 29.0,
+          "rotated": false
+        },
+        {
+          "uid": 81,
+          "board_id": 4,
+          "x": 30.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 58,
+          "board_id": 4,
+          "x": 31.0,
+          "y": 26.0,
+          "rotated": false
+        },
+        {
+          "uid": 26,
+          "board_id": 5,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 30,
+          "board_id": 5,
+          "x": 27.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 71,
+          "board_id": 5,
+          "x": 0.0,
+          "y": 35.0,
+          "rotated": false
+        },
+        {
+          "uid": 1,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 42,
+          "board_id": 6,
+          "x": 27.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 59,
+          "board_id": 6,
+          "x": 27.0,
+          "y": 26.0,
+          "rotated": false
+        },
+        {
+          "uid": 33,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 34.0,
+          "rotated": false
+        },
+        {
+          "uid": 40,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 37.0,
+          "rotated": false
+        },
+        {
+          "uid": 60,
+          "board_id": 6,
+          "x": 37.0,
+          "y": 26.0,
+          "rotated": false
+        },
+        {
+          "uid": 39,
+          "board_id": 7,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 16,
+          "board_id": 7,
+          "x": 27.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 35,
+          "board_id": 8,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 37,
+          "board_id": 8,
+          "x": 0.0,
+          "y": 27.0,
+          "rotated": false
+        },
+        {
+          "uid": 67,
+          "board_id": 8,
+          "x": 33.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 3,
+          "board_id": 8,
+          "x": 28.0,
+          "y": 32.0,
+          "rotated": false
+        },
+        {
+          "uid": 18,
+          "board_id": 8,
+          "x": 28.0,
+          "y": 36.0,
+          "rotated": false
+        },
+        {
+          "uid": 5,
+          "board_id": 9,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 68,
+          "board_id": 9,
+          "x": 26.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 53,
+          "board_id": 9,
+          "x": 0.0,
+          "y": 26.0,
+          "rotated": false
+        },
+        {
+          "uid": 54,
+          "board_id": 9,
+          "x": 30.0,
+          "y": 20.0,
+          "rotated": false
+        },
+        {
+          "uid": 48,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 29,
+          "board_id": 10,
+          "x": 25.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 72,
+          "board_id": 10,
+          "x": 25.0,
+          "y": 24.0,
+          "rotated": false
+        },
+        {
+          "uid": 38,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 35.0,
+          "rotated": false
+        },
+        {
+          "uid": 73,
+          "board_id": 10,
+          "x": 27.0,
+          "y": 35.0,
+          "rotated": false
+        },
+        {
+          "uid": 66,
+          "board_id": 10,
+          "x": 34.0,
+          "y": 35.0,
+          "rotated": false
+        },
+        {
+          "uid": 86,
+          "board_id": 10,
+          "x": 34.0,
+          "y": 39.0,
+          "rotated": false
+        },
+        {
+          "uid": 78,
+          "board_id": 11,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 24,
+          "board_id": 11,
+          "x": 0.0,
+          "y": 25.0,
+          "rotated": false
+        },
+        {
+          "uid": 15,
+          "board_id": 11,
+          "x": 33.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 80,
+          "board_id": 12,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 61,
+          "board_id": 12,
+          "x": 24.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 34,
+          "board_id": 12,
+          "x": 0.0,
+          "y": 34.0,
+          "rotated": false
+        },
+        {
+          "uid": 82,
+          "board_id": 12,
+          "x": 34.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 57,
+          "board_id": 12,
+          "x": 34.0,
+          "y": 38.0,
+          "rotated": false
+        },
+        {
+          "uid": 56,
+          "board_id": 12,
+          "x": 38.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 88,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 79,
+          "board_id": 13,
+          "x": 24.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 97,
+          "board_id": 13,
+          "x": 24.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 55,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 6,
+          "board_id": 13,
+          "x": 33.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 27,
+          "board_id": 13,
+          "x": 39.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 14,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 84,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 27.0,
+          "rotated": false
+        },
+        {
+          "uid": 11,
+          "board_id": 14,
+          "x": 24.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 52,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 13,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 23.0,
+          "rotated": false
+        },
+        {
+          "uid": 22,
+          "board_id": 15,
+          "x": 30.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 49,
+          "board_id": 16,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 21,
+          "board_id": 16,
+          "x": 23.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 28,
+          "board_id": 16,
+          "x": 0.0,
+          "y": 24.0,
+          "rotated": false
+        },
+        {
+          "uid": 17,
+          "board_id": 16,
+          "x": 18.0,
+          "y": 24.0,
+          "rotated": false
+        },
+        {
+          "uid": 65,
+          "board_id": 17,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 8,
+          "board_id": 17,
+          "x": 0.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 76,
+          "board_id": 18,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 44,
+          "board_id": 18,
+          "x": 0.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 51,
+          "board_id": 18,
+          "x": 22.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 93,
+          "board_id": 18,
+          "x": 27.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 87,
+          "board_id": 18,
+          "x": 35.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 19,
+          "board_id": 19,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 2,
+          "board_id": 19,
+          "x": 0.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 83,
+          "board_id": 19,
+          "x": 26.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 43,
+          "board_id": 19,
+          "x": 19.0,
+          "y": 25.0,
+          "rotated": false
+        },
+        {
+          "uid": 47,
+          "board_id": 20,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 10,
+          "board_id": 20,
+          "x": 23.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 96,
+          "board_id": 20,
+          "x": 0.0,
+          "y": 27.0,
+          "rotated": false
+        },
+        {
+          "uid": 99,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 94,
+          "board_id": 21,
+          "x": 20.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 91,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 26.0,
+          "rotated": false
+        },
+        {
+          "uid": 64,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 34.0,
+          "rotated": false
+        },
+        {
+          "uid": 63,
+          "board_id": 21,
+          "x": 37.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 85,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 95,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 36,
+          "board_id": 22,
+          "x": 29.0,
+          "y": 10.0,
+          "rotated": false
+        },
+        {
+          "uid": 70,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 20.0,
+          "rotated": false
+        },
+        {
+          "uid": 46,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 29.0,
+          "rotated": false
+        },
+        {
+          "uid": 75,
+          "board_id": 23,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 90,
+          "board_id": 23,
+          "x": 0.0,
+          "y": 8.0,
+          "rotated": false
+        },
+        {
+          "uid": 7,
+          "board_id": 23,
+          "x": 23.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 62,
+          "board_id": 23,
+          "x": 0.0,
+          "y": 16.0,
+          "rotated": false
+        },
+        {
+          "uid": 31,
+          "board_id": 23,
+          "x": 21.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 23,
+          "board_id": 23,
+          "x": 30.0,
+          "y": 0.0,
+          "rotated": false
+        }
+      ]
+    },
+    {
+      "case_id": "cl_04_100_02",
+      "stock": [
+        100,
+        100
+      ],
+      "panels": 4,
+      "sequence": [
+        4,
+        89,
+        25,
+        26,
+        1,
+        39,
+        35,
+        48,
+        98,
+        78,
+        80,
+        88,
+        65,
+        5,
+        8,
+        14,
+        52,
+        21,
+        94,
+        76,
+        49,
+        19,
+        61,
+        99,
+        13,
+        47,
+        10,
+        30,
+        44,
+        53,
+        24,
+        96,
+        29,
+        83,
+        2,
+        11,
+        92,
+        42,
+        37,
+        22,
+        79,
+        85,
+        69,
+        43,
+        95,
+        84,
+        28,
+        68,
+        81,
+        51,
+        16,
+        36,
+        55,
+        67,
+        70,
+        34,
+        32,
+        15,
+        97,
+        20,
+        46,
+        75,
+        90,
+        23,
+        50,
+        54,
+        64,
+        72,
+        100,
+        7,
+        62,
+        9,
+        93,
+        38,
+        31,
+        91,
+        59,
+        45,
+        63,
+        71,
+        87,
+        33,
+        74,
+        40,
+        58,
+        6,
+        41,
+        3,
+        18,
+        17,
+        73,
+        77,
+        66,
+        82,
+        60,
+        27,
+        57,
+        12,
+        86,
+        56
+      ],
+      "placements": [
+        {
+          "uid": 4,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 89,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 35.0,
+          "rotated": false
+        },
+        {
+          "uid": 25,
+          "board_id": 1,
+          "x": 34.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 26,
+          "board_id": 1,
+          "x": 35.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 1,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 66.0,
+          "rotated": false
+        },
+        {
+          "uid": 39,
+          "board_id": 1,
+          "x": 62.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 35,
+          "board_id": 1,
+          "x": 27.0,
+          "y": 68.0,
+          "rotated": false
+        },
+        {
+          "uid": 98,
+          "board_id": 1,
+          "x": 64.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 78,
+          "board_id": 1,
+          "x": 62.0,
+          "y": 67.0,
+          "rotated": false
+        },
+        {
+          "uid": 11,
+          "board_id": 1,
+          "x": 89.0,
+          "y": 29.0,
+          "rotated": false
+        },
+        {
+          "uid": 55,
+          "board_id": 1,
+          "x": 60.0,
+          "y": 92.0,
+          "rotated": false
+        },
+        {
+          "uid": 9,
+          "board_id": 1,
+          "x": 94.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 38,
+          "board_id": 1,
+          "x": 27.0,
+          "y": 95.0,
+          "rotated": false
+        },
+        {
+          "uid": 63,
+          "board_id": 1,
+          "x": 95.0,
+          "y": 60.0,
+          "rotated": false
+        },
+        {
+          "uid": 6,
+          "board_id": 1,
+          "x": 93.0,
+          "y": 92.0,
+          "rotated": false
+        },
+        {
+          "uid": 41,
+          "board_id": 1,
+          "x": 64.0,
+          "y": 29.0,
+          "rotated": false
+        },
+        {
+          "uid": 77,
+          "board_id": 1,
+          "x": 99.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 66,
+          "board_id": 1,
+          "x": 54.0,
+          "y": 95.0,
+          "rotated": false
+        },
+        {
+          "uid": 82,
+          "board_id": 1,
+          "x": 89.0,
+          "y": 60.0,
+          "rotated": false
+        },
+        {
+          "uid": 48,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 80,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 35.0,
+          "rotated": false
+        },
+        {
+          "uid": 88,
+          "board_id": 2,
+          "x": 24.0,
+          "y": 35.0,
+          "rotated": false
+        },
+        {
+          "uid": 65,
+          "board_id": 2,
+          "x": 24.0,
+          "y": 68.0,
+          "rotated": false
+        },
+        {
+          "uid": 5,
+          "board_id": 2,
+          "x": 25.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 8,
+          "board_id": 2,
+          "x": 48.0,
+          "y": 26.0,
+          "rotated": false
+        },
+        {
+          "uid": 14,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 69.0,
+          "rotated": false
+        },
+        {
+          "uid": 52,
+          "board_id": 2,
+          "x": 48.0,
+          "y": 45.0,
+          "rotated": false
+        },
+        {
+          "uid": 21,
+          "board_id": 2,
+          "x": 83.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 94,
+          "board_id": 2,
+          "x": 83.0,
+          "y": 35.0,
+          "rotated": false
+        },
+        {
+          "uid": 76,
+          "board_id": 2,
+          "x": 58.0,
+          "y": 69.0,
+          "rotated": false
+        },
+        {
+          "uid": 49,
+          "board_id": 2,
+          "x": 51.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 29,
+          "board_id": 2,
+          "x": 85.0,
+          "y": 69.0,
+          "rotated": false
+        },
+        {
+          "uid": 92,
+          "board_id": 2,
+          "x": 24.0,
+          "y": 89.0,
+          "rotated": false
+        },
+        {
+          "uid": 85,
+          "board_id": 2,
+          "x": 55.0,
+          "y": 90.0,
+          "rotated": false
+        },
+        {
+          "uid": 36,
+          "board_id": 2,
+          "x": 74.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 20,
+          "board_id": 2,
+          "x": 25.0,
+          "y": 26.0,
+          "rotated": false
+        },
+        {
+          "uid": 7,
+          "board_id": 2,
+          "x": 75.0,
+          "y": 45.0,
+          "rotated": false
+        },
+        {
+          "uid": 74,
+          "board_id": 2,
+          "x": 85.0,
+          "y": 93.0,
+          "rotated": false
+        },
+        {
+          "uid": 40,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 96.0,
+          "rotated": false
+        },
+        {
+          "uid": 27,
+          "board_id": 2,
+          "x": 82.0,
+          "y": 45.0,
+          "rotated": false
+        },
+        {
+          "uid": 57,
+          "board_id": 2,
+          "x": 85.0,
+          "y": 98.0,
+          "rotated": false
+        },
+        {
+          "uid": 12,
+          "board_id": 2,
+          "x": 91.0,
+          "y": 98.0,
+          "rotated": false
+        },
+        {
+          "uid": 86,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 99.0,
+          "rotated": false
+        },
+        {
+          "uid": 56,
+          "board_id": 2,
+          "x": 46.0,
+          "y": 26.0,
+          "rotated": false
+        },
+        {
+          "uid": 19,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 61,
+          "board_id": 3,
+          "x": 26.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 99,
+          "board_id": 3,
+          "x": 42.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 13,
+          "board_id": 3,
+          "x": 42.0,
+          "y": 26.0,
+          "rotated": false
+        },
+        {
+          "uid": 47,
+          "board_id": 3,
+          "x": 62.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 10,
+          "board_id": 3,
+          "x": 72.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 30,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 44,
+          "board_id": 3,
+          "x": 13.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 53,
+          "board_id": 3,
+          "x": 35.0,
+          "y": 43.0,
+          "rotated": false
+        },
+        {
+          "uid": 24,
+          "board_id": 3,
+          "x": 65.0,
+          "y": 48.0,
+          "rotated": false
+        },
+        {
+          "uid": 96,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 55.0,
+          "rotated": false
+        },
+        {
+          "uid": 83,
+          "board_id": 3,
+          "x": 31.0,
+          "y": 56.0,
+          "rotated": false
+        },
+        {
+          "uid": 2,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 67.0,
+          "rotated": false
+        },
+        {
+          "uid": 42,
+          "board_id": 3,
+          "x": 45.0,
+          "y": 56.0,
+          "rotated": false
+        },
+        {
+          "uid": 37,
+          "board_id": 3,
+          "x": 58.0,
+          "y": 63.0,
+          "rotated": false
+        },
+        {
+          "uid": 22,
+          "board_id": 3,
+          "x": 86.0,
+          "y": 63.0,
+          "rotated": false
+        },
+        {
+          "uid": 79,
+          "board_id": 3,
+          "x": 85.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 69,
+          "board_id": 3,
+          "x": 19.0,
+          "y": 67.0,
+          "rotated": false
+        },
+        {
+          "uid": 43,
+          "board_id": 3,
+          "x": 58.0,
+          "y": 75.0,
+          "rotated": false
+        },
+        {
+          "uid": 95,
+          "board_id": 3,
+          "x": 28.0,
+          "y": 82.0,
+          "rotated": false
+        },
+        {
+          "uid": 81,
+          "board_id": 3,
+          "x": 89.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 70,
+          "board_id": 3,
+          "x": 57.0,
+          "y": 89.0,
+          "rotated": false
+        },
+        {
+          "uid": 97,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 85.0,
+          "rotated": false
+        },
+        {
+          "uid": 75,
+          "board_id": 3,
+          "x": 28.0,
+          "y": 92.0,
+          "rotated": false
+        },
+        {
+          "uid": 59,
+          "board_id": 3,
+          "x": 90.0,
+          "y": 47.0,
+          "rotated": false
+        },
+        {
+          "uid": 87,
+          "board_id": 3,
+          "x": 81.0,
+          "y": 75.0,
+          "rotated": false
+        },
+        {
+          "uid": 58,
+          "board_id": 3,
+          "x": 35.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 3,
+          "board_id": 3,
+          "x": 13.0,
+          "y": 21.0,
+          "rotated": false
+        },
+        {
+          "uid": 18,
+          "board_id": 3,
+          "x": 13.0,
+          "y": 25.0,
+          "rotated": false
+        },
+        {
+          "uid": 17,
+          "board_id": 3,
+          "x": 95.0,
+          "y": 60.0,
+          "rotated": false
+        },
+        {
+          "uid": 73,
+          "board_id": 3,
+          "x": 65.0,
+          "y": 43.0,
+          "rotated": false
+        },
+        {
+          "uid": 60,
+          "board_id": 3,
+          "x": 28.0,
+          "y": 67.0,
+          "rotated": false
+        },
+        {
+          "uid": 84,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 28,
+          "board_id": 4,
+          "x": 24.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 68,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 12.0,
+          "rotated": false
+        },
+        {
+          "uid": 51,
+          "board_id": 4,
+          "x": 42.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 16,
+          "board_id": 4,
+          "x": 58.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 67,
+          "board_id": 4,
+          "x": 67.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 34,
+          "board_id": 4,
+          "x": 14.0,
+          "y": 16.0,
+          "rotated": false
+        },
+        {
+          "uid": 32,
+          "board_id": 4,
+          "x": 74.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 15,
+          "board_id": 4,
+          "x": 80.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 46,
+          "board_id": 4,
+          "x": 14.0,
+          "y": 22.0,
+          "rotated": false
+        },
+        {
+          "uid": 90,
+          "board_id": 4,
+          "x": 35.0,
+          "y": 22.0,
+          "rotated": false
+        },
+        {
+          "uid": 23,
+          "board_id": 4,
+          "x": 80.0,
+          "y": 28.0,
+          "rotated": false
+        },
+        {
+          "uid": 50,
+          "board_id": 4,
+          "x": 35.0,
+          "y": 30.0,
+          "rotated": false
+        },
+        {
+          "uid": 54,
+          "board_id": 4,
+          "x": 14.0,
+          "y": 31.0,
+          "rotated": false
+        },
+        {
+          "uid": 64,
+          "board_id": 4,
+          "x": 24.0,
+          "y": 37.0,
+          "rotated": false
+        },
+        {
+          "uid": 72,
+          "board_id": 4,
+          "x": 52.0,
+          "y": 37.0,
+          "rotated": false
+        },
+        {
+          "uid": 100,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 48.0,
+          "rotated": false
+        },
+        {
+          "uid": 62,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 57.0,
+          "rotated": false
+        },
+        {
+          "uid": 93,
+          "board_id": 4,
+          "x": 67.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 31,
+          "board_id": 4,
+          "x": 86.0,
+          "y": 28.0,
+          "rotated": false
+        },
+        {
+          "uid": 91,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 64.0,
+          "rotated": false
+        },
+        {
+          "uid": 45,
+          "board_id": 4,
+          "x": 18.0,
+          "y": 48.0,
+          "rotated": false
+        },
+        {
+          "uid": 71,
+          "board_id": 4,
+          "x": 18.0,
+          "y": 51.0,
+          "rotated": false
+        },
+        {
+          "uid": 33,
+          "board_id": 4,
+          "x": 18.0,
+          "y": 54.0,
+          "rotated": false
+        }
+      ]
+    },
+    {
+      "case_id": "cl_05_100_02",
+      "stock": [
+        100,
+        100
+      ],
+      "panels": 29,
+      "sequence": [
+        83,
+        37,
+        4,
+        89,
+        25,
+        98,
+        39,
+        1,
+        26,
+        35,
+        5,
+        48,
+        78,
+        14,
+        80,
+        88,
+        52,
+        49,
+        65,
+        19,
+        47,
+        76,
+        99,
+        44,
+        8,
+        2,
+        10,
+        21,
+        13,
+        94,
+        28,
+        61,
+        51,
+        24,
+        29,
+        79,
+        43,
+        68,
+        30,
+        53,
+        42,
+        84,
+        96,
+        97,
+        92,
+        11,
+        95,
+        72,
+        59,
+        54,
+        81,
+        22,
+        85,
+        16,
+        20,
+        69,
+        70,
+        46,
+        36,
+        100,
+        93,
+        90,
+        75,
+        67,
+        50,
+        62,
+        31,
+        55,
+        15,
+        7,
+        91,
+        6,
+        34,
+        58,
+        32,
+        23,
+        64,
+        74,
+        87,
+        73,
+        9,
+        38,
+        66,
+        18,
+        3,
+        17,
+        82,
+        45,
+        40,
+        60,
+        63,
+        71,
+        33,
+        41,
+        57,
+        56,
+        12,
+        86,
+        77,
+        27
+      ],
+      "placements": [
+        {
+          "uid": 83,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 99,
+          "board_id": 1,
+          "x": 38.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 85,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 72.0,
+          "rotated": false
+        },
+        {
+          "uid": 37,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 52,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 34.0,
+          "rotated": false
+        },
+        {
+          "uid": 67,
+          "board_id": 2,
+          "x": 78.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 4,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 89,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 38,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 88.0,
+          "rotated": false
+        },
+        {
+          "uid": 66,
+          "board_id": 4,
+          "x": 77.0,
+          "y": 88.0,
+          "rotated": false
+        },
+        {
+          "uid": 56,
+          "board_id": 4,
+          "x": 91.0,
+          "y": 88.0,
+          "rotated": false
+        },
+        {
+          "uid": 77,
+          "board_id": 4,
+          "x": 99.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 25,
+          "board_id": 5,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 32,
+          "board_id": 5,
+          "x": 85.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 41,
+          "board_id": 5,
+          "x": 0.0,
+          "y": 95.0,
+          "rotated": false
+        },
+        {
+          "uid": 57,
+          "board_id": 5,
+          "x": 85.0,
+          "y": 94.0,
+          "rotated": false
+        },
+        {
+          "uid": 12,
+          "board_id": 5,
+          "x": 67.0,
+          "y": 95.0,
+          "rotated": false
+        },
+        {
+          "uid": 86,
+          "board_id": 5,
+          "x": 67.0,
+          "y": 98.0,
+          "rotated": false
+        },
+        {
+          "uid": 98,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 34,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 83.0,
+          "rotated": false
+        },
+        {
+          "uid": 87,
+          "board_id": 6,
+          "x": 84.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 39,
+          "board_id": 7,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 15,
+          "board_id": 7,
+          "x": 77.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 1,
+          "board_id": 8,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 23,
+          "board_id": 8,
+          "x": 77.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 26,
+          "board_id": 9,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 36,
+          "board_id": 9,
+          "x": 76.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 6,
+          "board_id": 9,
+          "x": 76.0,
+          "y": 74.0,
+          "rotated": false
+        },
+        {
+          "uid": 35,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 70,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 75.0,
+          "rotated": false
+        },
+        {
+          "uid": 5,
+          "board_id": 11,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 16,
+          "board_id": 11,
+          "x": 73.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 20,
+          "board_id": 11,
+          "x": 0.0,
+          "y": 73.0,
+          "rotated": false
+        },
+        {
+          "uid": 18,
+          "board_id": 11,
+          "x": 60.0,
+          "y": 76.0,
+          "rotated": false
+        },
+        {
+          "uid": 3,
+          "board_id": 11,
+          "x": 60.0,
+          "y": 87.0,
+          "rotated": false
+        },
+        {
+          "uid": 60,
+          "board_id": 11,
+          "x": 91.0,
+          "y": 76.0,
+          "rotated": false
+        },
+        {
+          "uid": 48,
+          "board_id": 12,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 11,
+          "board_id": 12,
+          "x": 70.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 73,
+          "board_id": 12,
+          "x": 70.0,
+          "y": 87.0,
+          "rotated": false
+        },
+        {
+          "uid": 78,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 95,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 70.0,
+          "rotated": false
+        },
+        {
+          "uid": 14,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 69,
+          "board_id": 14,
+          "x": 68.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 90,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 77.0,
+          "rotated": false
+        },
+        {
+          "uid": 80,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 54,
+          "board_id": 15,
+          "x": 67.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 93,
+          "board_id": 15,
+          "x": 67.0,
+          "y": 47.0,
+          "rotated": false
+        },
+        {
+          "uid": 88,
+          "board_id": 16,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 81,
+          "board_id": 16,
+          "x": 67.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 49,
+          "board_id": 17,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 42,
+          "board_id": 17,
+          "x": 65.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 72,
+          "board_id": 17,
+          "x": 0.0,
+          "y": 67.0,
+          "rotated": false
+        },
+        {
+          "uid": 100,
+          "board_id": 17,
+          "x": 41.0,
+          "y": 75.0,
+          "rotated": false
+        },
+        {
+          "uid": 65,
+          "board_id": 18,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 43,
+          "board_id": 18,
+          "x": 0.0,
+          "y": 60.0,
+          "rotated": false
+        },
+        {
+          "uid": 59,
+          "board_id": 18,
+          "x": 60.0,
+          "y": 60.0,
+          "rotated": false
+        },
+        {
+          "uid": 17,
+          "board_id": 18,
+          "x": 89.0,
+          "y": 60.0,
+          "rotated": false
+        },
+        {
+          "uid": 19,
+          "board_id": 19,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 53,
+          "board_id": 19,
+          "x": 0.0,
+          "y": 60.0,
+          "rotated": false
+        },
+        {
+          "uid": 7,
+          "board_id": 19,
+          "x": 73.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 63,
+          "board_id": 19,
+          "x": 92.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 47,
+          "board_id": 20,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 30,
+          "board_id": 20,
+          "x": 64.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 97,
+          "board_id": 20,
+          "x": 0.0,
+          "y": 59.0,
+          "rotated": false
+        },
+        {
+          "uid": 76,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 24,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 58.0,
+          "rotated": false
+        },
+        {
+          "uid": 31,
+          "board_id": 21,
+          "x": 77.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 44,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 84,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 54.0,
+          "rotated": false
+        },
+        {
+          "uid": 22,
+          "board_id": 22,
+          "x": 67.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 40,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 89.0,
+          "rotated": false
+        },
+        {
+          "uid": 8,
+          "board_id": 23,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 13,
+          "board_id": 23,
+          "x": 0.0,
+          "y": 52.0,
+          "rotated": false
+        },
+        {
+          "uid": 58,
+          "board_id": 23,
+          "x": 84.0,
+          "y": 52.0,
+          "rotated": false
+        },
+        {
+          "uid": 82,
+          "board_id": 23,
+          "x": 84.0,
+          "y": 80.0,
+          "rotated": false
+        },
+        {
+          "uid": 27,
+          "board_id": 23,
+          "x": 99.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 2,
+          "board_id": 24,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 94,
+          "board_id": 24,
+          "x": 53.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 28,
+          "board_id": 24,
+          "x": 0.0,
+          "y": 50.0,
+          "rotated": false
+        },
+        {
+          "uid": 10,
+          "board_id": 25,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 21,
+          "board_id": 25,
+          "x": 49.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 74,
+          "board_id": 25,
+          "x": 0.0,
+          "y": 76.0,
+          "rotated": false
+        },
+        {
+          "uid": 61,
+          "board_id": 26,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 51,
+          "board_id": 26,
+          "x": 45.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 91,
+          "board_id": 26,
+          "x": 45.0,
+          "y": 45.0,
+          "rotated": false
+        },
+        {
+          "uid": 29,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 79,
+          "board_id": 27,
+          "x": 42.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 92,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 68.0,
+          "rotated": false
+        },
+        {
+          "uid": 9,
+          "board_id": 27,
+          "x": 88.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 68,
+          "board_id": 28,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 96,
+          "board_id": 28,
+          "x": 0.0,
+          "y": 56.0,
+          "rotated": false
+        },
+        {
+          "uid": 46,
+          "board_id": 28,
+          "x": 39.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 62,
+          "board_id": 28,
+          "x": 39.0,
+          "y": 25.0,
+          "rotated": false
+        },
+        {
+          "uid": 45,
+          "board_id": 28,
+          "x": 0.0,
+          "y": 89.0,
+          "rotated": false
+        },
+        {
+          "uid": 75,
+          "board_id": 29,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 50,
+          "board_id": 29,
+          "x": 0.0,
+          "y": 22.0,
+          "rotated": false
+        },
+        {
+          "uid": 55,
+          "board_id": 29,
+          "x": 0.0,
+          "y": 42.0,
+          "rotated": false
+        },
+        {
+          "uid": 64,
+          "board_id": 29,
+          "x": 0.0,
+          "y": 61.0,
+          "rotated": false
+        },
+        {
+          "uid": 71,
+          "board_id": 29,
+          "x": 0.0,
+          "y": 76.0,
+          "rotated": false
+        },
+        {
+          "uid": 33,
+          "board_id": 29,
+          "x": 0.0,
+          "y": 83.0,
+          "rotated": false
+        }
+      ]
+    },
+    {
+      "case_id": "cl_06_100_02",
+      "stock": [
+        300,
+        300
+      ],
+      "panels": 4,
+      "sequence": [
+        4,
+        89,
+        25,
+        26,
+        39,
+        1,
+        35,
+        98,
+        48,
+        78,
+        80,
+        88,
+        65,
+        5,
+        14,
+        8,
+        52,
+        21,
+        94,
+        76,
+        19,
+        49,
+        61,
+        13,
+        99,
+        47,
+        10,
+        30,
+        44,
+        53,
+        24,
+        29,
+        96,
+        92,
+        83,
+        37,
+        2,
+        42,
+        11,
+        22,
+        95,
+        79,
+        84,
+        43,
+        69,
+        28,
+        85,
+        68,
+        51,
+        81,
+        16,
+        67,
+        36,
+        55,
+        70,
+        20,
+        34,
+        97,
+        15,
+        46,
+        50,
+        90,
+        32,
+        75,
+        54,
+        23,
+        64,
+        62,
+        100,
+        72,
+        93,
+        7,
+        59,
+        31,
+        9,
+        91,
+        38,
+        45,
+        63,
+        87,
+        74,
+        71,
+        40,
+        33,
+        58,
+        6,
+        18,
+        41,
+        3,
+        17,
+        73,
+        66,
+        60,
+        82,
+        77,
+        57,
+        27,
+        12,
+        86,
+        56
+      ],
+      "placements": [
+        {
+          "uid": 4,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 89,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 100.0,
+          "rotated": false
+        },
+        {
+          "uid": 25,
+          "board_id": 1,
+          "x": 95.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 26,
+          "board_id": 1,
+          "x": 99.0,
+          "y": 95.0,
+          "rotated": false
+        },
+        {
+          "uid": 39,
+          "board_id": 1,
+          "x": 175.0,
+          "y": 95.0,
+          "rotated": false
+        },
+        {
+          "uid": 1,
+          "board_id": 1,
+          "x": 180.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 35,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 188.0,
+          "rotated": false
+        },
+        {
+          "uid": 98,
+          "board_id": 1,
+          "x": 175.0,
+          "y": 191.0,
+          "rotated": false
+        },
+        {
+          "uid": 48,
+          "board_id": 1,
+          "x": 93.0,
+          "y": 193.0,
+          "rotated": false
+        },
+        {
+          "uid": 61,
+          "board_id": 1,
+          "x": 252.0,
+          "y": 95.0,
+          "rotated": false
+        },
+        {
+          "uid": 30,
+          "board_id": 1,
+          "x": 259.0,
+          "y": 189.0,
+          "rotated": false
+        },
+        {
+          "uid": 53,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 263.0,
+          "rotated": false
+        },
+        {
+          "uid": 29,
+          "board_id": 1,
+          "x": 257.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 85,
+          "board_id": 1,
+          "x": 163.0,
+          "y": 274.0,
+          "rotated": false
+        },
+        {
+          "uid": 74,
+          "board_id": 1,
+          "x": 249.0,
+          "y": 285.0,
+          "rotated": false
+        },
+        {
+          "uid": 33,
+          "board_id": 1,
+          "x": 85.0,
+          "y": 292.0,
+          "rotated": false
+        },
+        {
+          "uid": 6,
+          "board_id": 1,
+          "x": 257.0,
+          "y": 68.0,
+          "rotated": false
+        },
+        {
+          "uid": 17,
+          "board_id": 1,
+          "x": 275.0,
+          "y": 68.0,
+          "rotated": false
+        },
+        {
+          "uid": 66,
+          "board_id": 1,
+          "x": 286.0,
+          "y": 68.0,
+          "rotated": false
+        },
+        {
+          "uid": 60,
+          "board_id": 1,
+          "x": 163.0,
+          "y": 193.0,
+          "rotated": false
+        },
+        {
+          "uid": 82,
+          "board_id": 1,
+          "x": 290.0,
+          "y": 285.0,
+          "rotated": false
+        },
+        {
+          "uid": 77,
+          "board_id": 1,
+          "x": 172.0,
+          "y": 193.0,
+          "rotated": false
+        },
+        {
+          "uid": 57,
+          "board_id": 1,
+          "x": 257.0,
+          "y": 87.0,
+          "rotated": false
+        },
+        {
+          "uid": 27,
+          "board_id": 1,
+          "x": 299.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 12,
+          "board_id": 1,
+          "x": 257.0,
+          "y": 91.0,
+          "rotated": false
+        },
+        {
+          "uid": 86,
+          "board_id": 1,
+          "x": 270.0,
+          "y": 92.0,
+          "rotated": false
+        },
+        {
+          "uid": 56,
+          "board_id": 1,
+          "x": 249.0,
+          "y": 274.0,
+          "rotated": false
+        },
+        {
+          "uid": 78,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 80,
+          "board_id": 2,
+          "x": 93.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 88,
+          "board_id": 2,
+          "x": 160.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 65,
+          "board_id": 2,
+          "x": 160.0,
+          "y": 94.0,
+          "rotated": false
+        },
+        {
+          "uid": 5,
+          "board_id": 2,
+          "x": 227.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 14,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 70.0,
+          "rotated": false
+        },
+        {
+          "uid": 8,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 147.0,
+          "rotated": false
+        },
+        {
+          "uid": 52,
+          "board_id": 2,
+          "x": 99.0,
+          "y": 154.0,
+          "rotated": false
+        },
+        {
+          "uid": 21,
+          "board_id": 2,
+          "x": 175.0,
+          "y": 154.0,
+          "rotated": false
+        },
+        {
+          "uid": 94,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 199.0,
+          "rotated": false
+        },
+        {
+          "uid": 76,
+          "board_id": 2,
+          "x": 223.0,
+          "y": 154.0,
+          "rotated": false
+        },
+        {
+          "uid": 19,
+          "board_id": 2,
+          "x": 223.0,
+          "y": 212.0,
+          "rotated": false
+        },
+        {
+          "uid": 49,
+          "board_id": 2,
+          "x": 47.0,
+          "y": 219.0,
+          "rotated": false
+        },
+        {
+          "uid": 13,
+          "board_id": 2,
+          "x": 68.0,
+          "y": 97.0,
+          "rotated": false
+        },
+        {
+          "uid": 99,
+          "board_id": 2,
+          "x": 112.0,
+          "y": 219.0,
+          "rotated": false
+        },
+        {
+          "uid": 83,
+          "board_id": 2,
+          "x": 256.0,
+          "y": 73.0,
+          "rotated": false
+        },
+        {
+          "uid": 28,
+          "board_id": 2,
+          "x": 168.0,
+          "y": 253.0,
+          "rotated": false
+        },
+        {
+          "uid": 70,
+          "board_id": 2,
+          "x": 217.0,
+          "y": 272.0,
+          "rotated": false
+        },
+        {
+          "uid": 45,
+          "board_id": 2,
+          "x": 47.0,
+          "y": 291.0,
+          "rotated": false
+        },
+        {
+          "uid": 58,
+          "board_id": 2,
+          "x": 284.0,
+          "y": 272.0,
+          "rotated": false
+        },
+        {
+          "uid": 18,
+          "board_id": 2,
+          "x": 47.0,
+          "y": 199.0,
+          "rotated": false
+        },
+        {
+          "uid": 73,
+          "board_id": 2,
+          "x": 227.0,
+          "y": 73.0,
+          "rotated": false
+        },
+        {
+          "uid": 47,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 10,
+          "board_id": 3,
+          "x": 64.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 44,
+          "board_id": 3,
+          "x": 113.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 24,
+          "board_id": 3,
+          "x": 176.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 96,
+          "board_id": 3,
+          "x": 176.0,
+          "y": 42.0,
+          "rotated": false
+        },
+        {
+          "uid": 92,
+          "board_id": 3,
+          "x": 113.0,
+          "y": 75.0,
+          "rotated": false
+        },
+        {
+          "uid": 37,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 76.0,
+          "rotated": false
+        },
+        {
+          "uid": 2,
+          "board_id": 3,
+          "x": 201.0,
+          "y": 75.0,
+          "rotated": false
+        },
+        {
+          "uid": 42,
+          "board_id": 3,
+          "x": 78.0,
+          "y": 76.0,
+          "rotated": false
+        },
+        {
+          "uid": 11,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 110.0,
+          "rotated": false
+        },
+        {
+          "uid": 22,
+          "board_id": 3,
+          "x": 113.0,
+          "y": 106.0,
+          "rotated": false
+        },
+        {
+          "uid": 95,
+          "board_id": 3,
+          "x": 30.0,
+          "y": 151.0,
+          "rotated": false
+        },
+        {
+          "uid": 79,
+          "board_id": 3,
+          "x": 30.0,
+          "y": 180.0,
+          "rotated": false
+        },
+        {
+          "uid": 84,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 238.0,
+          "rotated": false
+        },
+        {
+          "uid": 43,
+          "board_id": 3,
+          "x": 67.0,
+          "y": 238.0,
+          "rotated": false
+        },
+        {
+          "uid": 69,
+          "board_id": 3,
+          "x": 139.0,
+          "y": 106.0,
+          "rotated": false
+        },
+        {
+          "uid": 68,
+          "board_id": 3,
+          "x": 164.0,
+          "y": 125.0,
+          "rotated": false
+        },
+        {
+          "uid": 51,
+          "board_id": 3,
+          "x": 254.0,
+          "y": 75.0,
+          "rotated": false
+        },
+        {
+          "uid": 81,
+          "board_id": 3,
+          "x": 262.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 16,
+          "board_id": 3,
+          "x": 203.0,
+          "y": 125.0,
+          "rotated": false
+        },
+        {
+          "uid": 67,
+          "board_id": 3,
+          "x": 139.0,
+          "y": 199.0,
+          "rotated": false
+        },
+        {
+          "uid": 36,
+          "board_id": 3,
+          "x": 229.0,
+          "y": 125.0,
+          "rotated": false
+        },
+        {
+          "uid": 55,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 277.0,
+          "rotated": false
+        },
+        {
+          "uid": 20,
+          "board_id": 3,
+          "x": 229.0,
+          "y": 199.0,
+          "rotated": false
+        },
+        {
+          "uid": 34,
+          "board_id": 3,
+          "x": 159.0,
+          "y": 225.0,
+          "rotated": false
+        },
+        {
+          "uid": 97,
+          "board_id": 3,
+          "x": 71.0,
+          "y": 205.0,
+          "rotated": false
+        },
+        {
+          "uid": 15,
+          "board_id": 3,
+          "x": 254.0,
+          "y": 120.0,
+          "rotated": false
+        },
+        {
+          "uid": 46,
+          "board_id": 3,
+          "x": 159.0,
+          "y": 241.0,
+          "rotated": false
+        },
+        {
+          "uid": 50,
+          "board_id": 3,
+          "x": 159.0,
+          "y": 266.0,
+          "rotated": false
+        },
+        {
+          "uid": 90,
+          "board_id": 3,
+          "x": 219.0,
+          "y": 241.0,
+          "rotated": false
+        },
+        {
+          "uid": 75,
+          "board_id": 3,
+          "x": 231.0,
+          "y": 263.0,
+          "rotated": false
+        },
+        {
+          "uid": 62,
+          "board_id": 3,
+          "x": 113.0,
+          "y": 54.0,
+          "rotated": false
+        },
+        {
+          "uid": 100,
+          "board_id": 3,
+          "x": 159.0,
+          "y": 201.0,
+          "rotated": false
+        },
+        {
+          "uid": 72,
+          "board_id": 3,
+          "x": 30.0,
+          "y": 110.0,
+          "rotated": false
+        },
+        {
+          "uid": 93,
+          "board_id": 3,
+          "x": 273.0,
+          "y": 120.0,
+          "rotated": false
+        },
+        {
+          "uid": 59,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 197.0,
+          "rotated": false
+        },
+        {
+          "uid": 9,
+          "board_id": 3,
+          "x": 127.0,
+          "y": 205.0,
+          "rotated": false
+        },
+        {
+          "uid": 38,
+          "board_id": 3,
+          "x": 159.0,
+          "y": 286.0,
+          "rotated": false
+        },
+        {
+          "uid": 63,
+          "board_id": 3,
+          "x": 289.0,
+          "y": 170.0,
+          "rotated": false
+        },
+        {
+          "uid": 40,
+          "board_id": 3,
+          "x": 93.0,
+          "y": 291.0,
+          "rotated": false
+        },
+        {
+          "uid": 3,
+          "board_id": 3,
+          "x": 93.0,
+          "y": 277.0,
+          "rotated": false
+        },
+        {
+          "uid": 32,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 54,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 94.0,
+          "rotated": false
+        },
+        {
+          "uid": 23,
+          "board_id": 4,
+          "x": 15.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 64,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 141.0,
+          "rotated": false
+        },
+        {
+          "uid": 7,
+          "board_id": 4,
+          "x": 30.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 31,
+          "board_id": 4,
+          "x": 49.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 91,
+          "board_id": 4,
+          "x": 30.0,
+          "y": 60.0,
+          "rotated": false
+        },
+        {
+          "uid": 87,
+          "board_id": 4,
+          "x": 69.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 71,
+          "board_id": 4,
+          "x": 49.0,
+          "y": 53.0,
+          "rotated": false
+        },
+        {
+          "uid": 41,
+          "board_id": 4,
+          "x": 15.0,
+          "y": 84.0,
+          "rotated": false
+        }
+      ]
+    },
+    {
+      "case_id": "cl_07_100_02",
+      "stock": [
+        100,
+        100
+      ],
+      "panels": 27,
+      "sequence": [
+        86,
+        13,
+        98,
+        66,
+        93,
+        64,
+        68,
+        48,
+        100,
+        36,
+        62,
+        32,
+        73,
+        14,
+        83,
+        90,
+        23,
+        20,
+        46,
+        37,
+        76,
+        74,
+        7,
+        42,
+        89,
+        57,
+        17,
+        9,
+        94,
+        78,
+        71,
+        43,
+        10,
+        26,
+        51,
+        25,
+        28,
+        35,
+        54,
+        3,
+        52,
+        47,
+        59,
+        91,
+        33,
+        27,
+        92,
+        77,
+        96,
+        31,
+        29,
+        69,
+        85,
+        61,
+        58,
+        67,
+        19,
+        1,
+        65,
+        34,
+        81,
+        53,
+        16,
+        99,
+        84,
+        56,
+        63,
+        75,
+        95,
+        72,
+        15,
+        11,
+        24,
+        50,
+        82,
+        60,
+        21,
+        5,
+        49,
+        45,
+        41,
+        97,
+        87,
+        4,
+        70,
+        40,
+        39,
+        2,
+        12,
+        6,
+        44,
+        30,
+        55,
+        80,
+        22,
+        88,
+        38,
+        8,
+        18,
+        79
+      ],
+      "placements": [
+        {
+          "uid": 86,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 13,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 18.0,
+          "rotated": false
+        },
+        {
+          "uid": 74,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 55.0,
+          "rotated": false
+        },
+        {
+          "uid": 98,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 11,
+          "board_id": 2,
+          "x": 79.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 4,
+          "board_id": 2,
+          "x": 91.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 38,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 97.0,
+          "rotated": false
+        },
+        {
+          "uid": 66,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 50,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 86.0,
+          "rotated": false
+        },
+        {
+          "uid": 93,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 31,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 70.0,
+          "rotated": false
+        },
+        {
+          "uid": 41,
+          "board_id": 4,
+          "x": 86.0,
+          "y": 70.0,
+          "rotated": false
+        },
+        {
+          "uid": 44,
+          "board_id": 4,
+          "x": 86.0,
+          "y": 93.0,
+          "rotated": false
+        },
+        {
+          "uid": 64,
+          "board_id": 5,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 47,
+          "board_id": 5,
+          "x": 0.0,
+          "y": 66.0,
+          "rotated": false
+        },
+        {
+          "uid": 68,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 91,
+          "board_id": 6,
+          "x": 65.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 72,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 87.0,
+          "rotated": false
+        },
+        {
+          "uid": 18,
+          "board_id": 6,
+          "x": 98.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 48,
+          "board_id": 7,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 52,
+          "board_id": 7,
+          "x": 0.0,
+          "y": 64.0,
+          "rotated": false
+        },
+        {
+          "uid": 100,
+          "board_id": 8,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 3,
+          "board_id": 8,
+          "x": 63.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 87,
+          "board_id": 8,
+          "x": 0.0,
+          "y": 91.0,
+          "rotated": false
+        },
+        {
+          "uid": 36,
+          "board_id": 9,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 61,
+          "board_id": 9,
+          "x": 0.0,
+          "y": 73.0,
+          "rotated": false
+        },
+        {
+          "uid": 34,
+          "board_id": 9,
+          "x": 76.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 62,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 26,
+          "board_id": 10,
+          "x": 61.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 15,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 75.0,
+          "rotated": false
+        },
+        {
+          "uid": 60,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 88.0,
+          "rotated": false
+        },
+        {
+          "uid": 45,
+          "board_id": 10,
+          "x": 33.0,
+          "y": 88.0,
+          "rotated": false
+        },
+        {
+          "uid": 79,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 99.0,
+          "rotated": false
+        },
+        {
+          "uid": 32,
+          "board_id": 11,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 73,
+          "board_id": 11,
+          "x": 0.0,
+          "y": 50.0,
+          "rotated": false
+        },
+        {
+          "uid": 82,
+          "board_id": 11,
+          "x": 85.0,
+          "y": 50.0,
+          "rotated": false
+        },
+        {
+          "uid": 14,
+          "board_id": 12,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 83,
+          "board_id": 12,
+          "x": 0.0,
+          "y": 50.0,
+          "rotated": false
+        },
+        {
+          "uid": 90,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 23,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 49.0,
+          "rotated": false
+        },
+        {
+          "uid": 8,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 97.0,
+          "rotated": false
+        },
+        {
+          "uid": 20,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 46,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 48.0,
+          "rotated": false
+        },
+        {
+          "uid": 80,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 95.0,
+          "rotated": false
+        },
+        {
+          "uid": 37,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 42,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 47.0,
+          "rotated": false
+        },
+        {
+          "uid": 69,
+          "board_id": 15,
+          "x": 68.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 97,
+          "board_id": 15,
+          "x": 68.0,
+          "y": 87.0,
+          "rotated": false
+        },
+        {
+          "uid": 40,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 91.0,
+          "rotated": false
+        },
+        {
+          "uid": 76,
+          "board_id": 16,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 7,
+          "board_id": 16,
+          "x": 45.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 21,
+          "board_id": 16,
+          "x": 0.0,
+          "y": 82.0,
+          "rotated": false
+        },
+        {
+          "uid": 39,
+          "board_id": 16,
+          "x": 0.0,
+          "y": 92.0,
+          "rotated": false
+        },
+        {
+          "uid": 89,
+          "board_id": 17,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 57,
+          "board_id": 17,
+          "x": 0.0,
+          "y": 43.0,
+          "rotated": false
+        },
+        {
+          "uid": 95,
+          "board_id": 17,
+          "x": 0.0,
+          "y": 86.0,
+          "rotated": false
+        },
+        {
+          "uid": 17,
+          "board_id": 18,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 9,
+          "board_id": 18,
+          "x": 0.0,
+          "y": 43.0,
+          "rotated": false
+        },
+        {
+          "uid": 59,
+          "board_id": 18,
+          "x": 49.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 75,
+          "board_id": 18,
+          "x": 0.0,
+          "y": 85.0,
+          "rotated": false
+        },
+        {
+          "uid": 94,
+          "board_id": 19,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 78,
+          "board_id": 19,
+          "x": 0.0,
+          "y": 42.0,
+          "rotated": false
+        },
+        {
+          "uid": 56,
+          "board_id": 19,
+          "x": 0.0,
+          "y": 82.0,
+          "rotated": false
+        },
+        {
+          "uid": 24,
+          "board_id": 19,
+          "x": 79.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 6,
+          "board_id": 19,
+          "x": 91.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 88,
+          "board_id": 19,
+          "x": 98.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 71,
+          "board_id": 20,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 96,
+          "board_id": 20,
+          "x": 40.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 43,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 10,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 40.0,
+          "rotated": false
+        },
+        {
+          "uid": 5,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 80.0,
+          "rotated": false
+        },
+        {
+          "uid": 49,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 90.0,
+          "rotated": false
+        },
+        {
+          "uid": 51,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 25,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 39.0,
+          "rotated": false
+        },
+        {
+          "uid": 53,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 78.0,
+          "rotated": false
+        },
+        {
+          "uid": 28,
+          "board_id": 23,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 35,
+          "board_id": 23,
+          "x": 0.0,
+          "y": 38.0,
+          "rotated": false
+        },
+        {
+          "uid": 65,
+          "board_id": 23,
+          "x": 0.0,
+          "y": 76.0,
+          "rotated": false
+        },
+        {
+          "uid": 99,
+          "board_id": 23,
+          "x": 78.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 54,
+          "board_id": 24,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 33,
+          "board_id": 24,
+          "x": 0.0,
+          "y": 38.0,
+          "rotated": false
+        },
+        {
+          "uid": 85,
+          "board_id": 24,
+          "x": 0.0,
+          "y": 71.0,
+          "rotated": false
+        },
+        {
+          "uid": 1,
+          "board_id": 24,
+          "x": 75.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 63,
+          "board_id": 24,
+          "x": 72.0,
+          "y": 39.0,
+          "rotated": false
+        },
+        {
+          "uid": 27,
+          "board_id": 25,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 92,
+          "board_id": 25,
+          "x": 0.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 77,
+          "board_id": 25,
+          "x": 0.0,
+          "y": 65.0,
+          "rotated": false
+        },
+        {
+          "uid": 22,
+          "board_id": 25,
+          "x": 0.0,
+          "y": 96.0,
+          "rotated": false
+        },
+        {
+          "uid": 29,
+          "board_id": 26,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 58,
+          "board_id": 26,
+          "x": 0.0,
+          "y": 30.0,
+          "rotated": false
+        },
+        {
+          "uid": 67,
+          "board_id": 26,
+          "x": 0.0,
+          "y": 56.0,
+          "rotated": false
+        },
+        {
+          "uid": 84,
+          "board_id": 26,
+          "x": 0.0,
+          "y": 81.0,
+          "rotated": false
+        },
+        {
+          "uid": 19,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 81,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 25.0,
+          "rotated": false
+        },
+        {
+          "uid": 16,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 48.0,
+          "rotated": false
+        },
+        {
+          "uid": 70,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 69.0,
+          "rotated": false
+        },
+        {
+          "uid": 2,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 78.0,
+          "rotated": false
+        },
+        {
+          "uid": 12,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 84.0,
+          "rotated": false
+        },
+        {
+          "uid": 30,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 90.0,
+          "rotated": false
+        },
+        {
+          "uid": 55,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 95.0,
+          "rotated": false
+        }
+      ]
+    },
+    {
+      "case_id": "cl_08_100_02",
+      "stock": [
+        100,
+        100
+      ],
+      "panels": 27,
+      "sequence": [
+        98,
+        93,
+        66,
+        64,
+        100,
+        68,
+        36,
+        62,
+        48,
+        74,
+        78,
+        89,
+        83,
+        85,
+        53,
+        67,
+        26,
+        92,
+        23,
+        9,
+        72,
+        71,
+        7,
+        51,
+        32,
+        77,
+        95,
+        52,
+        65,
+        30,
+        21,
+        75,
+        94,
+        76,
+        73,
+        16,
+        91,
+        19,
+        43,
+        86,
+        22,
+        56,
+        31,
+        69,
+        55,
+        14,
+        50,
+        29,
+        27,
+        90,
+        17,
+        5,
+        34,
+        20,
+        3,
+        84,
+        35,
+        28,
+        99,
+        59,
+        96,
+        39,
+        61,
+        46,
+        54,
+        13,
+        12,
+        2,
+        81,
+        1,
+        10,
+        11,
+        33,
+        79,
+        87,
+        4,
+        70,
+        58,
+        49,
+        25,
+        15,
+        82,
+        8,
+        24,
+        37,
+        42,
+        60,
+        63,
+        47,
+        40,
+        45,
+        6,
+        41,
+        80,
+        97,
+        88,
+        38,
+        57,
+        18,
+        44
+      ],
+      "placements": [
+        {
+          "uid": 98,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 20,
+          "board_id": 1,
+          "x": 79.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 80,
+          "board_id": 1,
+          "x": 97.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 38,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 97.0,
+          "rotated": false
+        },
+        {
+          "uid": 93,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 66,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 84,
+          "board_id": 3,
+          "x": 78.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 87,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 86.0,
+          "rotated": false
+        },
+        {
+          "uid": 64,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 27,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 66.0,
+          "rotated": false
+        },
+        {
+          "uid": 8,
+          "board_id": 4,
+          "x": 93.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 45,
+          "board_id": 4,
+          "x": 67.0,
+          "y": 67.0,
+          "rotated": false
+        },
+        {
+          "uid": 100,
+          "board_id": 5,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 32,
+          "board_id": 5,
+          "x": 63.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 68,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 73,
+          "board_id": 6,
+          "x": 65.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 25,
+          "board_id": 6,
+          "x": 94.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 15,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 84.0,
+          "rotated": false
+        },
+        {
+          "uid": 97,
+          "board_id": 6,
+          "x": 42.0,
+          "y": 84.0,
+          "rotated": false
+        },
+        {
+          "uid": 44,
+          "board_id": 6,
+          "x": 42.0,
+          "y": 94.0,
+          "rotated": false
+        },
+        {
+          "uid": 36,
+          "board_id": 7,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 16,
+          "board_id": 7,
+          "x": 63.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 62,
+          "board_id": 8,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 26,
+          "board_id": 8,
+          "x": 61.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 48,
+          "board_id": 9,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 52,
+          "board_id": 9,
+          "x": 0.0,
+          "y": 64.0,
+          "rotated": false
+        },
+        {
+          "uid": 1,
+          "board_id": 9,
+          "x": 70.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 63,
+          "board_id": 9,
+          "x": 70.0,
+          "y": 39.0,
+          "rotated": false
+        },
+        {
+          "uid": 41,
+          "board_id": 9,
+          "x": 85.0,
+          "y": 39.0,
+          "rotated": false
+        },
+        {
+          "uid": 88,
+          "board_id": 9,
+          "x": 98.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 74,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 78,
+          "board_id": 10,
+          "x": 46.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 58,
+          "board_id": 10,
+          "x": 93.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 89,
+          "board_id": 11,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 83,
+          "board_id": 11,
+          "x": 43.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 61,
+          "board_id": 11,
+          "x": 84.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 85,
+          "board_id": 12,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 53,
+          "board_id": 12,
+          "x": 47.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 37,
+          "board_id": 12,
+          "x": 96.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 67,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 92,
+          "board_id": 13,
+          "x": 47.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 4,
+          "board_id": 13,
+          "x": 91.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 23,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 9,
+          "board_id": 14,
+          "x": 38.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 90,
+          "board_id": 14,
+          "x": 77.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 57,
+          "board_id": 14,
+          "x": 99.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 72,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 71,
+          "board_id": 15,
+          "x": 50.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 10,
+          "board_id": 15,
+          "x": 90.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 7,
+          "board_id": 16,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 51,
+          "board_id": 16,
+          "x": 44.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 54,
+          "board_id": 16,
+          "x": 83.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 77,
+          "board_id": 17,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 95,
+          "board_id": 17,
+          "x": 40.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 13,
+          "board_id": 17,
+          "x": 86.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 65,
+          "board_id": 18,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 30,
+          "board_id": 18,
+          "x": 42.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 96,
+          "board_id": 18,
+          "x": 42.0,
+          "y": 68.0,
+          "rotated": false
+        },
+        {
+          "uid": 49,
+          "board_id": 18,
+          "x": 92.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 60,
+          "board_id": 18,
+          "x": 0.0,
+          "y": 81.0,
+          "rotated": false
+        },
+        {
+          "uid": 21,
+          "board_id": 19,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 75,
+          "board_id": 19,
+          "x": 47.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 40,
+          "board_id": 19,
+          "x": 92.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 94,
+          "board_id": 20,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 17,
+          "board_id": 20,
+          "x": 0.0,
+          "y": 42.0,
+          "rotated": false
+        },
+        {
+          "uid": 3,
+          "board_id": 20,
+          "x": 49.0,
+          "y": 42.0,
+          "rotated": false
+        },
+        {
+          "uid": 46,
+          "board_id": 20,
+          "x": 86.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 70,
+          "board_id": 20,
+          "x": 0.0,
+          "y": 90.0,
+          "rotated": false
+        },
+        {
+          "uid": 6,
+          "board_id": 20,
+          "x": 79.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 18,
+          "board_id": 20,
+          "x": 99.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 76,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 91,
+          "board_id": 21,
+          "x": 45.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 35,
+          "board_id": 21,
+          "x": 78.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 47,
+          "board_id": 21,
+          "x": 96.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 19,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 43,
+          "board_id": 22,
+          "x": 34.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 86,
+          "board_id": 22,
+          "x": 64.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 22,
+          "board_id": 23,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 56,
+          "board_id": 23,
+          "x": 39.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 14,
+          "board_id": 23,
+          "x": 73.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 31,
+          "board_id": 24,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 69,
+          "board_id": 24,
+          "x": 30.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 55,
+          "board_id": 24,
+          "x": 59.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 42,
+          "board_id": 24,
+          "x": 95.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 50,
+          "board_id": 25,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 29,
+          "board_id": 25,
+          "x": 32.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 5,
+          "board_id": 25,
+          "x": 59.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 2,
+          "board_id": 25,
+          "x": 85.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 34,
+          "board_id": 26,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 28,
+          "board_id": 26,
+          "x": 23.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 99,
+          "board_id": 26,
+          "x": 41.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 39,
+          "board_id": 26,
+          "x": 62.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 12,
+          "board_id": 26,
+          "x": 81.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 59,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 81,
+          "board_id": 27,
+          "x": 44.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 11,
+          "board_id": 27,
+          "x": 56.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 33,
+          "board_id": 27,
+          "x": 68.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 79,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 34.0,
+          "rotated": false
+        },
+        {
+          "uid": 82,
+          "board_id": 27,
+          "x": 12.0,
+          "y": 34.0,
+          "rotated": false
+        },
+        {
+          "uid": 24,
+          "board_id": 27,
+          "x": 23.0,
+          "y": 34.0,
+          "rotated": false
+        }
+      ]
+    },
+    {
+      "case_id": "cl_09_100_02",
+      "stock": [
+        100,
+        100
+      ],
+      "panels": 64,
+      "sequence": [
+        74,
+        83,
+        26,
+        32,
+        9,
+        71,
+        51,
+        73,
+        98,
+        92,
+        85,
+        14,
+        67,
+        90,
+        93,
+        7,
+        53,
+        66,
+        20,
+        65,
+        91,
+        31,
+        69,
+        19,
+        72,
+        29,
+        64,
+        95,
+        46,
+        75,
+        35,
+        28,
+        100,
+        21,
+        56,
+        54,
+        68,
+        13,
+        30,
+        10,
+        34,
+        42,
+        25,
+        76,
+        50,
+        84,
+        88,
+        33,
+        57,
+        36,
+        62,
+        81,
+        5,
+        48,
+        47,
+        78,
+        89,
+        99,
+        39,
+        11,
+        23,
+        2,
+        18,
+        77,
+        52,
+        4,
+        94,
+        40,
+        79,
+        16,
+        8,
+        80,
+        43,
+        86,
+        22,
+        55,
+        27,
+        17,
+        3,
+        59,
+        96,
+        61,
+        12,
+        1,
+        87,
+        70,
+        58,
+        49,
+        15,
+        82,
+        24,
+        37,
+        60,
+        63,
+        45,
+        6,
+        41,
+        97,
+        38,
+        44
+      ],
+      "placements": [
+        {
+          "uid": 74,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 83,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 58,
+          "board_id": 2,
+          "x": 90.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 26,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 49,
+          "board_id": 3,
+          "x": 88.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 37,
+          "board_id": 3,
+          "x": 96.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 32,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 41,
+          "board_id": 4,
+          "x": 85.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 9,
+          "board_id": 5,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 71,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 51,
+          "board_id": 7,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 73,
+          "board_id": 8,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 61,
+          "board_id": 8,
+          "x": 78.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 97,
+          "board_id": 8,
+          "x": 78.0,
+          "y": 84.0,
+          "rotated": false
+        },
+        {
+          "uid": 98,
+          "board_id": 9,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 12,
+          "board_id": 9,
+          "x": 79.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 63,
+          "board_id": 9,
+          "x": 79.0,
+          "y": 69.0,
+          "rotated": false
+        },
+        {
+          "uid": 92,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 85,
+          "board_id": 11,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 14,
+          "board_id": 12,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 1,
+          "board_id": 12,
+          "x": 74.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 67,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 90,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 93,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 7,
+          "board_id": 16,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 53,
+          "board_id": 17,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 66,
+          "board_id": 18,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 20,
+          "board_id": 19,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 43,
+          "board_id": 19,
+          "x": 68.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 65,
+          "board_id": 20,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 91,
+          "board_id": 21,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 31,
+          "board_id": 22,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 69,
+          "board_id": 23,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 19,
+          "board_id": 24,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 72,
+          "board_id": 25,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 52,
+          "board_id": 25,
+          "x": 0.0,
+          "y": 62.0,
+          "rotated": false
+        },
+        {
+          "uid": 38,
+          "board_id": 25,
+          "x": 0.0,
+          "y": 97.0,
+          "rotated": false
+        },
+        {
+          "uid": 29,
+          "board_id": 26,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 64,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 27,
+          "board_id": 27,
+          "x": 0.0,
+          "y": 66.0,
+          "rotated": false
+        },
+        {
+          "uid": 95,
+          "board_id": 28,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 59,
+          "board_id": 28,
+          "x": 0.0,
+          "y": 63.0,
+          "rotated": false
+        },
+        {
+          "uid": 96,
+          "board_id": 28,
+          "x": 44.0,
+          "y": 63.0,
+          "rotated": false
+        },
+        {
+          "uid": 46,
+          "board_id": 29,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 23,
+          "board_id": 29,
+          "x": 62.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 75,
+          "board_id": 30,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 35,
+          "board_id": 31,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 28,
+          "board_id": 32,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 100,
+          "board_id": 33,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 16,
+          "board_id": 33,
+          "x": 63.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 70,
+          "board_id": 33,
+          "x": 0.0,
+          "y": 91.0,
+          "rotated": false
+        },
+        {
+          "uid": 60,
+          "board_id": 33,
+          "x": 63.0,
+          "y": 80.0,
+          "rotated": false
+        },
+        {
+          "uid": 44,
+          "board_id": 33,
+          "x": 69.0,
+          "y": 91.0,
+          "rotated": false
+        },
+        {
+          "uid": 21,
+          "board_id": 34,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 56,
+          "board_id": 35,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 54,
+          "board_id": 36,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 86,
+          "board_id": 36,
+          "x": 63.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 15,
+          "board_id": 36,
+          "x": 0.0,
+          "y": 87.0,
+          "rotated": false
+        },
+        {
+          "uid": 45,
+          "board_id": 36,
+          "x": 42.0,
+          "y": 87.0,
+          "rotated": false
+        },
+        {
+          "uid": 68,
+          "board_id": 37,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 13,
+          "board_id": 38,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 55,
+          "board_id": 38,
+          "x": 63.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 30,
+          "board_id": 39,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 94,
+          "board_id": 39,
+          "x": 0.0,
+          "y": 54.0,
+          "rotated": false
+        },
+        {
+          "uid": 24,
+          "board_id": 39,
+          "x": 79.0,
+          "y": 54.0,
+          "rotated": false
+        },
+        {
+          "uid": 6,
+          "board_id": 39,
+          "x": 91.0,
+          "y": 54.0,
+          "rotated": false
+        },
+        {
+          "uid": 10,
+          "board_id": 40,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 77,
+          "board_id": 40,
+          "x": 59.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 87,
+          "board_id": 40,
+          "x": 0.0,
+          "y": 90.0,
+          "rotated": false
+        },
+        {
+          "uid": 34,
+          "board_id": 41,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 42,
+          "board_id": 42,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 89,
+          "board_id": 42,
+          "x": 54.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 25,
+          "board_id": 43,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 22,
+          "board_id": 43,
+          "x": 56.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 76,
+          "board_id": 44,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 17,
+          "board_id": 44,
+          "x": 0.0,
+          "y": 52.0,
+          "rotated": false
+        },
+        {
+          "uid": 3,
+          "board_id": 44,
+          "x": 49.0,
+          "y": 52.0,
+          "rotated": false
+        },
+        {
+          "uid": 82,
+          "board_id": 44,
+          "x": 86.0,
+          "y": 52.0,
+          "rotated": false
+        },
+        {
+          "uid": 50,
+          "board_id": 45,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 84,
+          "board_id": 46,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 88,
+          "board_id": 47,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 78,
+          "board_id": 47,
+          "x": 51.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 33,
+          "board_id": 48,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 57,
+          "board_id": 49,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 18,
+          "board_id": 49,
+          "x": 50.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 36,
+          "board_id": 50,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 62,
+          "board_id": 51,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 81,
+          "board_id": 52,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 5,
+          "board_id": 53,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 48,
+          "board_id": 54,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 47,
+          "board_id": 55,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 99,
+          "board_id": 56,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 39,
+          "board_id": 57,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 11,
+          "board_id": 58,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 2,
+          "board_id": 59,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 4,
+          "board_id": 60,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 40,
+          "board_id": 61,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 79,
+          "board_id": 62,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 8,
+          "board_id": 63,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 80,
+          "board_id": 64,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        }
+      ]
+    },
+    {
+      "case_id": "cl_10_100_02",
+      "stock": [
+        100,
+        100
+      ],
+      "panels": 16,
+      "sequence": [
+        92,
+        67,
+        31,
+        72,
+        57,
+        81,
+        47,
+        78,
+        89,
+        39,
+        23,
+        77,
+        52,
+        94,
+        40,
+        16,
+        8,
+        43,
+        86,
+        22,
+        55,
+        27,
+        17,
+        74,
+        83,
+        26,
+        3,
+        32,
+        9,
+        71,
+        51,
+        59,
+        96,
+        73,
+        98,
+        61,
+        85,
+        14,
+        12,
+        7,
+        90,
+        93,
+        53,
+        91,
+        66,
+        1,
+        65,
+        69,
+        20,
+        19,
+        29,
+        87,
+        64,
+        28,
+        35,
+        95,
+        75,
+        70,
+        56,
+        46,
+        58,
+        49,
+        100,
+        15,
+        68,
+        54,
+        34,
+        82,
+        13,
+        21,
+        24,
+        10,
+        84,
+        37,
+        60,
+        63,
+        50,
+        36,
+        33,
+        48,
+        62,
+        45,
+        5,
+        6,
+        30,
+        25,
+        41,
+        97,
+        99,
+        42,
+        11,
+        38,
+        76,
+        88,
+        2,
+        4,
+        44,
+        18,
+        80,
+        79
+      ],
+      "placements": [
+        {
+          "uid": 92,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 70,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 81.0,
+          "rotated": false
+        },
+        {
+          "uid": 21,
+          "board_id": 1,
+          "x": 0.0,
+          "y": 90.0,
+          "rotated": false
+        },
+        {
+          "uid": 48,
+          "board_id": 1,
+          "x": 69.0,
+          "y": 81.0,
+          "rotated": false
+        },
+        {
+          "uid": 97,
+          "board_id": 1,
+          "x": 47.0,
+          "y": 90.0,
+          "rotated": false
+        },
+        {
+          "uid": 67,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 93,
+          "board_id": 2,
+          "x": 0.0,
+          "y": 75.0,
+          "rotated": false
+        },
+        {
+          "uid": 53,
+          "board_id": 2,
+          "x": 50.0,
+          "y": 75.0,
+          "rotated": false
+        },
+        {
+          "uid": 31,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 12,
+          "board_id": 3,
+          "x": 79.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 15,
+          "board_id": 3,
+          "x": 0.0,
+          "y": 80.0,
+          "rotated": false
+        },
+        {
+          "uid": 62,
+          "board_id": 3,
+          "x": 79.0,
+          "y": 69.0,
+          "rotated": false
+        },
+        {
+          "uid": 45,
+          "board_id": 3,
+          "x": 42.0,
+          "y": 80.0,
+          "rotated": false
+        },
+        {
+          "uid": 72,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 52,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 62.0,
+          "rotated": false
+        },
+        {
+          "uid": 38,
+          "board_id": 4,
+          "x": 0.0,
+          "y": 97.0,
+          "rotated": false
+        },
+        {
+          "uid": 57,
+          "board_id": 5,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 78,
+          "board_id": 5,
+          "x": 50.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 30,
+          "board_id": 5,
+          "x": 0.0,
+          "y": 93.0,
+          "rotated": false
+        },
+        {
+          "uid": 81,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 23,
+          "board_id": 6,
+          "x": 62.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 7,
+          "board_id": 6,
+          "x": 0.0,
+          "y": 73.0,
+          "rotated": false
+        },
+        {
+          "uid": 63,
+          "board_id": 6,
+          "x": 44.0,
+          "y": 73.0,
+          "rotated": false
+        },
+        {
+          "uid": 47,
+          "board_id": 7,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 89,
+          "board_id": 7,
+          "x": 53.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 64,
+          "board_id": 7,
+          "x": 0.0,
+          "y": 83.0,
+          "rotated": false
+        },
+        {
+          "uid": 37,
+          "board_id": 7,
+          "x": 96.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 4,
+          "board_id": 7,
+          "x": 43.0,
+          "y": 83.0,
+          "rotated": false
+        },
+        {
+          "uid": 44,
+          "board_id": 7,
+          "x": 43.0,
+          "y": 93.0,
+          "rotated": false
+        },
+        {
+          "uid": 39,
+          "board_id": 8,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 94,
+          "board_id": 8,
+          "x": 0.0,
+          "y": 58.0,
+          "rotated": false
+        },
+        {
+          "uid": 98,
+          "board_id": 8,
+          "x": 68.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 20,
+          "board_id": 8,
+          "x": 79.0,
+          "y": 47.0,
+          "rotated": false
+        },
+        {
+          "uid": 88,
+          "board_id": 8,
+          "x": 98.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 77,
+          "board_id": 9,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 40,
+          "board_id": 9,
+          "x": 40.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 9,
+          "board_id": 9,
+          "x": 40.0,
+          "y": 58.0,
+          "rotated": false
+        },
+        {
+          "uid": 28,
+          "board_id": 9,
+          "x": 79.0,
+          "y": 58.0,
+          "rotated": false
+        },
+        {
+          "uid": 60,
+          "board_id": 9,
+          "x": 0.0,
+          "y": 87.0,
+          "rotated": false
+        },
+        {
+          "uid": 25,
+          "board_id": 9,
+          "x": 94.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 16,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 8,
+          "board_id": 10,
+          "x": 36.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 17,
+          "board_id": 10,
+          "x": 36.0,
+          "y": 51.0,
+          "rotated": false
+        },
+        {
+          "uid": 58,
+          "board_id": 10,
+          "x": 92.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 50,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 80.0,
+          "rotated": false
+        },
+        {
+          "uid": 99,
+          "board_id": 10,
+          "x": 0.0,
+          "y": 91.0,
+          "rotated": false
+        },
+        {
+          "uid": 43,
+          "board_id": 11,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 86,
+          "board_id": 11,
+          "x": 30.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 32,
+          "board_id": 11,
+          "x": 65.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 73,
+          "board_id": 11,
+          "x": 65.0,
+          "y": 50.0,
+          "rotated": false
+        },
+        {
+          "uid": 56,
+          "board_id": 11,
+          "x": 30.0,
+          "y": 78.0,
+          "rotated": false
+        },
+        {
+          "uid": 6,
+          "board_id": 11,
+          "x": 94.0,
+          "y": 50.0,
+          "rotated": false
+        },
+        {
+          "uid": 2,
+          "board_id": 11,
+          "x": 0.0,
+          "y": 93.0,
+          "rotated": false
+        },
+        {
+          "uid": 22,
+          "board_id": 12,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 55,
+          "board_id": 12,
+          "x": 39.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 96,
+          "board_id": 12,
+          "x": 0.0,
+          "y": 69.0,
+          "rotated": false
+        },
+        {
+          "uid": 85,
+          "board_id": 12,
+          "x": 48.0,
+          "y": 69.0,
+          "rotated": false
+        },
+        {
+          "uid": 14,
+          "board_id": 12,
+          "x": 75.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 84,
+          "board_id": 12,
+          "x": 75.0,
+          "y": 50.0,
+          "rotated": false
+        },
+        {
+          "uid": 42,
+          "board_id": 12,
+          "x": 96.0,
+          "y": 50.0,
+          "rotated": false
+        },
+        {
+          "uid": 76,
+          "board_id": 12,
+          "x": 48.0,
+          "y": 97.0,
+          "rotated": false
+        },
+        {
+          "uid": 18,
+          "board_id": 12,
+          "x": 95.0,
+          "y": 69.0,
+          "rotated": false
+        },
+        {
+          "uid": 80,
+          "board_id": 12,
+          "x": 95.0,
+          "y": 94.0,
+          "rotated": false
+        },
+        {
+          "uid": 79,
+          "board_id": 12,
+          "x": 0.0,
+          "y": 68.0,
+          "rotated": false
+        },
+        {
+          "uid": 27,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 74,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 83,
+          "board_id": 13,
+          "x": 46.0,
+          "y": 33.0,
+          "rotated": false
+        },
+        {
+          "uid": 91,
+          "board_id": 13,
+          "x": 67.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 65,
+          "board_id": 13,
+          "x": 0.0,
+          "y": 77.0,
+          "rotated": false
+        },
+        {
+          "uid": 95,
+          "board_id": 13,
+          "x": 42.0,
+          "y": 82.0,
+          "rotated": false
+        },
+        {
+          "uid": 46,
+          "board_id": 13,
+          "x": 87.0,
+          "y": 31.0,
+          "rotated": false
+        },
+        {
+          "uid": 11,
+          "board_id": 13,
+          "x": 88.0,
+          "y": 78.0,
+          "rotated": false
+        },
+        {
+          "uid": 26,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 3,
+          "board_id": 14,
+          "x": 39.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 71,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 48.0,
+          "rotated": false
+        },
+        {
+          "uid": 51,
+          "board_id": 14,
+          "x": 40.0,
+          "y": 48.0,
+          "rotated": false
+        },
+        {
+          "uid": 61,
+          "board_id": 14,
+          "x": 79.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 87,
+          "board_id": 14,
+          "x": 0.0,
+          "y": 87.0,
+          "rotated": false
+        },
+        {
+          "uid": 59,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 90,
+          "board_id": 15,
+          "x": 44.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 66,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 34.0,
+          "rotated": false
+        },
+        {
+          "uid": 1,
+          "board_id": 15,
+          "x": 28.0,
+          "y": 49.0,
+          "rotated": false
+        },
+        {
+          "uid": 69,
+          "board_id": 15,
+          "x": 53.0,
+          "y": 49.0,
+          "rotated": false
+        },
+        {
+          "uid": 19,
+          "board_id": 15,
+          "x": 66.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 29,
+          "board_id": 15,
+          "x": 0.0,
+          "y": 70.0,
+          "rotated": false
+        },
+        {
+          "uid": 35,
+          "board_id": 15,
+          "x": 82.0,
+          "y": 25.0,
+          "rotated": false
+        },
+        {
+          "uid": 75,
+          "board_id": 15,
+          "x": 53.0,
+          "y": 80.0,
+          "rotated": false
+        },
+        {
+          "uid": 36,
+          "board_id": 15,
+          "x": 66.0,
+          "y": 25.0,
+          "rotated": false
+        },
+        {
+          "uid": 5,
+          "board_id": 15,
+          "x": 27.0,
+          "y": 88.0,
+          "rotated": false
+        },
+        {
+          "uid": 49,
+          "board_id": 16,
+          "x": 0.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 100,
+          "board_id": 16,
+          "x": 8.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 68,
+          "board_id": 16,
+          "x": 22.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 54,
+          "board_id": 16,
+          "x": 22.0,
+          "y": 34.0,
+          "rotated": false
+        },
+        {
+          "uid": 34,
+          "board_id": 16,
+          "x": 36.0,
+          "y": 34.0,
+          "rotated": false
+        },
+        {
+          "uid": 82,
+          "board_id": 16,
+          "x": 59.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 13,
+          "board_id": 16,
+          "x": 59.0,
+          "y": 48.0,
+          "rotated": false
+        },
+        {
+          "uid": 24,
+          "board_id": 16,
+          "x": 70.0,
+          "y": 0.0,
+          "rotated": false
+        },
+        {
+          "uid": 10,
+          "board_id": 16,
+          "x": 72.0,
+          "y": 37.0,
+          "rotated": false
+        },
+        {
+          "uid": 33,
+          "board_id": 16,
+          "x": 36.0,
+          "y": 57.0,
+          "rotated": false
+        },
+        {
+          "uid": 41,
+          "board_id": 16,
+          "x": 72.0,
+          "y": 77.0,
+          "rotated": false
+        }
+      ]
+    }
+  ]
+}
