@@ -1,0 +1,328 @@
+{
+  "date": "2026-11-27",
+  "task": "F15",
+  "scope": "saved-layout descriptive accounting; no new packing",
+  "source_sha256": "5eb3413c17462d629a09b6363af6fe50303dd7e1d4f336f723f731303e19fd39",
+  "primary": "Greedy_final",
+  "cuts": [
+    0,
+    1,
+    2,
+    3,
+    5
+  ],
+  "bounds": {
+    "net_area_mm2": "229210976.30",
+    "envelope_area_mm2": "234117583.70",
+    "gross_board_area_mm2": "2976800",
+    "trimmed_inner_area_mm2": "2940300",
+    "nominal_area_lower_bound": 77,
+    "envelope_area_lower_bound": 80,
+    "saved_upper_bound": 85,
+    "target_boards": 84,
+    "target_full_order_net_utilization_pct": "91.66561740155616129816613558",
+    "target_envelope_occupancy_inner_pct": "94.79012657438583364509290435",
+    "target_envelope_area_slack_m2": "12.8676163",
+    "target_excluded_by_area": false,
+    "target_feasibility": "UNKNOWN",
+    "fixed_Greedy_K1_minimum": 85,
+    "all_original624_parts_required": true
+  },
+  "layouts": [
+    {
+      "layout": "Greedy_final",
+      "boards": 85,
+      "sequence_sha256": "a591cc1fb7963d6359eb107f097e67346a3795ae680908e6c26e6aeeb04cd39d",
+      "layout_sha256": "0b6d0b54e95df56937f718b78eadd8a8740b8897c0946ac5871bd690ee454c1e",
+      "curve": [
+        {
+          "excluded_tail_boards": 0,
+          "retained_boards": 85,
+          "retained_parts": 624,
+          "retained_net_utilization_pct": "90.58719837330255940054065163",
+          "excluded_parts": 0,
+          "excluded_net_area_m2": "0",
+          "excluded_net_area_pct": "0E+2"
+        },
+        {
+          "excluded_tail_boards": 1,
+          "retained_boards": 84,
+          "retained_parts": 608,
+          "retained_net_utilization_pct": "90.87026169040580489115829078",
+          "excluded_parts": 16,
+          "excluded_net_area_m2": "1.9887965",
+          "excluded_net_area_pct": "0.8676707076178532903879961354"
+        },
+        {
+          "excluded_tail_boards": 2,
+          "retained_boards": 83,
+          "retained_parts": 593,
+          "retained_net_utilization_pct": "91.01243463507348393844121447",
+          "excluded_parts": 31,
+          "excluded_net_area_m2": "4.3425495",
+          "excluded_net_area_pct": "1.894564374751541948735201125"
+        },
+        {
+          "excluded_tail_boards": 3,
+          "retained_boards": 82,
+          "retained_parts": 576,
+          "retained_net_utilization_pct": "91.04348703141694142015325018",
+          "excluded_parts": 48,
+          "excluded_net_area_m2": "6.9760095",
+          "excluded_net_area_pct": "3.043488410812200706986823301"
+        },
+        {
+          "excluded_tail_boards": 5,
+          "retained_boards": 80,
+          "retained_parts": 546,
+          "retained_net_utilization_pct": "91.15534437147272238645525396",
+          "excluded_parts": 78,
+          "excluded_net_area_m2": "12.129993",
+          "excluded_net_area_pct": "5.292064627884053037821295646"
+        }
+      ],
+      "last5boards": [
+        {
+          "board_id": 81,
+          "part_count": 16,
+          "net_area_mm2": "2683569.00",
+          "envelope_area_mm2": "2763552.00",
+          "net_utilization_pct": "90.14945579145391023918301532",
+          "envelope_occupancy_inner_pct": "93.98877665544332210998877666"
+        },
+        {
+          "board_id": 82,
+          "part_count": 14,
+          "net_area_mm2": "2470414.5",
+          "envelope_area_mm2": "2545105.5",
+          "net_utilization_pct": "82.98893106691749529696318194",
+          "envelope_occupancy_inner_pct": "86.55938169574533210896847260"
+        },
+        {
+          "board_id": 83,
+          "part_count": 17,
+          "net_area_mm2": "2633460.0",
+          "envelope_area_mm2": "2715912.0",
+          "net_utilization_pct": "88.46613813490997043805428648",
+          "envelope_occupancy_inner_pct": "92.36853382307927762473217019"
+        },
+        {
+          "board_id": 84,
+          "part_count": 15,
+          "net_area_mm2": "2353753.0",
+          "envelope_area_mm2": "2429029.0",
+          "net_utilization_pct": "79.06990728298844396667562483",
+          "envelope_occupancy_inner_pct": "82.61160425806890453355099820"
+        },
+        {
+          "board_id": 85,
+          "part_count": 16,
+          "net_area_mm2": "1988796.50",
+          "envelope_area_mm2": "2057208.50",
+          "net_utilization_pct": "66.80987973662993818865896264",
+          "envelope_occupancy_inner_pct": "69.96593884977723361561745400"
+        }
+      ]
+    },
+    {
+      "layout": "Greedy_first85",
+      "boards": 85,
+      "sequence_sha256": "a8534822e7cb5e9314e42de996c92ea7f280b1387ba04d063dc34330019f9736",
+      "layout_sha256": "d0fa0fb7f0e3039c71fe177b79334e5555992fba3f6c42977153e7bb7a539517",
+      "curve": [
+        {
+          "excluded_tail_boards": 0,
+          "retained_boards": 85,
+          "retained_parts": 624,
+          "retained_net_utilization_pct": "90.58719837330255940054065163",
+          "excluded_parts": 0,
+          "excluded_net_area_m2": "0",
+          "excluded_net_area_pct": "0E+2"
+        },
+        {
+          "excluded_tail_boards": 1,
+          "retained_boards": 84,
+          "retained_parts": 607,
+          "retained_net_utilization_pct": "90.79048974769967110735721324",
+          "excluded_parts": 17,
+          "excluded_net_area_m2": "2.1882672",
+          "excluded_net_area_pct": "0.9546956412488349058177280666"
+        },
+        {
+          "excluded_tail_boards": 2,
+          "retained_boards": 83,
+          "retained_parts": 589,
+          "retained_net_utilization_pct": "90.76632953474742830499638975",
+          "excluded_parts": 35,
+          "excluded_net_area_m2": "4.9506122",
+          "excluded_net_area_pct": "2.159849532476338045247443065"
+        },
+        {
+          "excluded_tail_boards": 3,
+          "retained_boards": 82,
+          "retained_parts": 571,
+          "retained_net_utilization_pct": "90.74281643899817122331395311",
+          "excluded_parts": 53,
+          "excluded_net_area_m2": "7.7099392",
+          "excluded_net_area_pct": "3.363686732832959884740039825"
+        },
+        {
+          "excluded_tail_boards": 5,
+          "retained_boards": 80,
+          "retained_parts": 539,
+          "retained_net_utilization_pct": "90.74696261505643644181671594",
+          "excluded_parts": 85,
+          "excluded_net_area_m2": "13.10252965",
+          "excluded_net_area_pct": "5.716362218557506314325663470"
+        }
+      ],
+      "last5boards": [
+        {
+          "board_id": 81,
+          "part_count": 15,
+          "net_area_mm2": "2670025.95",
+          "envelope_area_mm2": "2747391.75",
+          "net_utilization_pct": "89.69450248589088954582101586",
+          "envelope_occupancy_inner_pct": "93.43916437098255280073461892"
+        },
+        {
+          "board_id": 82,
+          "part_count": 17,
+          "net_area_mm2": "2722564.5",
+          "envelope_area_mm2": "2808382.5",
+          "net_utilization_pct": "91.45943630744423542058586402",
+          "envelope_occupancy_inner_pct": "95.51346801346801346801346801"
+        },
+        {
+          "board_id": 83,
+          "part_count": 18,
+          "net_area_mm2": "2759327.0",
+          "envelope_area_mm2": "2848523.0",
+          "net_utilization_pct": "92.69440338618650900295619457",
+          "envelope_occupancy_inner_pct": "96.87865183824779784375743972"
+        },
+        {
+          "board_id": 84,
+          "part_count": 18,
+          "net_area_mm2": "2762345.0",
+          "envelope_area_mm2": "2851535.0",
+          "net_utilization_pct": "92.79578742273582370330556302",
+          "envelope_occupancy_inner_pct": "96.98109036492874876713260552"
+        },
+        {
+          "board_id": 85,
+          "part_count": 17,
+          "net_area_mm2": "2188267.20",
+          "envelope_area_mm2": "2262351.00",
+          "net_utilization_pct": "73.51072292394517602794947595",
+          "envelope_occupancy_inner_pct": "76.94286297316600346903377206"
+        }
+      ]
+    },
+    {
+      "layout": "ASH_final",
+      "boards": 85,
+      "sequence_sha256": "02557bb0bf60847282b6d8134a91d9cd7834d29467db7db0ac57823621417342",
+      "layout_sha256": "558282dfea66c86ae6a69a9eb64543c4f2e83fa63f6932c2a4cb0d426e793ab3",
+      "curve": [
+        {
+          "excluded_tail_boards": 0,
+          "retained_boards": 85,
+          "retained_parts": 624,
+          "retained_net_utilization_pct": "90.58719837330255940054065163",
+          "excluded_parts": 0,
+          "excluded_net_area_m2": "0",
+          "excluded_net_area_pct": "0E+2"
+        },
+        {
+          "excluded_tail_boards": 1,
+          "retained_boards": 84,
+          "retained_parts": 610,
+          "retained_net_utilization_pct": "91.00625315935296451286776468",
+          "excluded_parts": 14,
+          "excluded_net_area_m2": "1.6487482",
+          "excluded_net_area_pct": "0.7193146796958169930363845320"
+        },
+        {
+          "excluded_tail_boards": 2,
+          "retained_boards": 83,
+          "retained_parts": 595,
+          "retained_net_utilization_pct": "91.19546395741525629526976490",
+          "excluded_parts": 29,
+          "excluded_net_area_m2": "3.8903309",
+          "excluded_net_area_pct": "1.697270768965351682418535207"
+        },
+        {
+          "excluded_tail_boards": 3,
+          "retained_boards": 82,
+          "retained_parts": 577,
+          "retained_net_utilization_pct": "91.18051873512889925996814389",
+          "excluded_parts": 47,
+          "excluded_net_area_m2": "6.6415184",
+          "excluded_net_area_pct": "2.897556874112053594529364604"
+        },
+        {
+          "excluded_tail_boards": 5,
+          "retained_boards": 80,
+          "retained_parts": 546,
+          "retained_net_utilization_pct": "91.25151542764041924213920989",
+          "excluded_parts": 78,
+          "excluded_net_area_m2": "11.9009674",
+          "excluded_net_area_pct": "5.192145503722982048133268215"
+        }
+      ],
+      "last5boards": [
+        {
+          "board_id": 81,
+          "part_count": 14,
+          "net_area_mm2": "2470077.50",
+          "envelope_area_mm2": "2541783.50",
+          "net_utilization_pct": "82.97761018543402311206664875",
+          "envelope_occupancy_inner_pct": "86.44640002720810801618882427"
+        },
+        {
+          "board_id": 82,
+          "part_count": 17,
+          "net_area_mm2": "2789371.5",
+          "envelope_area_mm2": "2879620.5",
+          "net_utilization_pct": "93.70369188390217683418435904",
+          "envelope_occupancy_inner_pct": "97.93628201203958779716355474"
+        },
+        {
+          "board_id": 83,
+          "part_count": 18,
+          "net_area_mm2": "2751187.5",
+          "envelope_area_mm2": "2840674.5",
+          "net_utilization_pct": "92.42097218489653319000268745",
+          "envelope_occupancy_inner_pct": "96.61172329354147535965717784"
+        },
+        {
+          "board_id": 84,
+          "part_count": 15,
+          "net_area_mm2": "2241582.7",
+          "envelope_area_mm2": "2313512.5",
+          "net_utilization_pct": "75.30175692018274657350174684",
+          "envelope_occupancy_inner_pct": "78.68287249600380913512226644"
+        },
+        {
+          "board_id": 85,
+          "part_count": 14,
+          "net_area_mm2": "1648748.2",
+          "envelope_area_mm2": "1708192.0",
+          "net_utilization_pct": "55.38659634506852996506315507",
+          "envelope_occupancy_inner_pct": "58.09584056048702513348977995"
+        }
+      ]
+    }
+  ],
+  "new_packing_calls": 0,
+  "new_factory_runs": 0,
+  "audit_decoder_attempts": [],
+  "interpretation": {
+    "primary_utilization": "all624parts_over_all85boards",
+    "tail_excluded_utilization": "retained_part_area_over_retained_boards_gross_area",
+    "original_order_not_completed_by_tail_excluded_subset": true,
+    "84_board_layout_found": false,
+    "new_algorithm_or_tail_rule": false
+  }
+}
